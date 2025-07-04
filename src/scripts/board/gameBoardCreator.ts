@@ -28,11 +28,11 @@ export class gameBoardCreator{
         let yPosRectangle: number = 0;
         let lastColor: string = this.darkTileColor;
 
-        for(let yIndex = 1; yIndex <= 8; yIndex++){
+        for(let y = 1; y <= 8; y++){
 
             for (let x = 1; x <= 8; x++) {
 
-                // Determines the next Tile Color
+                // Determines the next tile color
                 if(lastColor === this.darkTileColor) {
                     this.canvasCtx!.fillStyle = this.whiteTileColor;
                     lastColor = this.whiteTileColor;
@@ -45,9 +45,11 @@ export class gameBoardCreator{
 
                 this.addToGameTilesArray(gameTileWidth, gameTileHeight, yPosRectangle, xPosRectangle, lastColor, x);
             
+                // Adds width of gameTile to xPos to calc/draw next rectangle
                 xPosRectangle += Math.round(gameTileWidth);
             }
 
+            // Adds height of gameTile to yPos to calc/draw next row
             yPosRectangle += Math.round(gameTileHeight);
             xPosRectangle = 0;
             lastColor = lastColor === this.darkTileColor ? this.whiteTileColor : this.darkTileColor;
