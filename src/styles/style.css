@@ -1,0 +1,16 @@
+body{
+    background-color: #302E2B;
+}
+
+.game-container{
+    min-height: 98.37vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.game-canvas{
+    width: 800px;
+    height: 800px;
+    border: 1px solid #000000;   
+}
