@@ -1,4 +1,4 @@
-export class gameTile{
+export class GameTile{
     centerPoint: [x: number, y: number];
     width: number;
     height: number;

@@ -1,11 +1,11 @@
-import { gameTile } from "./entities/gameTile";
+import { GameTile } from "./entities/gameTile";
 
-export class gameBoardCreator{
+export class GameBoardCreator{
     canvas: HTMLCanvasElement;
     canvasCtx: CanvasRenderingContext2D | null;
     whiteTileColor: string;
     darkTileColor: string;
-    gameTiles: gameTile[];
+    gameTiles: GameTile[];
 
     constructor(canvas: HTMLCanvasElement, whiteTileColor: string, darkTileColor: string){
         this.canvas = canvas;
@@ -58,10 +58,12 @@ export class gameBoardCreator{
         console.log(this.gameTiles)
     }
 
+
+
     // Adds GameTiles to the appropriate class array
     private addToGameTilesArray(gameTileWidth: number, gameTileHeight: number ,yPosRectangle: number, xPosRectangle: number, lastColor: string, x: number) : void{
         if(x === 1){
-            this.gameTiles.push(new gameTile(
+            this.gameTiles.push(new GameTile(
             [gameTileWidth / 2, yPosRectangle + gameTileHeight / 2],
             gameTileWidth,
             gameTileHeight,
@@ -70,7 +72,7 @@ export class gameBoardCreator{
             ))    
         }
         else{
-            this.gameTiles.push(new gameTile(
+            this.gameTiles.push(new GameTile(
             [xPosRectangle + gameTileWidth / 2, yPosRectangle + gameTileHeight / 2],
             gameTileWidth,
             gameTileHeight,
@@ -82,6 +84,6 @@ export class gameBoardCreator{
 }
 
 window.onload = () =>{
-    const gameBoard : gameBoardCreator = new gameBoardCreator(document.getElementById("game-canvas") as HTMLCanvasElement, "#F0D9B5", "#B58863")
+    const gameBoard : GameBoardCreator = new GameBoardCreator(document.getElementById("game-canvas") as HTMLCanvasElement, "#F0D9B5", "#B58863")
     gameBoard.drawGameboard();
 } 
