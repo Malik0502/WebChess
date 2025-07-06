@@ -11,12 +11,11 @@ The goal is to create an interactive chess plattform in your browser.
 ---
 
 ## Requirements
-- Node.js (empfohlen Version 22.17.0  LTS)
+- Node.js (recommended version 22.17.0  LTS)
 
 ---
 
 ## Installation & Start
 
-- cd WebChess
 - npm install
 - npm run dev
