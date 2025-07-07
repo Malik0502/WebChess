@@ -85,7 +85,6 @@ export class GameBoardCreator{
                 }
         
                 this.canvasCtx?.fillRect(xPosRectangle, yPosRectangle, gameTileWidth, gameTileHeight);
-
                 this.addToGameTilesArray(gameTileWidth, gameTileHeight, yPosRectangle, xPosRectangle, lastColor, x, this.convertNumCoordToChessCoord(x, y));
             
                 // Adds width of gameTile to xPos to calc/draw next rectangle
@@ -133,6 +132,21 @@ export class GameBoardCreator{
             }
         });
     } 
+
+    drawCoordinatesOnChessBoard(){
+        this.canvasCtx!.font = "24px serif";
+
+        this.gameTiles.forEach(tile => {
+            this.canvasCtx!.fillStyle = tile.color === this.darkTileColor ? this.whiteTileColor : this.darkTileColor;
+            if(tile.coordinates.includes("a")){
+                this.canvasCtx?.fillText(tile.coordinates.charAt(1), tile.centerPoint[0] - tile.width / 2, tile.centerPoint[1] - tile.height / 4)
+            }
+
+            if(tile.coordinates.includes("1")){
+                this.canvasCtx?.fillText(tile.coordinates.charAt(0), tile.centerPoint[0] + tile.width / 2.66, tile.centerPoint[1] + tile.height / 2.5)
+            }
+        });
+    }
 
     getCanvasSize(): [x: number, y: number]{
         return [this.canvas.width, this.canvas.height]
@@ -210,7 +224,9 @@ window.onload = () =>{
     ).then(() => {
         gameBoard.drawPiecesOnChessBoard();
     });
-
+    
+    
+    gameBoard.drawCoordinatesOnChessBoard();
     console.log(gameBoard.gamePieces)
 
 } 
