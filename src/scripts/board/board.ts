@@ -9,6 +9,8 @@ export class Board{
     darkTileColor: string;
     gameTiles: GameTile[];
     gamePieces: IPiece[];
+    gameTileWidth: number;
+    gameTileHeight: number;
 
 
     spriteMap: Record<string, HTMLImageElement> = {
@@ -53,6 +55,7 @@ export class Board{
     constructor(canvas: HTMLCanvasElement, whiteTileColor: string, darkTileColor: string, pieceFactory: IPieceFactory){
         this.canvas = canvas;
         this.canvasCtx = canvas.getContext("2d");
+        const canvasSize = this.getCanvasSize(); 
         this.whiteTileColor = whiteTileColor;
         this.darkTileColor = darkTileColor;
         this.gameTiles = [];
@@ -60,26 +63,26 @@ export class Board{
         this.connectImageSrcToSpriteMap();
         this.pieceFactory = pieceFactory;
 
+        
+        this.gameTileWidth = Math.round(canvasSize[0] / 8)
+        this.gameTileHeight = Math.round(canvasSize[1] / 8) 
+
         this.drawChessBoard();
     }
 
-    private drawChessBoard(){
+    private drawChessBoard(): void{
         this.drawChessboardPattern();
         Promise.all(
         Object.values(this.spriteMap).map(img => new Promise(resolve => img.onload = resolve))
         ).then(() => {
-            this.drawPiecesOnChessBoard();
+            this.drawStartPiecesOnChessBoard();
         });
     
-        this.drawCoordinatesOnChessBoard();
+        this.drawCoordinatesOnBoard();
         console.log(this.gamePieces)
     }
 
     private drawChessboardPattern(): void{
-        const canvasSize: [x: number, y: number] = this.getCanvasSize();
-        const gameTileWidth: number = Math.round(canvasSize[0] / 8);
-        const gameTileHeight: number = Math.round(canvasSize[1] / 8);
-
         let xPosRectangle: number = 0;
         let yPosRectangle: number = 0;
         let lastColor: string = this.darkTileColor;
@@ -97,15 +100,15 @@ export class Board{
                     lastColor = this.darkTileColor;
                 }
         
-                this.canvasCtx?.fillRect(xPosRectangle, yPosRectangle, gameTileWidth, gameTileHeight);
-                this.addToGameTilesArray(gameTileWidth, gameTileHeight, yPosRectangle, xPosRectangle, lastColor, x, this.convertNumCoordToChessCoord(x, y));
+                this.canvasCtx?.fillRect(xPosRectangle, yPosRectangle, this.gameTileWidth, this.gameTileHeight);
+                this.addToGameTilesArray(this.gameTileWidth, this.gameTileHeight, yPosRectangle, xPosRectangle, lastColor, x, this.convertNumCoordToChessCoord(x, y));
             
                 // Adds width of gameTile to xPos to calc/draw next rectangle
-                xPosRectangle += Math.round(gameTileWidth);
+                xPosRectangle += Math.round(this.gameTileWidth);
             }
 
             // Adds height of gameTile to yPos to calc/draw next row
-            yPosRectangle += Math.round(gameTileHeight);
+            yPosRectangle += Math.round(this.gameTileHeight);
             xPosRectangle = 0;
             lastColor = lastColor === this.darkTileColor ? this.whiteTileColor : this.darkTileColor;
         }
@@ -113,7 +116,7 @@ export class Board{
         console.log(this.gameTiles)
     }
 
-    private drawPiecesOnChessBoard(): void{
+    private drawStartPiecesOnChessBoard(): void{
         
 
         this.gameTiles.forEach(tile => {
@@ -133,32 +136,40 @@ export class Board{
             // if coordinate is in piecePosition Record it will generate a piece on this coordinate
             const piece = this.piecePositions[tile.coordinates]
             if(piece){
-                this.canvasCtx?.drawImage(
-                    this.spriteMap[piece],
-                    tile.centerPoint[0] - tile.width / 2,
-                    tile.centerPoint[1] - tile.height / 1.83,
-                    tile.width,
-                    tile.height
-                );
-                tile.isOccupied = true;
+                this.drawPieceOnBoard(piece, tile);
                 this.addToGamePiecesArray(piece, tile.coordinates);
             }
         });
-    } 
+    }
 
-    private drawCoordinatesOnChessBoard(){
+    private drawPieceOnBoard(pieceSprite: string, tile: GameTile): void{
+        this.canvasCtx?.drawImage(
+            this.spriteMap[pieceSprite],
+            tile.centerPoint[0] - tile.width / 2,
+            tile.centerPoint[1] - tile.height / 1.83,
+            tile.width,
+            tile.height
+        );
+        tile.isOccupied = true;
+    }
+
+    private drawCoordinatesOnBoard(): void{
         this.canvasCtx!.font = "24px serif";
 
         this.gameTiles.forEach(tile => {
-            this.canvasCtx!.fillStyle = tile.color === this.darkTileColor ? this.whiteTileColor : this.darkTileColor;
-            if(tile.coordinates.includes("a")){
-                this.canvasCtx?.fillText(tile.coordinates.charAt(1), tile.centerPoint[0] - tile.width / 2, tile.centerPoint[1] - tile.height / 4)
-            }
-
-            if(tile.coordinates.includes("1")){
-                this.canvasCtx?.fillText(tile.coordinates.charAt(0), tile.centerPoint[0] + tile.width / 2.66, tile.centerPoint[1] + tile.height / 2.5)
-            }
+            this.drawCoordinateOnBoard(tile);
         });
+    }
+
+    private drawCoordinateOnBoard(tile: GameTile): void{
+        this.canvasCtx!.fillStyle = tile.color === this.darkTileColor ? this.whiteTileColor : this.darkTileColor;
+        if(tile.coordinates.includes("a")){
+            this.canvasCtx?.fillText(tile.coordinates.charAt(1), tile.centerPoint[0] - tile.width / 2, tile.centerPoint[1] - tile.height / 4)
+        }
+
+        if(tile.coordinates.includes("1")){
+            this.canvasCtx?.fillText(tile.coordinates.charAt(0), tile.centerPoint[0] + tile.width / 2.66, tile.centerPoint[1] + tile.height / 2.5)
+        }
     }
 
     getCanvasSize(): [x: number, y: number]{
@@ -189,7 +200,7 @@ export class Board{
         }
     }
 
-    private addToGamePiecesArray(name: string, coordinate: string){
+    private addToGamePiecesArray(name: string, coordinate: string): void{
         const splitName = name.split("-");
         const pieceColor = splitName[0];
         this.gamePieces.push(this.pieceFactory.createPiece(name, pieceColor, coordinate))
@@ -225,5 +236,20 @@ export class Board{
         this.spriteMap["black-queen"].src = "src/assets/qb.svg"
         this.spriteMap["black-king"].src = "src/assets/kb.svg"
     }
+
+    repaintPieces(piece: IPiece, tile: GameTile, unselect: boolean): void{
+        if(!unselect){
+            this.canvasCtx!.fillStyle = "rgba(246, 235, 114, 0.45)";
+        }
+        else{
+            this.canvasCtx!.fillStyle = tile.color;
+        }
+        
+        this.canvasCtx?.fillRect(tile.centerPoint[0] - this.gameTileWidth / 2, tile.centerPoint[1] - this.gameTileHeight / 2, this.gameTileWidth, this.gameTileHeight);
+        this.drawCoordinateOnBoard(tile);
+        this.drawPieceOnBoard(piece.name, tile)
+    }
+
+    
     
 }

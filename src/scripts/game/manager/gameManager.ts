@@ -10,14 +10,22 @@ export class GameManager{
         this.board = board;
     }
 
-    handleMouseClick(mousePos: [number, number]){
+    handleMouseClick(mousePos: [number, number]): void{
         const nearestTile: GameTile = this.calcNearestTile(mousePos);
         
         if(!nearestTile.isOccupied) return
 
+        // Gets piece that stands on coordinates of nearest tile
         const pieceOnTile: IPiece = this.getPieceOnTile(nearestTile);
 
-        console.log(pieceOnTile);
+        // marks selected piece yellow
+        this.board.repaintPieces(pieceOnTile, nearestTile, false);
+
+        // unselects old selected piece
+        this.refreshSelectedPieces();
+
+
+        pieceOnTile.selected = pieceOnTile.selected ? false : true;
     }
 
     private calcNearestTile(mousePos: [x: number, y: number]) : GameTile{
@@ -35,24 +43,37 @@ export class GameManager{
         return nearestTile[0]!;
     }
 
+    // Gets the piece that stands on method parameter tile
     private getPieceOnTile(tile: GameTile) : IPiece{
         let piece: IPiece | undefined;
         
         this.board.gamePieces.forEach(gamePiece => {
             if(gamePiece.currentCoordinates == tile.coordinates){
                 piece = gamePiece;
-                this.refreshSelectedPieces();
-                piece.selected = true;
             }
         });
 
         return piece!;
     }
 
-    private refreshSelectedPieces(){
+    private getTileOnPiece(piece: IPiece) : GameTile{
+        let tile: GameTile | undefined;
+        
+        this.board.gameTiles.forEach(gameTile => {
+            if(gameTile.coordinates == piece.currentCoordinates){
+                tile = gameTile;
+            }
+        });
+
+        return tile!;
+    }
+
+
+    private refreshSelectedPieces(): void{
         this.board.gamePieces.forEach(gamePiece => {
             if(gamePiece.selected){
                 gamePiece.selected = false;
+                this.board.repaintPieces(gamePiece, this.getTileOnPiece(gamePiece), true)
             }
         });
     }
