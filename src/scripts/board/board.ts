@@ -2,7 +2,7 @@ import type { IPiece } from "../game/pieces/interfaces/IPiece";
 import type { IPieceFactory } from "../game/pieces/interfaces/IPieceFactory";
 import { GameTile } from "./entities/gameTile";
 
-export class GameBoardCreator{
+export class Board{
     canvas: HTMLCanvasElement;
     canvasCtx: CanvasRenderingContext2D | null;
     whiteTileColor: string;
@@ -59,9 +59,11 @@ export class GameBoardCreator{
         this.gamePieces = [];
         this.connectImageSrcToSpriteMap();
         this.pieceFactory = pieceFactory;
+
+        this.drawChessBoard();
     }
 
-    drawChessBoard(){
+    private drawChessBoard(){
         this.drawChessboardPattern();
         Promise.all(
         Object.values(this.spriteMap).map(img => new Promise(resolve => img.onload = resolve))
