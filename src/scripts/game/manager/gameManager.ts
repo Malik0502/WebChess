@@ -41,7 +41,7 @@ export class GameManager{
         this.board.gamePieces.forEach(gamePiece => {
             if(gamePiece.currentCoordinates == tile.coordinates){
                 piece = gamePiece;
-                this.refreshSelectedPieces(gamePiece);
+                this.refreshSelectedPieces();
                 piece.selected = true;
             }
         });
@@ -49,7 +49,7 @@ export class GameManager{
         return piece!;
     }
 
-    private refreshSelectedPieces(piece: IPiece){
+    private refreshSelectedPieces(){
         this.board.gamePieces.forEach(gamePiece => {
             if(gamePiece.selected){
                 gamePiece.selected = false;
