@@ -6,6 +6,7 @@ export interface IPiece{
     startCoordinates: string;
     currentCoordinates: string;
     hasMoved: boolean;
+    selected: boolean;
 
 
     MovePiece(): [startPosition: string, endPosition: string];

@@ -8,6 +8,7 @@ export class Bishop implements IPiece{
     startCoordinates: string;
     currentCoordinates: string;
     hasMoved: boolean;
+    selected: boolean;
     
     constructor(name: string, color: string, startCoordinates: string){
         this.name = name,
@@ -17,6 +18,7 @@ export class Bishop implements IPiece{
         this.startCoordinates = startCoordinates;
         this.currentCoordinates = startCoordinates;
         this.hasMoved = false;
+        this.selected = false;
     }
     
     MovePiece(): [startPosition: string, endPosition: string] {

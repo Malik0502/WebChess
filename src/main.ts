@@ -12,6 +12,7 @@ window.onload = () => {
     canvas = gameBoard.canvas;
 
     canvas.addEventListener("click", handleClick)
+    
 }
 
 function handleClick(event: MouseEvent){
@@ -21,4 +22,5 @@ function handleClick(event: MouseEvent){
     const mousePos: [x: number, y: number] = [Math.round(event.clientX - rect.left), Math.round(event.clientY - rect.top)];
 
     gameManager.handleMouseClick(mousePos);
+    console.log(gameBoard.gamePieces)
 }
