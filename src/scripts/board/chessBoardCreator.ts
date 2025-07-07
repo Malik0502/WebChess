@@ -1,6 +1,5 @@
 import type { IPiece } from "../game/pieces/interfaces/IPiece";
 import type { IPieceFactory } from "../game/pieces/interfaces/IPieceFactory";
-import { PieceFactory } from "../game/pieces/pieceFactory";
 import { GameTile } from "./entities/gameTile";
 
 export class GameBoardCreator{
@@ -62,7 +61,19 @@ export class GameBoardCreator{
         this.pieceFactory = pieceFactory;
     }
 
-    drawChessBoard(): void{
+    drawChessBoard(){
+        this.drawChessboardPattern();
+        Promise.all(
+        Object.values(this.spriteMap).map(img => new Promise(resolve => img.onload = resolve))
+        ).then(() => {
+            this.drawPiecesOnChessBoard();
+        });
+    
+        this.drawCoordinatesOnChessBoard();
+        console.log(this.gamePieces)
+    }
+
+    private drawChessboardPattern(): void{
         const canvasSize: [x: number, y: number] = this.getCanvasSize();
         const gameTileWidth: number = Math.round(canvasSize[0] / 8);
         const gameTileHeight: number = Math.round(canvasSize[1] / 8);
@@ -100,7 +111,7 @@ export class GameBoardCreator{
         console.log(this.gameTiles)
     }
 
-    drawPiecesOnChessBoard(): void{
+    private drawPiecesOnChessBoard(): void{
         
 
         this.gameTiles.forEach(tile => {
@@ -133,7 +144,7 @@ export class GameBoardCreator{
         });
     } 
 
-    drawCoordinatesOnChessBoard(){
+    private drawCoordinatesOnChessBoard(){
         this.canvasCtx!.font = "24px serif";
 
         this.gameTiles.forEach(tile => {
@@ -214,19 +225,3 @@ export class GameBoardCreator{
     }
     
 }
-
-window.onload = () =>{
-    const gameBoard : GameBoardCreator = new GameBoardCreator(document.getElementById("game-canvas") as HTMLCanvasElement, "#F0D9B5", "#B58863", new PieceFactory())
-    gameBoard.drawChessBoard();
-    
-    Promise.all(
-        Object.values(gameBoard.spriteMap).map(img => new Promise(resolve => img.onload = resolve))
-    ).then(() => {
-        gameBoard.drawPiecesOnChessBoard();
-    });
-    
-    
-    gameBoard.drawCoordinatesOnChessBoard();
-    console.log(gameBoard.gamePieces)
-
-} 
