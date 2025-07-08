@@ -72,7 +72,6 @@ export class GameManager{
     private refreshSelectedPieces(): void{
         this.board.gamePieces.forEach(gamePiece => {
             if(gamePiece.selected){
-                gamePiece.selected = false;
                 this.board.repaintPieces(gamePiece, this.getTileOnPiece(gamePiece), true)
             }
         });
