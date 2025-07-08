@@ -15,8 +15,13 @@ export class GameManager{
         
         if(!nearestTile.isOccupied) return
 
+        
         // Gets piece that stands on coordinates of nearest tile
         const pieceOnTile: IPiece = this.getPieceOnTile(nearestTile);
+        
+        if(!nearestTile.isMoveOption){
+            pieceOnTile.MovePiece();
+        }
 
         // marks selected piece yellow
         this.board.repaintPieces(pieceOnTile, nearestTile);
@@ -26,6 +31,10 @@ export class GameManager{
 
         // then unselect others, excluding this one
         this.refreshSelectedPieces(pieceOnTile);
+
+        const possibleMoves: string[] = pieceOnTile.CalcPossibleMoves(this.board.gameTiles);
+
+        console.log(possibleMoves);
     }
 
     private calcNearestTile(mousePos: [x: number, y: number]) : GameTile{

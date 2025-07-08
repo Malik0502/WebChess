@@ -1,3 +1,4 @@
+import type { GameTile } from "../../board/entities/gameTile";
 import type { IPiece } from "./interfaces/IPiece";
 
 export class Pawn implements IPiece{
@@ -20,6 +21,14 @@ export class Pawn implements IPiece{
         this.hasMoved = false;
         this.selected = false;
     }
+
+    CalcPossibleMoves(board: GameTile[]): string[] {
+        let possibleMoves: string[] = [];
+
+        return possibleMoves;
+    }
+    
+
     
     MovePiece(): [startPosition: string, endPosition: string] {
         throw new Error("Method not implemented.");
