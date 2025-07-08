@@ -19,13 +19,13 @@ export class GameManager{
         const pieceOnTile: IPiece = this.getPieceOnTile(nearestTile);
 
         // marks selected piece yellow
-        this.board.repaintPieces(pieceOnTile, nearestTile, false);
+        this.board.repaintPieces(pieceOnTile, nearestTile);
 
-        // unselects old selected piece
-        this.refreshSelectedPieces();
+        // toggle selection
+        pieceOnTile.selected = !pieceOnTile.selected;
 
-
-        pieceOnTile.selected = pieceOnTile.selected ? false : true;
+        // then unselect others, excluding this one
+        this.refreshSelectedPieces(pieceOnTile);
     }
 
     private calcNearestTile(mousePos: [x: number, y: number]) : GameTile{
@@ -69,11 +69,12 @@ export class GameManager{
     }
 
 
-    private refreshSelectedPieces(): void{
-        this.board.gamePieces.forEach(gamePiece => {
-            if(gamePiece.selected){
-                this.board.repaintPieces(gamePiece, this.getTileOnPiece(gamePiece), true)
-            }
-        });
-    }
+    private refreshSelectedPieces(selectedPiece: IPiece): void {
+    this.board.gamePieces.forEach(gamePiece => {
+        if (gamePiece !== selectedPiece && gamePiece.selected) {
+            this.board.repaintPieces(gamePiece, this.getTileOnPiece(gamePiece));
+            gamePiece.selected = false;
+        }
+    });
+}
 }

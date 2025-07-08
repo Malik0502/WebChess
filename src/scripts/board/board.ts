@@ -237,8 +237,8 @@ export class Board{
         this.spriteMap["black-king"].src = "src/assets/kb.svg"
     }
 
-    repaintPieces(piece: IPiece, tile: GameTile, unselect: boolean): void{
-        if(!unselect){
+    repaintPieces(piece: IPiece, tile: GameTile): void{
+        if(!piece.selected){
             this.canvasCtx!.fillStyle = "rgba(246, 235, 114, 0.45)";
         }
         else{
