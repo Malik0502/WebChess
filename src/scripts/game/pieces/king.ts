@@ -1,3 +1,4 @@
+import type { GameTile } from "../../board/entities/gameTile";
 import type { IPiece } from "./interfaces/IPiece";
 
 export class King implements IPiece{
@@ -8,8 +9,10 @@ export class King implements IPiece{
     startCoordinates: string;
     currentCoordinates: string;
     hasMoved: boolean;
+    selected: boolean;
+    currentArrayPos: number;
     
-    constructor(name: string, color: string, startCoordinates: string){
+    constructor(name: string, color: string, startCoordinates: string, currentArrayPos: number){
         this.name = name,
         this.color = color,
         this.value = 0,
@@ -17,6 +20,12 @@ export class King implements IPiece{
         this.startCoordinates = startCoordinates;
         this.currentCoordinates = startCoordinates;
         this.hasMoved = false;
+        this.selected = false;
+        this.currentArrayPos = currentArrayPos;
+    }
+    
+    CalcPossibleMoves(board: GameTile[]): string[] {
+        throw new Error("Method not implemented.");
     }
     
     MovePiece(): [startPosition: string, endPosition: string] {
