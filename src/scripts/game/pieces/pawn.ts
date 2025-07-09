@@ -32,14 +32,18 @@ export class Pawn implements IPiece{
 
             if(this.color === "white"){
                 this.CalcArrayPosWhite(tile, index, possibleMoves)
+                if(this.currentArrayPos <= index){
+                    break;
+                }
             }
             else{
-                this.CalcArrayPosBlack(tile, index, possibleMoves);
+                if(index >= 16){
+                    this.CalcArrayPosBlack(tile, index, possibleMoves);
+                }
             }
 
         }
         
-        console.log(possibleMoves)
         return possibleMoves;
     }
     
@@ -72,6 +76,19 @@ export class Pawn implements IPiece{
                 return;
             }
         }
+
+        // diagonal down left from pawn
+        if(tileIndex === this.currentArrayPos + (8 - 1) && !this.currentCoordinates.includes("h") && tile.isOccupied){
+                possibleMoves.push(tile.coordinates);
+                return;
+            }
+
+
+        // diagonal down right from pawn
+        if(tileIndex === this.currentArrayPos + (8 + 1) && !this.currentCoordinates.includes("a") && tile.isOccupied){
+                possibleMoves.push(tile.coordinates);
+                return;
+        }
         
     }
 
@@ -82,15 +99,19 @@ export class Pawn implements IPiece{
             possibleMoves.push(tile.coordinates);
             return;
         }
+        
+        if(tileIndex === this.currentArrayPos - 8 && tile.isOccupied){
+            possibleMoves.shift();
+        }
 
         // in front of pawn 1 tiles away
-        if(!this.hasMoved && tileIndex === this.currentArrayPos - 16 && !tile.isOccupied && possibleMoves.length > 0){
+        if(!this.hasMoved && tileIndex === this.currentArrayPos - 16 && !tile.isOccupied){
             possibleMoves.push(tile.coordinates);
             return;
         }
 
         if(this.currentCoordinates.includes("a")){
-            // diagonal up left from pawn
+            // diagonal up right from pawn
             if(tileIndex === this.currentArrayPos - (8 - 1) && tile.isOccupied){
                 possibleMoves.push(tile.coordinates);
                 return;
@@ -98,12 +119,26 @@ export class Pawn implements IPiece{
         }
 
         if(this.currentCoordinates.includes("h")){
-            // diagonal up right from pawn
+            // diagonal up left from pawn
             if(tileIndex === this.currentArrayPos - (8 + 1) && tile.isOccupied){
                 possibleMoves.push(tile.coordinates);
                 return;
             }
         }
+
+        // diagonal up right from pawn
+        if(tileIndex === this.currentArrayPos - (8 - 1) && !this.currentCoordinates.includes("h") && tile.isOccupied){
+                possibleMoves.push(tile.coordinates);
+                return;
+            }
+
+
+        // diagonal up left from pawn
+        if(tileIndex === this.currentArrayPos - (8 + 1) && !this.currentCoordinates.includes("a") && tile.isOccupied){
+                possibleMoves.push(tile.coordinates);
+                return;
+        }
+
     }
     
     MovePiece(): [startPosition: string, endPosition: string] {
