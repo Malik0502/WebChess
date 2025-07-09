@@ -49,43 +49,42 @@ export class Pawn implements IPiece{
     
     private CalcArrayPosBlack(tile: GameTile, tileIndex: number, possibleMoves: string[]){
         
-        // in front of pawn
-        if(tileIndex === this.currentArrayPos + 8 && !tile.isOccupied){
+        const frontOfPawn: number = this.currentArrayPos + 8;
+        const frontOfPawnTwo: number = this.currentArrayPos + 16;
+        const diagonalLeftPawn: number = this.currentArrayPos + (8 - 1);
+        const diagonalRightPawn: number = this.currentArrayPos + (8 + 1); 
+
+        if(tileIndex === frontOfPawn && !tile.isOccupied){
             possibleMoves.push(tile.coordinates);
             return;
         }
 
-        // in front of pawn 1 tiles away
-        if(!this.hasMoved && tileIndex === this.currentArrayPos + 16 && !tile.isOccupied && possibleMoves.length > 0){
+        if(!this.hasMoved && tileIndex === frontOfPawnTwo && !tile.isOccupied && possibleMoves.length > 0){
             possibleMoves.push(tile.coordinates);
             return;
         }
 
         if(this.currentCoordinates.includes("h")){
-            // diagonal down left from pawn
-            if(tileIndex === this.currentArrayPos + (8 - 1) && tile.isOccupied){
+            if(tileIndex === diagonalLeftPawn && tile.isOccupied){
                 possibleMoves.push(tile.coordinates);
                 return;
             }
         }
 
         if(this.currentCoordinates.includes("a")){
-            // diagonal right from pawn
-            if(tileIndex === this.currentArrayPos + (8 + 1) && tile.isOccupied){
+            if(tileIndex === diagonalRightPawn && tile.isOccupied){
                 possibleMoves.push(tile.coordinates);
                 return;
             }
         }
 
-        // diagonal down left from pawn
-        if(tileIndex === this.currentArrayPos + (8 - 1) && !this.currentCoordinates.includes("h") && tile.isOccupied){
+        if(tileIndex === diagonalLeftPawn && !this.currentCoordinates.includes("h") && tile.isOccupied){
                 possibleMoves.push(tile.coordinates);
                 return;
             }
 
 
-        // diagonal down right from pawn
-        if(tileIndex === this.currentArrayPos + (8 + 1) && !this.currentCoordinates.includes("a") && tile.isOccupied){
+        if(tileIndex === diagonalRightPawn && !this.currentCoordinates.includes("a") && tile.isOccupied){
                 possibleMoves.push(tile.coordinates);
                 return;
         }
@@ -94,47 +93,46 @@ export class Pawn implements IPiece{
 
     private CalcArrayPosWhite(tile: GameTile, tileIndex: number,  possibleMoves: string[]){
         
+        const frontOfPawn: number = this.currentArrayPos - 8;
+        const frontOfPawnTwo: number = this.currentArrayPos - 16;
+        const diagonalLeftPawn: number = this.currentArrayPos - (8 + 1);
+        const diagonalRightPawn: number = this.currentArrayPos - (8 - 1); 
+
         // in front of pawn
-        if(tileIndex === this.currentArrayPos - 8 && !tile.isOccupied){
+        if(tileIndex === frontOfPawn && !tile.isOccupied){
             possibleMoves.push(tile.coordinates);
             return;
         }
         
-        if(tileIndex === this.currentArrayPos - 8 && tile.isOccupied){
+        if(tileIndex === frontOfPawn && tile.isOccupied){
             possibleMoves.shift();
         }
 
-        // in front of pawn 1 tiles away
-        if(!this.hasMoved && tileIndex === this.currentArrayPos - 16 && !tile.isOccupied){
+        if(!this.hasMoved && tileIndex === frontOfPawnTwo && !tile.isOccupied){
             possibleMoves.push(tile.coordinates);
             return;
         }
 
         if(this.currentCoordinates.includes("a")){
-            // diagonal up right from pawn
-            if(tileIndex === this.currentArrayPos - (8 - 1) && tile.isOccupied){
+            if(tileIndex === diagonalRightPawn && tile.isOccupied){
                 possibleMoves.push(tile.coordinates);
                 return;
             }
         }
 
         if(this.currentCoordinates.includes("h")){
-            // diagonal up left from pawn
-            if(tileIndex === this.currentArrayPos - (8 + 1) && tile.isOccupied){
+            if(tileIndex === diagonalLeftPawn && tile.isOccupied){
                 possibleMoves.push(tile.coordinates);
                 return;
             }
         }
 
-        // diagonal up right from pawn
-        if(tileIndex === this.currentArrayPos - (8 - 1) && !this.currentCoordinates.includes("h") && tile.isOccupied){
+        if(tileIndex === diagonalRightPawn && !this.currentCoordinates.includes("h") && tile.isOccupied){
                 possibleMoves.push(tile.coordinates);
                 return;
             }
 
-
-        // diagonal up left from pawn
-        if(tileIndex === this.currentArrayPos - (8 + 1) && !this.currentCoordinates.includes("a") && tile.isOccupied){
+        if(tileIndex === diagonalLeftPawn && !this.currentCoordinates.includes("a") && tile.isOccupied){
                 possibleMoves.push(tile.coordinates);
                 return;
         }
