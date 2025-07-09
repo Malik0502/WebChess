@@ -120,6 +120,10 @@ export class Board{
         
         for (let index = 0; index < this.gameTiles.length; index++) {
             const tile = this.gameTiles[index];
+
+            if(index === 17 || index == 22){
+                tile.isOccupied = true;
+            }
             
             // fills second and seventh rank with pawns
             if(tile.coordinates.includes("2")){
