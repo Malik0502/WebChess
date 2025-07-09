@@ -10,8 +10,9 @@ export class Rook implements IPiece{
     currentCoordinates: string;
     hasMoved: boolean;
     selected: boolean;
+    currentArrayPos: number;
     
-    constructor(name: string, color: string, startCoordinates: string){
+    constructor(name: string, color: string, startCoordinates: string, currentArrayPos: number){
         this.name = name,
         this.color = color,
         this.value = 5,
@@ -20,6 +21,7 @@ export class Rook implements IPiece{
         this.currentCoordinates = startCoordinates;
         this.hasMoved = false;
         this.selected = false;
+        this.currentArrayPos = currentArrayPos;
     }
     
     CalcPossibleMoves(board: GameTile[]): string[] {

@@ -19,7 +19,7 @@ export class GameManager{
         // Gets piece that stands on coordinates of nearest tile
         const pieceOnTile: IPiece = this.getPieceOnTile(nearestTile);
         
-        if(!nearestTile.isMoveOption){
+        if(nearestTile.isMoveOption){
             pieceOnTile.MovePiece();
         }
 

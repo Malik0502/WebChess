@@ -9,27 +9,27 @@ import { Rook } from "./rook";
 
 export class PieceFactory implements IPieceFactory{
     
-    createPiece(name: string, color: string, coordinate: string): IPiece {
+    createPiece(name: string, color: string, coordinate: string, gameTileArrayPos: number): IPiece | undefined {
         if(name.includes("pawn")){
-            return new Pawn(name, color, coordinate)
+            return new Pawn(name, color, coordinate, gameTileArrayPos)
         }
         if(name.includes("bishop")){
-            return new Bishop(name, color, coordinate)
+            return new Bishop(name, color, coordinate, gameTileArrayPos)
         }
         if(name.includes("knight")){
-            return new Knight(name, color, coordinate)
+            return new Knight(name, color, coordinate, gameTileArrayPos)
         }
         if(name.includes("rook")){
-            return new Rook(name, color, coordinate)
+            return new Rook(name, color, coordinate, gameTileArrayPos)
         }
         if(name.includes("queen")){
-            return new Queen(name, color, coordinate)
+            return new Queen(name, color, coordinate, gameTileArrayPos)
         }
         if(name.includes("king")){
-            return new King(name, color, coordinate)
+            return new King(name, color, coordinate, gameTileArrayPos)
         }
 
-        return new King(name, color, coordinate)
+        return undefined;
     }
 
 

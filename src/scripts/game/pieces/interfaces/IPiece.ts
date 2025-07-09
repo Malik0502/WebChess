@@ -7,6 +7,7 @@ export interface IPiece{
     spritePath: string;
     startCoordinates: string;
     currentCoordinates: string;
+    currentArrayPos: number;
     hasMoved: boolean;
     selected: boolean;
 

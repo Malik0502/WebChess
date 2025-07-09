@@ -118,18 +118,18 @@ export class Board{
 
     private drawStartPiecesOnChessBoard(): void{
         
-
-        this.gameTiles.forEach(tile => {
-
+        for (let index = 0; index < this.gameTiles.length; index++) {
+            const tile = this.gameTiles[index];
+            
             // fills second and seventh rank with pawns
             if(tile.coordinates.includes("2")){
                 this.canvasCtx?.drawImage(this.spriteMap["white-pawn"], tile.centerPoint[0] - tile.width / 2, tile.centerPoint[1] - tile.height / 1.83, tile.width, tile.height);
-                this.addToGamePiecesArray("white-pawn", tile.coordinates);
+                this.addToGamePiecesArray("white-pawn", tile.coordinates, index);
                 tile.isOccupied = true;
             }
             else if(tile.coordinates.includes("7")){
                 this.canvasCtx?.drawImage(this.spriteMap["black-pawn"], tile.centerPoint[0] - tile.width / 2, tile.centerPoint[1] - tile.height / 1.83, tile.width, tile.height);
-                this.addToGamePiecesArray("black-pawn", tile.coordinates);
+                this.addToGamePiecesArray("black-pawn", tile.coordinates, index);
                 tile.isOccupied = true;
             }
 
@@ -137,9 +137,9 @@ export class Board{
             const piece = this.piecePositions[tile.coordinates]
             if(piece){
                 this.drawPieceOnBoard(piece, tile);
-                this.addToGamePiecesArray(piece, tile.coordinates);
+                this.addToGamePiecesArray(piece, tile.coordinates, index);
             }
-        });
+        }
     }
 
     private drawPieceOnBoard(pieceSprite: string, tile: GameTile): void{
@@ -200,10 +200,10 @@ export class Board{
         }
     }
 
-    private addToGamePiecesArray(name: string, coordinate: string): void{
+    private addToGamePiecesArray(name: string, coordinate: string, gameTileArrayPos: number): void{
         const splitName = name.split("-");
         const pieceColor = splitName[0];
-        this.gamePieces.push(this.pieceFactory.createPiece(name, pieceColor, coordinate))
+        this.gamePieces.push(this.pieceFactory.createPiece(name, pieceColor, coordinate, gameTileArrayPos)!)
             
         }
 
