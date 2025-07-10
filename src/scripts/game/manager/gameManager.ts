@@ -29,7 +29,7 @@ export class GameManager{
         // toggle selection
         pieceOnTile.selected = !pieceOnTile.selected;
 
-        // then unselect others, excluding this one
+        // then unselect others, excluding the newly selected piece
         this.refreshSelectedPieces(pieceOnTile);
 
         const possibleMoves: string[] = pieceOnTile.CalcPossibleMoves(this.board.gameTiles);
@@ -37,20 +37,25 @@ export class GameManager{
         console.log(possibleMoves);
     }
 
-    private calcNearestTile(mousePos: [x: number, y: number]) : GameTile{
-        let nearestTile: [tile: GameTile | undefined, posDifference: number] = [undefined, 0];
-        this.board.gameTiles.forEach(tile => {
+    private calcNearestTile(mousePos: [x: number, y: number]): GameTile {
+        let nearestTile: [tile: GameTile | undefined, posDifference: number] = [undefined, Infinity];
 
-            // Euclidean distance formula to determine the nearest tile to the mouse click
-            let distanceCpMp: number = Math.sqrt((Math.pow(mousePos[0] - tile.centerPoint[0], 2)) + (Math.pow(mousePos[1] - tile.centerPoint[1], 2)))
+        for (const row of this.board.gameTiles) {
+            for (const tile of row) {
+                const distanceCpMp = Math.sqrt(
+                    Math.pow(mousePos[0] - tile.centerPoint[0], 2) +
+                    Math.pow(mousePos[1] - tile.centerPoint[1], 2)
+                );
 
-            if(distanceCpMp < nearestTile[1] || nearestTile[1] === 0){
-                nearestTile = [tile, distanceCpMp]
+                if (distanceCpMp < nearestTile[1]) {
+                    nearestTile = [tile, distanceCpMp];
+                }
             }
-        });
-        
+        }
+
         return nearestTile[0]!;
     }
+
 
     // Gets the piece that stands on method parameter tile
     private getPieceOnTile(tile: GameTile) : IPiece{
@@ -65,25 +70,24 @@ export class GameManager{
         return piece!;
     }
 
-    private getTileOnPiece(piece: IPiece) : GameTile{
-        let tile: GameTile | undefined;
-        
-        this.board.gameTiles.forEach(gameTile => {
-            if(gameTile.coordinates == piece.currentCoordinates){
-                tile = gameTile;
+    private getTileOnPiece(piece: IPiece): GameTile {
+        for (const row of this.board.gameTiles) {
+            for (const tile of row) {
+                if (tile.coordinates === piece.currentCoordinates) {
+                    return tile;
+                }
             }
-        });
+        }
 
-        return tile!;
+        throw new Error(`Tile for piece at ${piece.currentCoordinates} not found`);
     }
 
-
     private refreshSelectedPieces(selectedPiece: IPiece): void {
-    this.board.gamePieces.forEach(gamePiece => {
-        if (gamePiece !== selectedPiece && gamePiece.selected) {
-            this.board.repaintPieces(gamePiece, this.getTileOnPiece(gamePiece));
-            gamePiece.selected = false;
-        }
-    });
-}
+        this.board.gamePieces.forEach(gamePiece => {
+            if (gamePiece !== selectedPiece && gamePiece.selected) {
+                this.board.repaintPieces(gamePiece, this.getTileOnPiece(gamePiece));
+                gamePiece.selected = false;
+            }
+        });
+    }
 }

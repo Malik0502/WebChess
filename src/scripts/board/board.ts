@@ -7,7 +7,7 @@ export class Board{
     canvasCtx: CanvasRenderingContext2D | null;
     whiteTileColor: string;
     darkTileColor: string;
-    gameTiles: GameTile[];
+    gameTiles: GameTile[][];
     gamePieces: IPiece[];
     gameTileWidth: number;
     gameTileHeight: number;
@@ -82,69 +82,110 @@ export class Board{
         console.log(this.gamePieces)
     }
 
-    private drawChessboardPattern(): void{
+    private drawChessboardPattern(): void {
         let xPosRectangle: number = 0;
         let yPosRectangle: number = 0;
         let lastColor: string = this.darkTileColor;
 
-        for(let y = 8; y >= 1; y--){
+        for (let y = 8; y >= 1; y--) {
+            const rowTiles: GameTile[] = [];
+            const rowIndex: number = 8 - y;
 
             for (let x = 1; x <= 8; x++) {
+                const colIndex: number = x - 1;
 
-                // Determines the next tile color
-                if(lastColor === this.darkTileColor) {
+                // change tile color
+                if (lastColor === this.darkTileColor) {
                     this.canvasCtx!.fillStyle = this.whiteTileColor;
                     lastColor = this.whiteTileColor;
                 } else {
                     this.canvasCtx!.fillStyle = this.darkTileColor;
                     lastColor = this.darkTileColor;
                 }
-        
-                this.canvasCtx?.fillRect(xPosRectangle, yPosRectangle, this.gameTileWidth, this.gameTileHeight);
-                this.addToGameTilesArray(this.gameTileWidth, this.gameTileHeight, yPosRectangle, xPosRectangle, lastColor, x, this.convertNumCoordToChessCoord(x, y));
-            
-                // Adds width of gameTile to xPos to calc/draw next rectangle
+
+                this.canvasCtx?.fillRect(
+                    xPosRectangle,
+                    yPosRectangle,
+                    this.gameTileWidth,
+                    this.gameTileHeight
+                );
+
+                const tile = this.createGameTile(
+                    this.gameTileWidth, 
+                    this.gameTileHeight, 
+                    yPosRectangle, 
+                    xPosRectangle, 
+                    lastColor, 
+                    x, 
+                    this.convertNumCoordToChessCoord(x, y),
+                    rowIndex,
+                    colIndex
+                );
+
+                rowTiles.push(tile);
                 xPosRectangle += Math.round(this.gameTileWidth);
             }
 
-            // Adds height of gameTile to yPos to calc/draw next row
+            this.gameTiles.push(rowTiles);
+        
+            // calculate rectangle start pos in new row
             yPosRectangle += Math.round(this.gameTileHeight);
             xPosRectangle = 0;
+
+            // invert next rows start color
             lastColor = lastColor === this.darkTileColor ? this.whiteTileColor : this.darkTileColor;
         }
 
-        console.log(this.gameTiles)
+        console.log(this.gameTiles);
     }
 
-    private drawStartPiecesOnChessBoard(): void{
-        
-        for (let index = 0; index < this.gameTiles.length; index++) {
-            const tile = this.gameTiles[index];
+    // TODO: image drawing via draw piece on board when drawing pawns
+    // add to array in here instead of addToGamePiecesArray
+    // use the newly created createGamePiece method to create a piece
+    // set currentPiece in tile to the drawed piece
+    // 
+    private drawStartPiecesOnChessBoard(): void {
+        for (let row = 0; row < this.gameTiles.length; row++) {
+            for (let col = 0; col < this.gameTiles[row].length; col++) {
+                const tile = this.gameTiles[row][col];
 
-            // fills second and seventh rank with pawns
-            if(tile.coordinates.includes("2")){
-                this.canvasCtx?.drawImage(this.spriteMap["white-pawn"], tile.centerPoint[0] - tile.width / 2, tile.centerPoint[1] - tile.height / 1.83, tile.width, tile.height);
-                this.addToGamePiecesArray("white-pawn", tile.coordinates, index);
-                tile.isOccupied = true;
-            }
-            else if(tile.coordinates.includes("7")){
-                this.canvasCtx?.drawImage(this.spriteMap["black-pawn"], tile.centerPoint[0] - tile.width / 2, tile.centerPoint[1] - tile.height / 1.83, tile.width, tile.height);
-                this.addToGamePiecesArray("black-pawn", tile.coordinates, index);
-                tile.isOccupied = true;
-            }
+                // fills 2th and 7th rank with pawns
+                if (tile.coordinates.includes("2")) {
+                    this.canvasCtx?.drawImage(
+                        this.spriteMap["white-pawn"],
+                        tile.centerPoint[0] - tile.width / 2,
+                        tile.centerPoint[1] - tile.height / 1.83,
+                        tile.width,
+                        tile.height
+                    );
+                    this.addToGamePiecesArray("white-pawn", tile);
+                    tile.isOccupied = true;
 
-            // if coordinate is in piecePosition Record it will generate a piece on this coordinate
-            const piece = this.piecePositions[tile.coordinates]
-            if(piece){
-                this.drawPieceOnBoard(piece, tile);
-                this.addToGamePiecesArray(piece, tile.coordinates, index);
+                } else if (tile.coordinates.includes("7")) {
+                    this.canvasCtx?.drawImage(
+                        this.spriteMap["black-pawn"],
+                        tile.centerPoint[0] - tile.width / 2,
+                        tile.centerPoint[1] - tile.height / 1.83,
+                        tile.width,
+                        tile.height
+                    );
+                    this.addToGamePiecesArray("black-pawn", tile);
+                    tile.isOccupied = true;
+                }
+
+                // generates all pieces except pawns
+                const pieceName = this.piecePositions[tile.coordinates];
+                if (pieceName) {
+                    this.drawPieceOnBoard(pieceName, tile);
+                    this.addToGamePiecesArray(pieceName, tile);
+                }
             }
         }
     }
 
-    private drawPieceOnBoard(pieceSprite: string, tile: GameTile): void{
+    private drawPieceOnBoard(pieceName: string, tile: GameTile): void{
         this.canvasCtx?.drawImage(
-            this.spriteMap[pieceSprite],
+            this.spriteMap[pieceName],
             tile.centerPoint[0] - tile.width / 2,
             tile.centerPoint[1] - tile.height / 1.83,
             tile.width,
@@ -153,12 +194,13 @@ export class Board{
         tile.isOccupied = true;
     }
 
-    private drawCoordinatesOnBoard(): void{
+    private drawCoordinatesOnBoard(): void {
         this.canvasCtx!.font = "24px serif";
-
-        this.gameTiles.forEach(tile => {
-            this.drawCoordinateOnBoard(tile);
-        });
+        for (const row of this.gameTiles) {
+            for (const tile of row) {
+                this.drawCoordinateOnBoard(tile);
+            }
+        }
     }
 
     private drawCoordinateOnBoard(tile: GameTile): void{
@@ -176,37 +218,45 @@ export class Board{
         return [this.canvas.width, this.canvas.height]
     }
     
-    // Adds GameTiles to the appropriate class array
-    private addToGameTilesArray(gameTileWidth: number, gameTileHeight: number ,yPosRectangle: number, xPosRectangle: number, lastColor: string, x: number, coordinates: string) : void{
+    private createGameTile(gameTileWidth: number, gameTileHeight: number ,yPosRectangle: number, xPosRectangle: number, lastColor: string, x: number, coordinates: string, row: number, col: number) : GameTile{
+        let gameTile: GameTile | undefined;
         if(x === 1){
-            this.gameTiles.push(new GameTile(
+            gameTile = new GameTile(
             [gameTileWidth / 2, yPosRectangle + gameTileHeight / 2],
             gameTileWidth,
             gameTileHeight,
             lastColor,
             false,
             coordinates,
-            ))    
+            row, 
+            col
+            );
         }
         else{
-            this.gameTiles.push(new GameTile(
+            gameTile = new GameTile(
             [xPosRectangle + gameTileWidth / 2, yPosRectangle + gameTileHeight / 2],
             gameTileWidth,
             gameTileHeight,
             lastColor,
             false,
-            coordinates
-            ))
+            coordinates,
+            row,
+            col
+            );
         }
+
+        return gameTile!;
     }
 
-    private addToGamePiecesArray(name: string, coordinate: string, gameTileArrayPos: number): void{
-        const splitName = name.split("-");
-        const pieceColor = splitName[0];
-        this.gamePieces.push(this.pieceFactory.createPiece(name, pieceColor, coordinate, gameTileArrayPos)!)
-            
-        }
 
+    // TODO: edit it to be a createGamePiece method instead of addToGamePiecesArray
+    private addToGamePiecesArray(piece: string, tile: GameTile): void {
+        const splitName = piece.split("-");
+        const pieceColor = splitName[0];
+
+        this.gamePieces.push(this.pieceFactory.createPiece(piece, pieceColor, tile)!);
+    }
+ 
     private convertNumCoordToChessCoord(xCoordinate: number, yCoordinate: number): string{
         const chessCoordinates: Map<number, string> = new Map([
             [1, "a"],
@@ -249,7 +299,4 @@ export class Board{
         this.drawCoordinateOnBoard(tile);
         this.drawPieceOnBoard(piece.name, tile)
     }
-
-    
-    
 }

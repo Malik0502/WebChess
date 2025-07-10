@@ -1,3 +1,4 @@
+import type { GameTile } from "../../board/entities/gameTile";
 import { Bishop } from "./bishop";
 import type { IPiece } from "./interfaces/IPiece";
 import type { IPieceFactory } from "./interfaces/IPieceFactory";
@@ -9,28 +10,26 @@ import { Rook } from "./rook";
 
 export class PieceFactory implements IPieceFactory{
     
-    createPiece(name: string, color: string, coordinate: string, gameTileArrayPos: number): IPiece | undefined {
-        if(name.includes("pawn")){
-            return new Pawn(name, color, coordinate, gameTileArrayPos)
+    createPiece(name: string, color: string, tile: GameTile): IPiece | undefined {
+        if (name.includes("pawn")) {
+            return new Pawn(name, color, tile.coordinates, tile);
         }
-        if(name.includes("bishop")){
-            return new Bishop(name, color, coordinate, gameTileArrayPos)
+        if (name.includes("bishop")) {
+            return new Bishop(name, color, tile.coordinates, tile);
         }
-        if(name.includes("knight")){
-            return new Knight(name, color, coordinate, gameTileArrayPos)
+        if (name.includes("knight")) {
+            return new Knight(name, color, tile.coordinates, tile);
         }
-        if(name.includes("rook")){
-            return new Rook(name, color, coordinate, gameTileArrayPos)
+        if (name.includes("rook")) {
+            return new Rook(name, color, tile.coordinates, tile);
         }
-        if(name.includes("queen")){
-            return new Queen(name, color, coordinate, gameTileArrayPos)
+        if (name.includes("queen")) {
+            return new Queen(name, color, tile.coordinates, tile);
         }
-        if(name.includes("king")){
-            return new King(name, color, coordinate, gameTileArrayPos)
+        if (name.includes("king")) {
+            return new King(name, color, tile.coordinates, tile);
         }
 
         return undefined;
     }
-
-
 }

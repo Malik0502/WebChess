@@ -10,9 +10,9 @@ export class Rook implements IPiece{
     currentCoordinates: string;
     hasMoved: boolean;
     selected: boolean;
-    currentArrayPos: number;
+    currentTile: GameTile;
     
-    constructor(name: string, color: string, startCoordinates: string, currentArrayPos: number){
+    constructor(name: string, color: string, startCoordinates: string, currentTile: GameTile){
         this.name = name,
         this.color = color,
         this.value = 5,
@@ -21,10 +21,10 @@ export class Rook implements IPiece{
         this.currentCoordinates = startCoordinates;
         this.hasMoved = false;
         this.selected = false;
-        this.currentArrayPos = currentArrayPos;
+        this.currentTile = currentTile;
     }
     
-    CalcPossibleMoves(board: GameTile[]): string[] {
+    CalcPossibleMoves(board: GameTile[][]): string[] {
         throw new Error("Method not implemented.");
     }
     
