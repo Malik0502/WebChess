@@ -62,7 +62,7 @@ export class Board{
         this.gamePieces = [];
         this.connectImageSrcToSpriteMap();
         this.pieceFactory = pieceFactory;
-
+        this.fillRecordWithPawns();
         
         this.gameTileWidth = Math.round(canvasSize[0] / 8)
         this.gameTileHeight = Math.round(canvasSize[1] / 8) 
@@ -139,59 +139,31 @@ export class Board{
         console.log(this.gameTiles);
     }
 
-    // TODO: image drawing via draw piece on board when drawing pawns
-    // add to array in here instead of addToGamePiecesArray
-    // use the newly created createGamePiece method to create a piece
-    // set currentPiece in tile to the drawed piece
-    // 
     private drawStartPiecesOnChessBoard(): void {
         for (let row = 0; row < this.gameTiles.length; row++) {
             for (let col = 0; col < this.gameTiles[row].length; col++) {
+
                 const tile = this.gameTiles[row][col];
-
-                // fills 2th and 7th rank with pawns
-                if (tile.coordinates.includes("2")) {
-                    this.canvasCtx?.drawImage(
-                        this.spriteMap["white-pawn"],
-                        tile.centerPoint[0] - tile.width / 2,
-                        tile.centerPoint[1] - tile.height / 1.83,
-                        tile.width,
-                        tile.height
-                    );
-                    this.addToGamePiecesArray("white-pawn", tile);
-                    tile.isOccupied = true;
-
-                } else if (tile.coordinates.includes("7")) {
-                    this.canvasCtx?.drawImage(
-                        this.spriteMap["black-pawn"],
-                        tile.centerPoint[0] - tile.width / 2,
-                        tile.centerPoint[1] - tile.height / 1.83,
-                        tile.width,
-                        tile.height
-                    );
-                    this.addToGamePiecesArray("black-pawn", tile);
-                    tile.isOccupied = true;
-                }
-
-                // generates all pieces except pawns
                 const pieceName = this.piecePositions[tile.coordinates];
                 if (pieceName) {
-                    this.drawPieceOnBoard(pieceName, tile);
-                    this.addToGamePiecesArray(pieceName, tile);
+                    const piece: IPiece = this.createGamePiece(pieceName, tile);
+                    this.drawPieceOnBoard(piece, tile);
+                    this.gamePieces.push(piece);
                 }
             }
         }
     }
 
-    private drawPieceOnBoard(pieceName: string, tile: GameTile): void{
+    private drawPieceOnBoard(piece: IPiece, tile: GameTile): void{
         this.canvasCtx?.drawImage(
-            this.spriteMap[pieceName],
+            this.spriteMap[piece.name],
             tile.centerPoint[0] - tile.width / 2,
             tile.centerPoint[1] - tile.height / 1.83,
             tile.width,
             tile.height
         );
         tile.isOccupied = true;
+        tile.currentPiece = piece;
     }
 
     private drawCoordinatesOnBoard(): void {
@@ -248,13 +220,11 @@ export class Board{
         return gameTile!;
     }
 
-
-    // TODO: edit it to be a createGamePiece method instead of addToGamePiecesArray
-    private addToGamePiecesArray(piece: string, tile: GameTile): void {
-        const splitName = piece.split("-");
+    private createGamePiece(pieceName: string, tile: GameTile): IPiece {
+        const splitName = pieceName.split("-");
         const pieceColor = splitName[0];
 
-        this.gamePieces.push(this.pieceFactory.createPiece(piece, pieceColor, tile)!);
+        return this.pieceFactory.createPiece(pieceName, pieceColor, tile)!;
     }
  
     private convertNumCoordToChessCoord(xCoordinate: number, yCoordinate: number): string{
@@ -297,6 +267,13 @@ export class Board{
         
         this.canvasCtx?.fillRect(tile.centerPoint[0] - this.gameTileWidth / 2, tile.centerPoint[1] - this.gameTileHeight / 2, this.gameTileWidth, this.gameTileHeight);
         this.drawCoordinateOnBoard(tile);
-        this.drawPieceOnBoard(piece.name, tile)
+        this.drawPieceOnBoard(piece, tile)
+    }
+
+    private fillRecordWithPawns(){
+        for (let col of "abcdefgh") {
+            this.piecePositions[`${col}2`] = "white-pawn";
+            this.piecePositions[`${col}7`] = "black-pawn";
+        }
     }
 }
