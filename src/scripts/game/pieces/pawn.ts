@@ -27,115 +27,31 @@ export class Pawn implements IPiece{
     CalcPossibleMoves(board: GameTile[][]): string[] {
         let possibleMoves: string[] = [];
 
-        // for (let index = 0; index < board.length; index++) {
-        //     const tile = board[index];
-
-        //     if(this.color === "white"){
-        //         this.CalcArrayPosWhite(tile, index, possibleMoves)
-        //         if(this.currentArrayPos <= index){
-        //             break;
-        //         }
-        //     }
-        //     else{
-        //         if(index >= 16){
-        //             this.CalcArrayPosBlack(tile, index, possibleMoves);
-        //         }
-        //     }
-
-        // }
-        
+            if(this.color === "white"){
+                this.CalcArrayPosWhite(board, possibleMoves)
+            }
+            else{
+                this.CalcArrayPosBlack(board, possibleMoves);
+            }
+             
         return possibleMoves;
     }
     
-    private CalcArrayPosBlack(tile: GameTile, tileIndex: number, possibleMoves: string[]){
+    private CalcArrayPosBlack(board: GameTile[][], possibleMoves: string[]){
         
-        // const frontOfPawn: number = this.currentArrayPos + 8;
-        // const frontOfPawnTwo: number = this.currentArrayPos + 16;
-        // const diagonalLeftPawn: number = this.currentArrayPos + (8 - 1);
-        // const diagonalRightPawn: number = this.currentArrayPos + (8 + 1); 
-
-        // if(tileIndex === frontOfPawn && !tile.isOccupied){
-        //     possibleMoves.push(tile.coordinates);
-        //     return;
-        // }
-
-        // if(!this.hasMoved && tileIndex === frontOfPawnTwo && !tile.isOccupied && possibleMoves.length > 0){
-        //     possibleMoves.push(tile.coordinates);
-        //     return;
-        // }
-
-        // if(this.currentCoordinates.includes("h")){
-        //     if(tileIndex === diagonalLeftPawn && tile.isOccupied){
-        //         possibleMoves.push(tile.coordinates);
-        //         return;
-        //     }
-        // }
-
-        // if(this.currentCoordinates.includes("a")){
-        //     if(tileIndex === diagonalRightPawn && tile.isOccupied){
-        //         possibleMoves.push(tile.coordinates);
-        //         return;
-        //     }
-        // }
-
-        // if(tileIndex === diagonalLeftPawn && !this.currentCoordinates.includes("h") && tile.isOccupied){
-        //         possibleMoves.push(tile.coordinates);
-        //         return;
-        //     }
+        const pieceCol: number = this.currentTile.col;
+        const pieceRow: number = this.currentTile.row;
 
 
-        // if(tileIndex === diagonalRightPawn && !this.currentCoordinates.includes("a") && tile.isOccupied){
-        //         possibleMoves.push(tile.coordinates);
-        //         return;
-        // }
+        const frontOfPawn: GameTile = board[pieceRow + 1][pieceCol];
+        const frontOfPawnTwo: GameTile = board[pieceRow + 2][pieceCol];
+        const diagonalLeftPawn: GameTile = board[pieceRow + 1][pieceCol - 1];
+        const diagonalRightPawn: GameTile = board[pieceRow + 1][pieceCol + 1];
         
+        console.log(frontOfPawn.coordinates, frontOfPawnTwo.coordinates, diagonalLeftPawn.coordinates, diagonalRightPawn.coordinates)
     }
 
-    private CalcArrayPosWhite(tile: GameTile, tileIndex: number,  possibleMoves: string[]){
-        
-        // const frontOfPawn: number = this.currentArrayPos - 8;
-        // const frontOfPawnTwo: number = this.currentArrayPos - 16;
-        // const diagonalLeftPawn: number = this.currentArrayPos - (8 + 1);
-        // const diagonalRightPawn: number = this.currentArrayPos - (8 - 1); 
-
-        // // in front of pawn
-        // if(tileIndex === frontOfPawn && !tile.isOccupied){
-        //     possibleMoves.push(tile.coordinates);
-        //     return;
-        // }
-        
-        // if(tileIndex === frontOfPawn && tile.isOccupied){
-        //     possibleMoves.shift();
-        // }
-
-        // if(!this.hasMoved && tileIndex === frontOfPawnTwo && !tile.isOccupied){
-        //     possibleMoves.push(tile.coordinates);
-        //     return;
-        // }
-
-        // if(this.currentCoordinates.includes("a")){
-        //     if(tileIndex === diagonalRightPawn && tile.isOccupied){
-        //         possibleMoves.push(tile.coordinates);
-        //         return;
-        //     }
-        // }
-
-        // if(this.currentCoordinates.includes("h")){
-        //     if(tileIndex === diagonalLeftPawn && tile.isOccupied){
-        //         possibleMoves.push(tile.coordinates);
-        //         return;
-        //     }
-        // }
-
-        // if(tileIndex === diagonalRightPawn && !this.currentCoordinates.includes("h") && tile.isOccupied){
-        //         possibleMoves.push(tile.coordinates);
-        //         return;
-        //     }
-
-        // if(tileIndex === diagonalLeftPawn && !this.currentCoordinates.includes("a") && tile.isOccupied){
-        //         possibleMoves.push(tile.coordinates);
-        //         return;
-        // }
+    private CalcArrayPosWhite(board: GameTile[][], possibleMoves: string[]){
 
     }
     

@@ -7,6 +7,7 @@ export class Board{
     canvasCtx: CanvasRenderingContext2D | null;
     whiteTileColor: string;
     darkTileColor: string;
+    // [row][col]
     gameTiles: GameTile[][];
     gamePieces: IPiece[];
     gameTileWidth: number;
@@ -142,7 +143,7 @@ export class Board{
     private drawStartPiecesOnChessBoard(): void {
         for (let row = 0; row < this.gameTiles.length; row++) {
             for (let col = 0; col < this.gameTiles[row].length; col++) {
-
+                
                 const tile = this.gameTiles[row][col];
                 const pieceName = this.piecePositions[tile.coordinates];
                 if (pieceName) {
