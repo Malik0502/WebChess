@@ -5,9 +5,12 @@ import type { IPiece } from "../pieces/interfaces/IPiece";
 export class GameManager{
     
     private board: Board;
+    private isPieceSelected: boolean;
+    private selectedPiece: IPiece | undefined;
 
     constructor(board: Board){
         this.board = board;
+        this.isPieceSelected = false;
     }
 
     handleMouseClick(mousePos: [number, number]): void{
@@ -19,8 +22,10 @@ export class GameManager{
         // Gets piece that stands on coordinates of nearest tile
         const pieceOnTile: IPiece = this.getPieceOnTile(nearestTile);
         
-        if(nearestTile.isMoveOption){
-            pieceOnTile.MovePiece();
+        if(this.isPieceSelected && this.selectedPiece != pieceOnTile){
+            // pieceOnTile.MovePiece();
+            this.isPieceSelected = false;
+            return;
         }
 
         // marks selected piece yellow
@@ -29,12 +34,13 @@ export class GameManager{
         // toggle selection
         pieceOnTile.selected = !pieceOnTile.selected;
 
+        this.isPieceSelected = true;
+        this.selectedPiece = pieceOnTile;
+
         // then unselect others, excluding the newly selected piece
         this.refreshSelectedPieces(pieceOnTile);
 
-        const possibleMoves: string[] = pieceOnTile.CalcPossibleMoves(this.board.gameTiles);
-
-        console.log(possibleMoves);
+        pieceOnTile.CalcPossibleMoves(this.board.gameTiles);
     }
 
     private calcNearestTile(mousePos: [x: number, y: number]): GameTile {

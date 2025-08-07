@@ -11,6 +11,7 @@ export class King implements IPiece{
     hasMoved: boolean;
     selected: boolean;
     currentTile: GameTile;
+    possibleMoves: GameTile[];
     
     constructor(name: string, color: string, startCoordinates: string, currentTile: GameTile){
         this.name = name,
@@ -22,13 +23,18 @@ export class King implements IPiece{
         this.hasMoved = false;
         this.selected = false;
         this.currentTile = currentTile
+        this.possibleMoves = [];
     }
     
-    CalcPossibleMoves(board: GameTile[][]): string[] {
+    CalcPossibleMoves(board: GameTile[][]){
         throw new Error("Method not implemented.");
     }
     
     MovePiece(): [startPosition: string, endPosition: string] {
+        throw new Error("Method not implemented.");
+    }
+
+    MarkAsMoveOption(): void {
         throw new Error("Method not implemented.");
     }
 }

@@ -1,5 +1,6 @@
 import type { GameTile } from "../../board/entities/gameTile";
 import type { IPiece } from "./interfaces/IPiece";
+import { FilePosVerifier } from "./filePosVerifier";
 
 export class Pawn implements IPiece{
     name: string;
@@ -11,6 +12,9 @@ export class Pawn implements IPiece{
     hasMoved: boolean;
     selected: boolean;
     currentTile: GameTile;
+    possibleMoves: GameTile[];
+    
+    private filePosVerifier: FilePosVerifier; 
     
     constructor(name: string, color: string, startCoordinates: string, currentTile: GameTile){
         this.name = name,
@@ -22,40 +26,87 @@ export class Pawn implements IPiece{
         this.hasMoved = false;
         this.selected = false;
         this.currentTile = currentTile;
+        this.possibleMoves = [];
+
+        this.filePosVerifier = new FilePosVerifier;
     }
 
-    CalcPossibleMoves(board: GameTile[][]): string[] {
-        let possibleMoves: string[] = [];
+    CalcPossibleMoves(board: GameTile[][]){
 
             if(this.color === "white"){
-                this.CalcArrayPosWhite(board, possibleMoves)
+                this.possibleMoves = this.CalcArrayPosWhite(board);
             }
             else{
-                this.CalcArrayPosBlack(board, possibleMoves);
+                this.possibleMoves = this.CalcArrayPosBlack(board);
             }
              
-        return possibleMoves;
+        this.MarkAsMoveOption();
+        console.log(this.possibleMoves);
     }
     
-    private CalcArrayPosBlack(board: GameTile[][], possibleMoves: string[]){
+    private CalcArrayPosBlack(board: GameTile[][]): GameTile[]{        
+        let possibleMoves: GameTile[] = [];
         
         const pieceCol: number = this.currentTile.col;
         const pieceRow: number = this.currentTile.row;
 
-
         const frontOfPawn: GameTile = board[pieceRow + 1][pieceCol];
         const frontOfPawnTwo: GameTile = board[pieceRow + 2][pieceCol];
-        const diagonalLeftPawn: GameTile = board[pieceRow + 1][pieceCol - 1];
-        const diagonalRightPawn: GameTile = board[pieceRow + 1][pieceCol + 1];
         
-        console.log(frontOfPawn.coordinates, frontOfPawnTwo.coordinates, diagonalLeftPawn.coordinates, diagonalRightPawn.coordinates)
+        // Not on "a" file and diagonal down left file has piece
+        if(!this.filePosVerifier.IsOnAFile(this) && board[pieceRow + 1][pieceCol - 1].isOccupied){
+            // diagonal down left of pawn
+            possibleMoves.push(board[pieceRow + 1][pieceCol - 1]);
+        }
+
+        // Not on "h" file and diagonal down right file has piece
+        if(!this.filePosVerifier.IsOnHFile(this) && board[pieceRow + 1][pieceCol + 1].isOccupied){
+            // diagonal down right of pawn
+            possibleMoves.push(board[pieceRow + 1][pieceCol + 1]);
+        }
+
+        if(!frontOfPawn.isOccupied) possibleMoves.push(frontOfPawn)
+
+        if(!frontOfPawnTwo.isOccupied) possibleMoves.push(frontOfPawnTwo)
+
+        return possibleMoves;
     }
 
-    private CalcArrayPosWhite(board: GameTile[][], possibleMoves: string[]){
+    private CalcArrayPosWhite(board: GameTile[][]): GameTile[]{
+        let possibleMoves: GameTile[] = [];
+        
+        const pieceCol: number = this.currentTile.col;
+        const pieceRow: number = this.currentTile.row;
 
+        const frontOfPawn: GameTile = board[pieceRow - 1][pieceCol];
+        const frontOfPawnTwo: GameTile = board[pieceRow - 2][pieceCol];
+        
+        // Not on "a" file and diagonal up left file has piece
+        if(!this.filePosVerifier.IsOnAFile(this) && board[pieceRow - 1][pieceCol - 1].isOccupied){
+            // diagonal up left of pawn
+            possibleMoves.push(board[pieceRow - 1][pieceCol - 1]);
+        }
+
+        // Not on "h" file and diagonal up right file has piece
+        if(!this.filePosVerifier.IsOnHFile(this) && board[pieceRow - 1][pieceCol + 1].isOccupied){
+            // diagonal up right of pawn
+            possibleMoves.push(board[pieceRow - 1][pieceCol + 1]);
+        }
+
+        if(!frontOfPawn.isOccupied) possibleMoves.push(frontOfPawn)
+
+        if(!frontOfPawnTwo.isOccupied) possibleMoves.push(frontOfPawnTwo)
+
+        return possibleMoves;
     }
-    
+
     MovePiece(): [startPosition: string, endPosition: string] {
         throw new Error("Method not implemented.");
+    }
+
+    MarkAsMoveOption(): void {
+        this.possibleMoves.forEach(tile => {
+            tile.isMoveOption = true;
+        });
     }
 }
