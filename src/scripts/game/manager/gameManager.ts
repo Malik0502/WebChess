@@ -25,6 +25,8 @@ export class GameManager{
         if(this.isPieceSelected && this.selectedPiece != pieceOnTile){
             if(!this.selectedPiece?.possibleMoves.some(x => x.coordinates === nearestTile.coordinates)){
                 this.selectPiece(pieceOnTile, nearestTile);
+                pieceOnTile.calcPossibleMoves(this.board.gameTiles);
+                return;
             }
 
             // this.movePiece();
