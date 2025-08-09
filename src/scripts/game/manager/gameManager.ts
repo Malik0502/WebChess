@@ -1,6 +1,6 @@
 import type { Board } from "../../board/board";
 import { GameTile } from "../../board/entities/gameTile";
-import type { IPiece } from "../pieces/interfaces/IPiece";
+import type { IPiece } from "../pieces/Interfaces/IPiece";
 
 export class GameManager{
     
@@ -23,24 +23,18 @@ export class GameManager{
         const pieceOnTile: IPiece = this.getPieceOnTile(nearestTile);
         
         if(this.isPieceSelected && this.selectedPiece != pieceOnTile){
-            // pieceOnTile.MovePiece();
+            if(!this.selectedPiece?.possibleMoves.some(x => x.coordinates === nearestTile.coordinates)){
+                this.selectPiece(pieceOnTile, nearestTile);
+            }
+
+            // this.movePiece();
             this.isPieceSelected = false;
             return;
         }
 
-        // marks selected piece yellow
-        this.board.repaintPieces(pieceOnTile, nearestTile);
+        this.selectPiece(pieceOnTile, nearestTile);
 
-        // toggle selection
-        pieceOnTile.selected = !pieceOnTile.selected;
-
-        this.isPieceSelected = true;
-        this.selectedPiece = pieceOnTile;
-
-        // then unselect others, excluding the newly selected piece
-        this.refreshSelectedPieces(pieceOnTile);
-
-        pieceOnTile.CalcPossibleMoves(this.board.gameTiles);
+        pieceOnTile.calcPossibleMoves(this.board.gameTiles);
     }
 
     private calcNearestTile(mousePos: [x: number, y: number]): GameTile {
@@ -61,7 +55,6 @@ export class GameManager{
 
         return nearestTile[0]!;
     }
-
 
     // Gets the piece that stands on method parameter tile
     private getPieceOnTile(tile: GameTile) : IPiece{
@@ -95,5 +88,23 @@ export class GameManager{
                 gamePiece.selected = false;
             }
         });
+    }
+
+    private selectPiece(pieceOnTile: IPiece, nearestTile: GameTile): void{
+        // marks selected piece yellow
+        this.board.repaintPieces(pieceOnTile, nearestTile);
+
+        // toggle selection
+        pieceOnTile.selected = !pieceOnTile.selected;
+
+        this.isPieceSelected = true;
+        this.selectedPiece = pieceOnTile;
+
+        // then unselect others, excluding the newly selected piece
+        this.refreshSelectedPieces(pieceOnTile);
+    }
+
+    private movePiece(possibleMoves: GameTile[]): void {
+
     }
 }

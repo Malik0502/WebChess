@@ -12,7 +12,6 @@ export interface IPiece {
     selected: boolean;
     possibleMoves: GameTile[];
 
-    CalcPossibleMoves(board: GameTile[][]): void;
-    MovePiece(): [startPosition: string, endPosition: string];
-    MarkAsMoveOption(): void;
+    calcPossibleMoves(board: GameTile[][]): void;
+    markAsMoveOption(): void;
 }

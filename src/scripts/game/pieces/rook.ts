@@ -1,5 +1,5 @@
 import type { GameTile } from "../../board/entities/gameTile";
-import type { IPiece } from "./interfaces/IPiece";
+import type { IPiece } from "./Interfaces/IPiece";
 
 export class Rook implements IPiece{
     name: string;
@@ -26,15 +26,11 @@ export class Rook implements IPiece{
         this.possibleMoves = [];
     }
     
-    CalcPossibleMoves(board: GameTile[][]){
-        throw new Error("Method not implemented.");
-    }
-    
-    MovePiece(): [startPosition: string, endPosition: string] {
+    calcPossibleMoves(board: GameTile[][]){
         throw new Error("Method not implemented.");
     }
 
-    MarkAsMoveOption(): void {
+    markAsMoveOption(): void {
         throw new Error("Method not implemented.");
     }
 }

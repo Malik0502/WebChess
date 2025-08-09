@@ -1,7 +1,7 @@
 import type { GameTile } from "../../board/entities/gameTile";
 import { Bishop } from "./bishop";
-import type { IPiece } from "./interfaces/IPiece";
-import type { IPieceFactory } from "./interfaces/IPieceFactory";
+import type { IPiece } from "./Interfaces/IPiece";
+import type { IPieceFactory } from "./Interfaces/IPieceFactory";
 import { King } from "./king";
 import { Knight } from "./knight";
 import { Pawn } from "./pawn";

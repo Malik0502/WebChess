@@ -1,4 +1,4 @@
-import type { IPiece } from "../../game/pieces/interfaces/IPiece";
+import type { IPiece } from "../../game/pieces/Interfaces/IPiece";
 
 export class GameTile{
     centerPoint: [x: number, y: number];

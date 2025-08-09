@@ -1,11 +1,11 @@
-import type { IPiece } from "./interfaces/IPiece";
+import type { IPiece } from "./Interfaces/IPiece";
 
 export class FilePosVerifier{
-    public IsOnHFile(piece: IPiece){
+    public isOnHFile(piece: IPiece){
         return piece.currentCoordinates.includes("h");
     }
 
-    public IsOnAFile(piece: IPiece){
+    public isOnAFile(piece: IPiece){
         return piece.currentCoordinates.includes("a");
     }
 }

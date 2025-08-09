@@ -1,6 +1,6 @@
 import type { GameTile } from "../../board/entities/gameTile";
-import type { IPiece } from "./interfaces/IPiece";
 import { FilePosVerifier } from "./filePosVerifier";
+import type { IPiece } from "./Interfaces/IPiece";
 
 export class Pawn implements IPiece{
     name: string;
@@ -31,20 +31,20 @@ export class Pawn implements IPiece{
         this.filePosVerifier = new FilePosVerifier;
     }
 
-    CalcPossibleMoves(board: GameTile[][]){
+    calcPossibleMoves(board: GameTile[][]){
 
             if(this.color === "white"){
-                this.possibleMoves = this.CalcArrayPosWhite(board);
+                this.possibleMoves = this.calcArrayPosWhite(board);
             }
             else{
-                this.possibleMoves = this.CalcArrayPosBlack(board);
+                this.possibleMoves = this.calcArrayPosBlack(board);
             }
              
-        this.MarkAsMoveOption();
+        this.markAsMoveOption();
         console.log(this.possibleMoves);
     }
     
-    private CalcArrayPosBlack(board: GameTile[][]): GameTile[]{        
+    private calcArrayPosBlack(board: GameTile[][]): GameTile[]{        
         let possibleMoves: GameTile[] = [];
         
         const pieceCol: number = this.currentTile.col;
@@ -54,13 +54,13 @@ export class Pawn implements IPiece{
         const frontOfPawnTwo: GameTile = board[pieceRow + 2][pieceCol];
         
         // Not on "a" file and diagonal down left file has piece
-        if(!this.filePosVerifier.IsOnAFile(this) && board[pieceRow + 1][pieceCol - 1].isOccupied){
+        if(!this.filePosVerifier.isOnAFile(this) && board[pieceRow + 1][pieceCol - 1].isOccupied){
             // diagonal down left of pawn
             possibleMoves.push(board[pieceRow + 1][pieceCol - 1]);
         }
 
         // Not on "h" file and diagonal down right file has piece
-        if(!this.filePosVerifier.IsOnHFile(this) && board[pieceRow + 1][pieceCol + 1].isOccupied){
+        if(!this.filePosVerifier.isOnHFile(this) && board[pieceRow + 1][pieceCol + 1].isOccupied){
             // diagonal down right of pawn
             possibleMoves.push(board[pieceRow + 1][pieceCol + 1]);
         }
@@ -72,7 +72,7 @@ export class Pawn implements IPiece{
         return possibleMoves;
     }
 
-    private CalcArrayPosWhite(board: GameTile[][]): GameTile[]{
+    private calcArrayPosWhite(board: GameTile[][]): GameTile[]{
         let possibleMoves: GameTile[] = [];
         
         const pieceCol: number = this.currentTile.col;
@@ -82,13 +82,13 @@ export class Pawn implements IPiece{
         const frontOfPawnTwo: GameTile = board[pieceRow - 2][pieceCol];
         
         // Not on "a" file and diagonal up left file has piece
-        if(!this.filePosVerifier.IsOnAFile(this) && board[pieceRow - 1][pieceCol - 1].isOccupied){
+        if(!this.filePosVerifier.isOnAFile(this) && board[pieceRow - 1][pieceCol - 1].isOccupied){
             // diagonal up left of pawn
             possibleMoves.push(board[pieceRow - 1][pieceCol - 1]);
         }
 
         // Not on "h" file and diagonal up right file has piece
-        if(!this.filePosVerifier.IsOnHFile(this) && board[pieceRow - 1][pieceCol + 1].isOccupied){
+        if(!this.filePosVerifier.isOnHFile(this) && board[pieceRow - 1][pieceCol + 1].isOccupied){
             // diagonal up right of pawn
             possibleMoves.push(board[pieceRow - 1][pieceCol + 1]);
         }
@@ -100,11 +100,7 @@ export class Pawn implements IPiece{
         return possibleMoves;
     }
 
-    MovePiece(): [startPosition: string, endPosition: string] {
-        throw new Error("Method not implemented.");
-    }
-
-    MarkAsMoveOption(): void {
+    markAsMoveOption(): void {
         this.possibleMoves.forEach(tile => {
             tile.isMoveOption = true;
         });

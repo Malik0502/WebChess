@@ -1,5 +1,5 @@
-import type { IPiece } from "../game/pieces/interfaces/IPiece";
-import type { IPieceFactory } from "../game/pieces/interfaces/IPieceFactory";
+import type { IPiece } from "../game/pieces/Interfaces/IPiece";
+import type { IPieceFactory } from "../game/pieces/Interfaces/IPieceFactory";
 import { GameTile } from "./entities/gameTile";
 
 export class Board{
