@@ -68,8 +68,8 @@ export class Pawn implements IPiece{
         // Tile in front of piece is not occupied
         if(!frontOfPawn.isOccupied) possibleMoves.push(frontOfPawn)
 
-        // Tile in front and 2 in front of piece are not occupied
-        if(!frontOfPawn.isOccupied && !frontOfPawnTwo.isOccupied) possibleMoves.push(frontOfPawnTwo)
+        // Tile in front and 2 in front of piece are not occupied + has not moved
+        if(!frontOfPawn.isOccupied && !frontOfPawnTwo.isOccupied && !this.hasMoved) possibleMoves.push(frontOfPawnTwo)
 
         return possibleMoves;
     }
@@ -98,8 +98,8 @@ export class Pawn implements IPiece{
         // Tile in front of piece is not occupied
         if(!frontOfPawn.isOccupied) possibleMoves.push(frontOfPawn)
 
-        // Tile in front and 2 in front of piece are not occupied
-        if(!frontOfPawn.isOccupied && !frontOfPawnTwo.isOccupied) possibleMoves.push(frontOfPawnTwo)
+        // Tile in front and 2 in front of piece are not occupied + has not moved
+        if(!frontOfPawn.isOccupied && !frontOfPawnTwo.isOccupied && !this.hasMoved) possibleMoves.push(frontOfPawnTwo)
 
         return possibleMoves;
     }
