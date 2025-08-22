@@ -1,7 +1,0 @@
-Current Bugs:
-
-Pawn Movement:
-
-- when trying to move  without piece on tile throws error because of undefined trying to read properties
-
-- when pawn on 2nd or 7th rank tries to select throws error
