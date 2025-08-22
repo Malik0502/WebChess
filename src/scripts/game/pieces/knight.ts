@@ -1,5 +1,5 @@
 import type { GameTile } from "../../board/entities/gameTile";
-import type { IPiece } from "./Interfaces/IPiece";
+import type { IPiece } from "./interfaces/IPiece";
 
 export class Knight implements IPiece{
     name: string;

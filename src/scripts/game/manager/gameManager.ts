@@ -1,6 +1,6 @@
 import type { Board } from "../../board/board";
 import { GameTile } from "../../board/entities/gameTile";
-import type { IPiece } from "../pieces/Interfaces/IPiece";
+import type { IPiece } from "../pieces/interfaces/IPiece";
 
 export class GameManager{
     
@@ -15,21 +15,21 @@ export class GameManager{
 
     handleMouseClick(mousePos: [number, number]): void{
         const nearestTile: GameTile = this.calcNearestTile(mousePos);
-        
-        if(!nearestTile.isOccupied) return
 
         
         // Gets piece that stands on coordinates of nearest tile
         const pieceOnTile: IPiece = this.getPieceOnTile(nearestTile);
         
-        if(this.isPieceSelected && this.selectedPiece != pieceOnTile){
+        // If a piece is selected && its a different tile than the selected tile
+        if(this.isPieceSelected && this.selectedPiece?.currentTile != nearestTile){
             if(!this.selectedPiece?.possibleMoves.some(x => x.coordinates === nearestTile.coordinates)){
                 this.selectPiece(pieceOnTile, nearestTile);
                 pieceOnTile.calcPossibleMoves(this.board.gameTiles);
                 return;
             }
 
-            // this.movePiece();
+            console.log("Kommt durch");
+            this.movePiece(this.selectedPiece, nearestTile);
             this.isPieceSelected = false;
             return;
         }
@@ -106,7 +106,22 @@ export class GameManager{
         this.refreshSelectedPieces(pieceOnTile);
     }
 
-    private movePiece(possibleMoves: GameTile[]): void {
+    private movePiece(piece: IPiece, clickedTile: GameTile): void {
+        
+        this.board.removePieceFromTile(piece);
+        this.board.drawPieceOnBoard(piece, clickedTile);
 
+        this.changePropsAfterMove(piece, clickedTile);
+
+    }
+
+    private changePropsAfterMove(piece: IPiece, clickedTile: GameTile){
+        piece.possibleMoves.forEach(x => x.isMoveOption = false);
+        piece.selected = false;
+        piece.hasMoved = true;
+        piece.possibleMoves = [];
+        piece.currentCoordinates = clickedTile.coordinates;
+        piece.currentTile.isOccupied = false;
+        piece.currentTile = clickedTile;
     }
 }

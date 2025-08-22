@@ -1,4 +1,4 @@
-import type { IPiece } from "./Interfaces/IPiece";
+import type { IPiece } from "./interfaces/IPiece";
 
 export class FilePosVerifier{
     public isOnHFile(piece: IPiece){

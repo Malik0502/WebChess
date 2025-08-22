@@ -1,5 +1,5 @@
-import type { IPiece } from "../game/pieces/Interfaces/IPiece";
-import type { IPieceFactory } from "../game/pieces/Interfaces/IPieceFactory";
+import type { IPiece } from "../game/pieces/interfaces/IPiece";
+import type { IPieceFactory } from "../game/pieces/interfaces/IPieceFactory";
 import { GameTile } from "./entities/gameTile";
 
 export class Board{
@@ -155,7 +155,7 @@ export class Board{
         }
     }
 
-    private drawPieceOnBoard(piece: IPiece, tile: GameTile): void{
+    public drawPieceOnBoard(piece: IPiece, tile: GameTile): void{
         this.canvasCtx?.drawImage(
             this.spriteMap[piece.name],
             tile.centerPoint[0] - tile.width / 2,
@@ -165,6 +165,21 @@ export class Board{
         );
         tile.isOccupied = true;
         tile.currentPiece = piece;
+    }
+
+    public removePieceFromTile(piece: IPiece): void{
+        const xPosRectangle: number = piece.currentTile.centerPoint[0] - this.gameTileWidth / 2;
+        const yPosRectangle: number = piece.currentTile.centerPoint[1] - this.gameTileHeight / 2;
+
+        this.canvasCtx!.fillStyle = piece.currentTile.color;
+        this.canvasCtx?.fillRect(
+            xPosRectangle,
+            yPosRectangle,
+            this.gameTileWidth,
+            this.gameTileHeight
+        );
+
+
     }
 
     private drawCoordinatesOnBoard(): void {

@@ -1,6 +1,6 @@
 import type { GameTile } from "../../board/entities/gameTile";
 import { FilePosVerifier } from "./filePosVerifier";
-import type { IPiece } from "./Interfaces/IPiece";
+import type { IPiece } from "./interfaces/IPiece";
 
 export class Pawn implements IPiece{
     name: string;
