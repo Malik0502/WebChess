@@ -16,6 +16,7 @@ export class GameManager{
     handleMouseClick(mousePos: [number, number]): void{
         const nearestTile: GameTile = this.calcNearestTile(mousePos);
 
+        if(!this.isPieceSelected && !nearestTile.isOccupied) return;
         
         // Gets piece that stands on coordinates of nearest tile
         const pieceOnTile: IPiece = this.getPieceOnTile(nearestTile);
@@ -115,13 +116,22 @@ export class GameManager{
 
     }
 
-    private changePropsAfterMove(piece: IPiece, clickedTile: GameTile){
+    private changePropsAfterMove(piece: IPiece, clickedTile: GameTile): void{
+        
+        if(clickedTile.isOccupied && clickedTile.coordinates != piece.currentCoordinates) this.capturePiece(clickedTile)
+        
         piece.possibleMoves.forEach(x => x.isMoveOption = false);
         piece.selected = false;
         piece.hasMoved = true;
         piece.possibleMoves = [];
         piece.currentCoordinates = clickedTile.coordinates;
         piece.currentTile.isOccupied = false;
+
         piece.currentTile = clickedTile;
+    }
+
+    // just handles removing piece from array right now
+    private capturePiece(clickedTile: GameTile): void{
+        this.board.gamePieces = this.board.gamePieces.filter(x => x.currentCoordinates != clickedTile.coordinates);
     }
 }
