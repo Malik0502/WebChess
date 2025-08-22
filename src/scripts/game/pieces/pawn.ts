@@ -65,9 +65,11 @@ export class Pawn implements IPiece{
             possibleMoves.push(board[pieceRow + 1][pieceCol + 1]);
         }
 
+        // Tile in front of piece is not occupied
         if(!frontOfPawn.isOccupied) possibleMoves.push(frontOfPawn)
 
-        if(!frontOfPawnTwo.isOccupied) possibleMoves.push(frontOfPawnTwo)
+        // Tile in front and 2 in front of piece are not occupied
+        if(!frontOfPawn.isOccupied && !frontOfPawnTwo.isOccupied) possibleMoves.push(frontOfPawnTwo)
 
         return possibleMoves;
     }
@@ -93,9 +95,11 @@ export class Pawn implements IPiece{
             possibleMoves.push(board[pieceRow - 1][pieceCol + 1]);
         }
 
+        // Tile in front of piece is not occupied
         if(!frontOfPawn.isOccupied) possibleMoves.push(frontOfPawn)
 
-        if(!frontOfPawnTwo.isOccupied) possibleMoves.push(frontOfPawnTwo)
+        // Tile in front and 2 in front of piece are not occupied
+        if(!frontOfPawn.isOccupied && !frontOfPawnTwo.isOccupied) possibleMoves.push(frontOfPawnTwo)
 
         return possibleMoves;
     }

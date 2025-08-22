@@ -1,0 +1,13 @@
+Current Bugs:
+
+Pawn Movement:
+
+- pawns can move 2 tiles after first move
+    -> should check if pawn was moved already
+
+- pawn can jump over other pieces | works now
+    -> should check if piece is in front of pawn
+
+- when trying to move diagonal without piece to capture throws error because of undefined trying to read properties
+
+- if pawn captures other pawn and you select the tile again the captured pawn respawns and the other disappears
