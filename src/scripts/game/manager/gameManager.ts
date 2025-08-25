@@ -23,15 +23,18 @@ export class GameManager{
         
         // If a piece is selected && its a different tile than the selected tile
         if(this.isPieceSelected && this.selectedPiece?.currentTile != nearestTile){
-            if(!this.selectedPiece?.possibleMoves.some(x => x.coordinates === nearestTile.coordinates)){
-                this.selectPiece(pieceOnTile, nearestTile);
-                pieceOnTile.calcPossibleMoves(this.board.gameTiles);
-                return;
+            if(this.selectedPiece?.possibleMoves.some(x => x.coordinates === nearestTile.coordinates)){
+                this.movePiece(this.selectedPiece, nearestTile);
+                this.isPieceSelected = false;
+                return;    
             }
 
-            this.movePiece(this.selectedPiece, nearestTile);
-            this.isPieceSelected = false;
+            if(!pieceOnTile) return;
+            
+            this.selectPiece(pieceOnTile, nearestTile);
+            pieceOnTile.calcPossibleMoves(this.board.gameTiles);
             return;
+            
         }
 
         this.selectPiece(pieceOnTile, nearestTile);
