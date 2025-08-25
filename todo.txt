@@ -1,10 +1,14 @@
 Current Bugs:
 
-Pawn Movement:
+general:
 
-- when trying to move  without piece on tile throws error because of undefined trying to read properties
+- win conditions
+- movement of pieces besides pawn
+- turn system + movement memory
+- point system
 
 pawn todo:
 
 - implement conversion of Pawn
 - implement en passant
+
