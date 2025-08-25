@@ -1,5 +1,5 @@
 import { Board } from "./scripts/board/board"
-import { GameManager } from "./scripts/game/manager/gameManager";
+import { GameManager } from "./scripts/game/manager/gameManagement/gameManager";
 import { PieceFactory } from "./scripts/game/pieces/pieceFactory"
 
 let gameBoard  : Board;

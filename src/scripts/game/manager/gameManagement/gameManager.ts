@@ -1,6 +1,6 @@
-import type { Board } from "../../board/board";
-import { GameTile } from "../../board/entities/gameTile";
-import type { IPiece } from "../pieces/interfaces/IPiece";
+import type { Board } from "../../../board/board";
+import { GameTile } from "../../../board/entities/gameTile";
+import type { IPiece } from "../../pieces/interfaces/IPiece";
 
 export class GameManager{
     
