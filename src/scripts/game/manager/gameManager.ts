@@ -29,7 +29,6 @@ export class GameManager{
                 return;
             }
 
-            console.log("Kommt durch");
             this.movePiece(this.selectedPiece, nearestTile);
             this.isPieceSelected = false;
             return;
@@ -110,7 +109,7 @@ export class GameManager{
     private movePiece(piece: IPiece, clickedTile: GameTile): void {
         
         this.board.removePieceFromTile(piece);
-        this.board.drawPieceOnBoard(piece, clickedTile);
+        this.board.drawPieceOnBoard(piece, clickedTile, true);
 
         this.changePropsAfterMove(piece, clickedTile);
 

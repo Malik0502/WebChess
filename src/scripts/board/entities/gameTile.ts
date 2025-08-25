@@ -2,6 +2,7 @@ import type { IPiece } from "../../game/pieces/interfaces/IPiece";
 
 export class GameTile{
     centerPoint: [x: number, y: number];
+    cornerPoint: [x: number, y: number];
     width: number;
     height: number;
     color: string;
@@ -23,5 +24,6 @@ export class GameTile{
         this.isMoveOption = false;
         this.row = row;
         this.col = col;
+        this.cornerPoint = [centerPoint[0] - width / 2, centerPoint[1] - height / 2]
     }
 }

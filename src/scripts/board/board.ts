@@ -148,14 +148,19 @@ export class Board{
                 const pieceName = this.piecePositions[tile.coordinates];
                 if (pieceName) {
                     const piece: IPiece = this.createGamePiece(pieceName, tile);
-                    this.drawPieceOnBoard(piece, tile);
+                    this.drawPieceOnBoard(piece, tile, false);
                     this.gamePieces.push(piece);
                 }
             }
         }
     }
 
-    public drawPieceOnBoard(piece: IPiece, tile: GameTile): void{
+    public drawPieceOnBoard(piece: IPiece, tile: GameTile, shouldSquareRepaint: boolean): void{
+        if(shouldSquareRepaint){
+            this.canvasCtx!.fillStyle = tile.color;
+            this.canvasCtx!.fillRect(tile.cornerPoint[0], tile.cornerPoint[1], tile.width, tile.height);
+        }
+        
         this.canvasCtx?.drawImage(
             this.spriteMap[piece.name],
             tile.centerPoint[0] - tile.width / 2,
@@ -168,17 +173,13 @@ export class Board{
     }
 
     public removePieceFromTile(piece: IPiece): void{
-        const xPosRectangle: number = piece.currentTile.centerPoint[0] - this.gameTileWidth / 2;
-        const yPosRectangle: number = piece.currentTile.centerPoint[1] - this.gameTileHeight / 2;
-
         this.canvasCtx!.fillStyle = piece.currentTile.color;
         this.canvasCtx?.fillRect(
-            xPosRectangle,
-            yPosRectangle,
+            piece.currentTile.cornerPoint[0],
+            piece.currentTile.cornerPoint[1],
             this.gameTileWidth,
             this.gameTileHeight
         );
-
 
     }
 
@@ -281,9 +282,9 @@ export class Board{
             this.canvasCtx!.fillStyle = tile.color;
         }
         
-        this.canvasCtx?.fillRect(tile.centerPoint[0] - this.gameTileWidth / 2, tile.centerPoint[1] - this.gameTileHeight / 2, this.gameTileWidth, this.gameTileHeight);
+        this.canvasCtx?.fillRect(tile.cornerPoint[0], tile.cornerPoint[1], this.gameTileWidth, this.gameTileHeight);
         this.drawCoordinateOnBoard(tile);
-        this.drawPieceOnBoard(piece, tile)
+        this.drawPieceOnBoard(piece, tile, false)
     }
 
     private fillRecordWithPawns(){

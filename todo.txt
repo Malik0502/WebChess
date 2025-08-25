@@ -4,9 +4,6 @@ Pawn Movement:
 
 - when trying to move  without piece on tile throws error because of undefined trying to read properties
 
-- pawn dont fill captured pieces other than pawn or doesnt fill pieces on last rank
-    -> repaints after selecting piece a second time and move it to the place it stands on
-
 pawn todo:
 
 - implement conversion of Pawn
