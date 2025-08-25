@@ -7,6 +7,7 @@ export class Board{
     canvasCtx: CanvasRenderingContext2D | null;
     whiteTileColor: string;
     darkTileColor: string;
+    // [row][col]
     gameTiles: GameTile[][];
     gamePieces: IPiece[];
     gameTileWidth: number;
@@ -142,19 +143,24 @@ export class Board{
     private drawStartPiecesOnChessBoard(): void {
         for (let row = 0; row < this.gameTiles.length; row++) {
             for (let col = 0; col < this.gameTiles[row].length; col++) {
-
+                
                 const tile = this.gameTiles[row][col];
                 const pieceName = this.piecePositions[tile.coordinates];
                 if (pieceName) {
                     const piece: IPiece = this.createGamePiece(pieceName, tile);
-                    this.drawPieceOnBoard(piece, tile);
+                    this.drawPieceOnBoard(piece, tile, false);
                     this.gamePieces.push(piece);
                 }
             }
         }
     }
 
-    private drawPieceOnBoard(piece: IPiece, tile: GameTile): void{
+    public drawPieceOnBoard(piece: IPiece, tile: GameTile, shouldSquareRepaint: boolean): void{
+        if(shouldSquareRepaint){
+            this.canvasCtx!.fillStyle = tile.color;
+            this.canvasCtx!.fillRect(tile.cornerPoint[0], tile.cornerPoint[1], tile.width, tile.height);
+        }
+        
         this.canvasCtx?.drawImage(
             this.spriteMap[piece.name],
             tile.centerPoint[0] - tile.width / 2,
@@ -164,6 +170,17 @@ export class Board{
         );
         tile.isOccupied = true;
         tile.currentPiece = piece;
+    }
+
+    public removePieceFromTile(piece: IPiece): void{
+        this.canvasCtx!.fillStyle = piece.currentTile.color;
+        this.canvasCtx?.fillRect(
+            piece.currentTile.cornerPoint[0],
+            piece.currentTile.cornerPoint[1],
+            this.gameTileWidth,
+            this.gameTileHeight
+        );
+
     }
 
     private drawCoordinatesOnBoard(): void {
@@ -265,9 +282,9 @@ export class Board{
             this.canvasCtx!.fillStyle = tile.color;
         }
         
-        this.canvasCtx?.fillRect(tile.centerPoint[0] - this.gameTileWidth / 2, tile.centerPoint[1] - this.gameTileHeight / 2, this.gameTileWidth, this.gameTileHeight);
+        this.canvasCtx?.fillRect(tile.cornerPoint[0], tile.cornerPoint[1], this.gameTileWidth, this.gameTileHeight);
         this.drawCoordinateOnBoard(tile);
-        this.drawPieceOnBoard(piece, tile)
+        this.drawPieceOnBoard(piece, tile, false)
     }
 
     private fillRecordWithPawns(){

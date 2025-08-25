@@ -1,4 +1,5 @@
 import type { GameTile } from "../../board/entities/gameTile";
+import { FilePosVerifier } from "./filePosVerifier";
 import type { IPiece } from "./interfaces/IPiece";
 
 export class Pawn implements IPiece{
@@ -11,6 +12,9 @@ export class Pawn implements IPiece{
     hasMoved: boolean;
     selected: boolean;
     currentTile: GameTile;
+    possibleMoves: GameTile[];
+    
+    private filePosVerifier: FilePosVerifier; 
     
     constructor(name: string, color: string, startCoordinates: string, currentTile: GameTile){
         this.name = name,
@@ -22,124 +26,104 @@ export class Pawn implements IPiece{
         this.hasMoved = false;
         this.selected = false;
         this.currentTile = currentTile;
+        this.possibleMoves = [];
+
+        this.filePosVerifier = new FilePosVerifier;
     }
 
-    CalcPossibleMoves(board: GameTile[][]): string[] {
-        let possibleMoves: string[] = [];
+    calcPossibleMoves(board: GameTile[][]){
 
-        // for (let index = 0; index < board.length; index++) {
-        //     const tile = board[index];
-
-        //     if(this.color === "white"){
-        //         this.CalcArrayPosWhite(tile, index, possibleMoves)
-        //         if(this.currentArrayPos <= index){
-        //             break;
-        //         }
-        //     }
-        //     else{
-        //         if(index >= 16){
-        //             this.CalcArrayPosBlack(tile, index, possibleMoves);
-        //         }
-        //     }
-
-        // }
+            if(this.color === "white"){
+                if(this.currentCoordinates.includes("8")){
+                    this.convertPiece();
+                    return;
+                }
+                this.possibleMoves = this.calcArrayPosWhite(board);
+            }
+            else{
+                if(this.currentCoordinates.includes("1")){
+                    this.convertPiece();
+                    return;
+                }
+                this.possibleMoves = this.calcArrayPosBlack(board);
+            }
+             
+        this.markAsMoveOption();
+        console.log(this.possibleMoves);
+    }
+    
+    private calcArrayPosBlack(board: GameTile[][]): GameTile[]{        
+        let possibleMoves: GameTile[] = [];
         
+        const pieceCol: number = this.currentTile.col;
+        const pieceRow: number = this.currentTile.row;
+
+        const frontOfPawn: GameTile = board[pieceRow + 1][pieceCol];
+        const frontOfPawnTwo: GameTile | undefined = !this.currentCoordinates.includes("2") ? board[pieceRow + 2][pieceCol] : undefined;
+        
+        // Not on "a" file and diagonal down left file has piece
+        if(!this.filePosVerifier.isOnAFile(this) && board[pieceRow + 1][pieceCol - 1].isOccupied){
+            // diagonal down left of pawn
+            possibleMoves.push(board[pieceRow + 1][pieceCol - 1]);
+        }
+
+        // Not on "h" file and diagonal down right file has piece
+        if(!this.filePosVerifier.isOnHFile(this) && board[pieceRow + 1][pieceCol + 1].isOccupied){
+            // diagonal down right of pawn
+            possibleMoves.push(board[pieceRow + 1][pieceCol + 1]);
+        }
+
+        // Tile in front of piece is not occupied
+        if(!frontOfPawn.isOccupied) possibleMoves.push(frontOfPawn)
+
+        if(!frontOfPawnTwo) return possibleMoves;
+
+        // Tile in front and 2 in front of piece are not occupied + has not moved and is not on 2nd rank
+        if(!frontOfPawn.isOccupied && !frontOfPawnTwo.isOccupied && !this.hasMoved && !this.currentCoordinates.includes("2")) possibleMoves.push(frontOfPawnTwo)
+
         return possibleMoves;
     }
-    
-    private CalcArrayPosBlack(tile: GameTile, tileIndex: number, possibleMoves: string[]){
+
+    private calcArrayPosWhite(board: GameTile[][]): GameTile[]{
+        let possibleMoves: GameTile[] = [];
         
-        // const frontOfPawn: number = this.currentArrayPos + 8;
-        // const frontOfPawnTwo: number = this.currentArrayPos + 16;
-        // const diagonalLeftPawn: number = this.currentArrayPos + (8 - 1);
-        // const diagonalRightPawn: number = this.currentArrayPos + (8 + 1); 
+        const pieceCol: number = this.currentTile.col;
+        const pieceRow: number = this.currentTile.row;
 
-        // if(tileIndex === frontOfPawn && !tile.isOccupied){
-        //     possibleMoves.push(tile.coordinates);
-        //     return;
-        // }
-
-        // if(!this.hasMoved && tileIndex === frontOfPawnTwo && !tile.isOccupied && possibleMoves.length > 0){
-        //     possibleMoves.push(tile.coordinates);
-        //     return;
-        // }
-
-        // if(this.currentCoordinates.includes("h")){
-        //     if(tileIndex === diagonalLeftPawn && tile.isOccupied){
-        //         possibleMoves.push(tile.coordinates);
-        //         return;
-        //     }
-        // }
-
-        // if(this.currentCoordinates.includes("a")){
-        //     if(tileIndex === diagonalRightPawn && tile.isOccupied){
-        //         possibleMoves.push(tile.coordinates);
-        //         return;
-        //     }
-        // }
-
-        // if(tileIndex === diagonalLeftPawn && !this.currentCoordinates.includes("h") && tile.isOccupied){
-        //         possibleMoves.push(tile.coordinates);
-        //         return;
-        //     }
-
-
-        // if(tileIndex === diagonalRightPawn && !this.currentCoordinates.includes("a") && tile.isOccupied){
-        //         possibleMoves.push(tile.coordinates);
-        //         return;
-        // }
+        const frontOfPawn: GameTile = board[pieceRow - 1][pieceCol];
+        const frontOfPawnTwo: GameTile | undefined = !this.currentCoordinates.includes("7") ? board[pieceRow - 2][pieceCol] : undefined;
         
+        // Not on "a" file and diagonal up left file has piece
+        if(!this.filePosVerifier.isOnAFile(this) && board[pieceRow - 1][pieceCol - 1].isOccupied){
+            // diagonal up left of pawn
+            possibleMoves.push(board[pieceRow - 1][pieceCol - 1]);
+        }
+
+        // Not on "h" file and diagonal up right file has piece
+        if(!this.filePosVerifier.isOnHFile(this) && board[pieceRow - 1][pieceCol + 1].isOccupied){
+            // diagonal up right of pawn
+            possibleMoves.push(board[pieceRow - 1][pieceCol + 1]);
+        }
+
+
+        // Tile in front of piece is not occupied
+        if(!frontOfPawn.isOccupied) possibleMoves.push(frontOfPawn)
+
+        if(!frontOfPawnTwo) return possibleMoves;
+
+        // Tile in front and 2 in front of piece are not occupied + has not moved and is not on 7th rank
+        if(!frontOfPawn.isOccupied && !frontOfPawnTwo.isOccupied && !this.hasMoved && !this.currentCoordinates.includes("7")) possibleMoves.push(frontOfPawnTwo)
+
+        return possibleMoves;
     }
 
-    private CalcArrayPosWhite(tile: GameTile, tileIndex: number,  possibleMoves: string[]){
-        
-        // const frontOfPawn: number = this.currentArrayPos - 8;
-        // const frontOfPawnTwo: number = this.currentArrayPos - 16;
-        // const diagonalLeftPawn: number = this.currentArrayPos - (8 + 1);
-        // const diagonalRightPawn: number = this.currentArrayPos - (8 - 1); 
-
-        // // in front of pawn
-        // if(tileIndex === frontOfPawn && !tile.isOccupied){
-        //     possibleMoves.push(tile.coordinates);
-        //     return;
-        // }
-        
-        // if(tileIndex === frontOfPawn && tile.isOccupied){
-        //     possibleMoves.shift();
-        // }
-
-        // if(!this.hasMoved && tileIndex === frontOfPawnTwo && !tile.isOccupied){
-        //     possibleMoves.push(tile.coordinates);
-        //     return;
-        // }
-
-        // if(this.currentCoordinates.includes("a")){
-        //     if(tileIndex === diagonalRightPawn && tile.isOccupied){
-        //         possibleMoves.push(tile.coordinates);
-        //         return;
-        //     }
-        // }
-
-        // if(this.currentCoordinates.includes("h")){
-        //     if(tileIndex === diagonalLeftPawn && tile.isOccupied){
-        //         possibleMoves.push(tile.coordinates);
-        //         return;
-        //     }
-        // }
-
-        // if(tileIndex === diagonalRightPawn && !this.currentCoordinates.includes("h") && tile.isOccupied){
-        //         possibleMoves.push(tile.coordinates);
-        //         return;
-        //     }
-
-        // if(tileIndex === diagonalLeftPawn && !this.currentCoordinates.includes("a") && tile.isOccupied){
-        //         possibleMoves.push(tile.coordinates);
-        //         return;
-        // }
-
+    markAsMoveOption(): void {
+        this.possibleMoves.forEach(tile => {
+            tile.isMoveOption = true;
+        });
     }
-    
-    MovePiece(): [startPosition: string, endPosition: string] {
-        throw new Error("Method not implemented.");
+
+    private convertPiece(){
+        console.log("Convert to other piece")
     }
 }

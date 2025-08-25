@@ -5,36 +5,41 @@ import type { IPiece } from "../pieces/interfaces/IPiece";
 export class GameManager{
     
     private board: Board;
+    private isPieceSelected: boolean;
+    private selectedPiece: IPiece | undefined;
 
     constructor(board: Board){
         this.board = board;
+        this.isPieceSelected = false;
     }
 
     handleMouseClick(mousePos: [number, number]): void{
         const nearestTile: GameTile = this.calcNearestTile(mousePos);
-        
-        if(!nearestTile.isOccupied) return
 
+        if(!this.isPieceSelected && !nearestTile.isOccupied) return;
         
         // Gets piece that stands on coordinates of nearest tile
         const pieceOnTile: IPiece = this.getPieceOnTile(nearestTile);
         
-        if(nearestTile.isMoveOption){
-            pieceOnTile.MovePiece();
+        // If a piece is selected && its a different tile than the selected tile
+        if(this.isPieceSelected && this.selectedPiece?.currentTile != nearestTile){
+            if(this.selectedPiece?.possibleMoves.some(x => x.coordinates === nearestTile.coordinates)){
+                this.movePiece(this.selectedPiece, nearestTile);
+                this.isPieceSelected = false;
+                return;    
+            }
+
+            if(!pieceOnTile) return;
+            
+            this.selectPiece(pieceOnTile, nearestTile);
+            pieceOnTile.calcPossibleMoves(this.board.gameTiles);
+            return;
+            
         }
 
-        // marks selected piece yellow
-        this.board.repaintPieces(pieceOnTile, nearestTile);
+        this.selectPiece(pieceOnTile, nearestTile);
 
-        // toggle selection
-        pieceOnTile.selected = !pieceOnTile.selected;
-
-        // then unselect others, excluding the newly selected piece
-        this.refreshSelectedPieces(pieceOnTile);
-
-        const possibleMoves: string[] = pieceOnTile.CalcPossibleMoves(this.board.gameTiles);
-
-        console.log(possibleMoves);
+        pieceOnTile.calcPossibleMoves(this.board.gameTiles);
     }
 
     private calcNearestTile(mousePos: [x: number, y: number]): GameTile {
@@ -55,7 +60,6 @@ export class GameManager{
 
         return nearestTile[0]!;
     }
-
 
     // Gets the piece that stands on method parameter tile
     private getPieceOnTile(tile: GameTile) : IPiece{
@@ -89,5 +93,47 @@ export class GameManager{
                 gamePiece.selected = false;
             }
         });
+    }
+
+    private selectPiece(pieceOnTile: IPiece, nearestTile: GameTile): void{
+        // marks selected piece yellow
+        this.board.repaintPieces(pieceOnTile, nearestTile);
+
+        // toggle selection
+        pieceOnTile.selected = !pieceOnTile.selected;
+
+        this.isPieceSelected = true;
+        this.selectedPiece = pieceOnTile;
+
+        // then unselect others, excluding the newly selected piece
+        this.refreshSelectedPieces(pieceOnTile);
+    }
+
+    private movePiece(piece: IPiece, clickedTile: GameTile): void {
+        
+        this.board.removePieceFromTile(piece);
+        this.board.drawPieceOnBoard(piece, clickedTile, true);
+
+        this.changePropsAfterMove(piece, clickedTile);
+
+    }
+
+    private changePropsAfterMove(piece: IPiece, clickedTile: GameTile): void{
+        
+        if(clickedTile.isOccupied && clickedTile.coordinates != piece.currentCoordinates) this.capturePiece(clickedTile)
+        
+        piece.possibleMoves.forEach(x => x.isMoveOption = false);
+        piece.selected = false;
+        piece.hasMoved = true;
+        piece.possibleMoves = [];
+        piece.currentCoordinates = clickedTile.coordinates;
+        piece.currentTile.isOccupied = false;
+
+        piece.currentTile = clickedTile;
+    }
+
+    // just handles removing piece from array right now
+    private capturePiece(clickedTile: GameTile): void{
+        this.board.gamePieces = this.board.gamePieces.filter(x => x.currentCoordinates != clickedTile.coordinates);
     }
 }

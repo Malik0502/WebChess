@@ -1,0 +1,14 @@
+Current Bugs:
+
+general:
+
+- win conditions
+- movement of pieces besides pawn
+- turn system + movement memory
+- point system
+
+pawn todo:
+
+- implement conversion of Pawn
+- implement en passant
+

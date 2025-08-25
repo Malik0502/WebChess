@@ -11,6 +11,7 @@ export class Bishop implements IPiece{
     hasMoved: boolean;
     selected: boolean;
     currentTile: GameTile;
+    possibleMoves: GameTile[];
     
     constructor(name: string, color: string, startCoordinates: string, currentTile: GameTile){
         this.name = name,
@@ -22,13 +23,15 @@ export class Bishop implements IPiece{
         this.hasMoved = false;
         this.selected = false;
         this.currentTile = currentTile;
+
+        this.possibleMoves = [];
     }
     
-    CalcPossibleMoves(board: GameTile[][]): string[] {
+    calcPossibleMoves(board: GameTile[][]){
         throw new Error("Method not implemented.");
     }
-    
-    MovePiece(): [startPosition: string, endPosition: string] {
+
+    markAsMoveOption(): void {
         throw new Error("Method not implemented.");
     }
 }
