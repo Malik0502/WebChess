@@ -1,16 +1,17 @@
-import type { GameTile } from "../../board/entities/gameTile";
-import { Bishop } from "./bishop";
-import type { IPiece } from "./interfaces/IPiece";
-import type { IPieceFactory } from "./interfaces/IPieceFactory";
-import { King } from "./king";
-import { Knight } from "./knight";
-import { Pawn } from "./pawn";
-import { Queen } from "./queen";
-import { Rook } from "./rook";
+import type { GameTile } from "../../../board/entities/gameTile";
+import { Bishop } from "../bishop";
+import type { IPiece } from "../interfaces/IPiece";
+import type { IPieceFactory } from "../interfaces/IPieceFactory";
+import { King } from "../king";
+import { Knight } from "../knight";
+import { Pawn } from "../pawn";
+import type { SlidingMovement } from "../pieceMovement/slidingMovement";
+import { Queen } from "../queen";
+import { Rook } from "../rook";
 
 export class PieceFactory implements IPieceFactory{
     
-    createPiece(name: string, color: string, tile: GameTile): IPiece | undefined {
+    createPiece(name: string, color: string, tile: GameTile, movement: SlidingMovement): IPiece | undefined {
         if (name.includes("pawn")) {
             return new Pawn(name, color, tile.coordinates, tile);
         }
@@ -21,7 +22,7 @@ export class PieceFactory implements IPieceFactory{
             return new Knight(name, color, tile.coordinates, tile);
         }
         if (name.includes("rook")) {
-            return new Rook(name, color, tile.coordinates, tile);
+            return new Rook(name, color, tile.coordinates, tile, movement);
         }
         if (name.includes("queen")) {
             return new Queen(name, color, tile.coordinates, tile);

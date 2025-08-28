@@ -1,5 +1,11 @@
 Current Bugs:
 
+- when pawn moves on tiles with coordinate chars or numbers it will be erased after moving
+
+- when trying to switch selected piece and the piece current selected could capture the newly selected piece
+-> it captures instead of switching the selection
+-> maybe because moveOptions are removed only after moving a piece not when selecting a new piece
+
 general:
 
 - win conditions
@@ -11,4 +17,3 @@ pawn todo:
 
 - implement conversion of Pawn
 - implement en passant
-

@@ -31,12 +31,9 @@ export class GameManager{
 
             if(!pieceOnTile) return;
             
-            this.selectPiece(pieceOnTile, nearestTile);
-            pieceOnTile.calcPossibleMoves(this.board.gameTiles);
-            return;
-            
         }
 
+        
         this.selectPiece(pieceOnTile, nearestTile);
 
         pieceOnTile.calcPossibleMoves(this.board.gameTiles);
@@ -128,8 +125,16 @@ export class GameManager{
         piece.possibleMoves = [];
         piece.currentCoordinates = clickedTile.coordinates;
         piece.currentTile.isOccupied = false;
+        piece.currentTile.currentPiece = undefined;
 
         piece.currentTile = clickedTile;
+
+    }
+
+    private deleteMoveOptions(){
+        this.board.gameTiles.forEach(row => {
+            row.forEach(col => col.isMoveOption = false)
+        });
     }
 
     // just handles removing piece from array right now

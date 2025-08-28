@@ -1,5 +1,7 @@
 import type { GameTile } from "../../board/entities/gameTile";
 import type { IPiece } from "./interfaces/IPiece";
+import type { IMovementInfo } from "./pieceMovement/entities/IMovementInfo";
+import type { SlidingMovement } from "./pieceMovement/slidingMovement";
 
 export class Rook implements IPiece{
     name: string;
@@ -12,8 +14,10 @@ export class Rook implements IPiece{
     selected: boolean;
     currentTile: GameTile;
     possibleMoves: GameTile[];
+
+    private movement: SlidingMovement;
     
-    constructor(name: string, color: string, startCoordinates: string, currentTile: GameTile){
+    constructor(name: string, color: string, startCoordinates: string, currentTile: GameTile, movement: SlidingMovement){
         this.name = name,
         this.color = color,
         this.value = 5,
@@ -24,13 +28,29 @@ export class Rook implements IPiece{
         this.selected = false;
         this.currentTile = currentTile;
         this.possibleMoves = [];
+        this.movement = movement
     }
     
     calcPossibleMoves(board: GameTile[][]){
-        throw new Error("Method not implemented.");
+        this.possibleMoves = [];
+        
+        var movementInfo: IMovementInfo = {
+            pieceColor: this.color,
+            possibleMoves: this.possibleMoves,
+            board: board,
+            pieceRow: this.currentTile.row,
+            pieceCol: this.currentTile.col
+        }
+
+        this.possibleMoves = this.movement.straightMovement(movementInfo);
+        
+        this.markAsMoveOption();
+        console.log(this.possibleMoves);
     }
 
-    markAsMoveOption(): void {
-        throw new Error("Method not implemented.");
+    public markAsMoveOption(): void {
+        this.possibleMoves.forEach(tile => {
+            tile.isMoveOption = true;
+        });
     }
 }

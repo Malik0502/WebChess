@@ -1,5 +1,6 @@
 import type { IPiece } from "../game/pieces/interfaces/IPiece";
 import type { IPieceFactory } from "../game/pieces/interfaces/IPieceFactory";
+import type { SlidingMovement } from "../game/pieces/pieceMovement/slidingMovement";
 import { GameTile } from "./entities/gameTile";
 
 export class Board{
@@ -52,8 +53,9 @@ export class Board{
     }
 
     private pieceFactory: IPieceFactory;
+    private movement: SlidingMovement;
 
-    constructor(canvas: HTMLCanvasElement, whiteTileColor: string, darkTileColor: string, pieceFactory: IPieceFactory){
+    constructor(canvas: HTMLCanvasElement, whiteTileColor: string, darkTileColor: string, pieceFactory: IPieceFactory, movement: SlidingMovement){
         this.canvas = canvas;
         this.canvasCtx = canvas.getContext("2d");
         const canvasSize = this.getCanvasSize(); 
@@ -63,6 +65,7 @@ export class Board{
         this.gamePieces = [];
         this.connectImageSrcToSpriteMap();
         this.pieceFactory = pieceFactory;
+        this.movement = movement;
         this.fillRecordWithPawns();
         
         this.gameTileWidth = Math.round(canvasSize[0] / 8)
@@ -241,7 +244,7 @@ export class Board{
         const splitName = pieceName.split("-");
         const pieceColor = splitName[0];
 
-        return this.pieceFactory.createPiece(pieceName, pieceColor, tile)!;
+        return this.pieceFactory.createPiece(pieceName, pieceColor, tile, this.movement)!;
     }
  
     private convertNumCoordToChessCoord(xCoordinate: number, yCoordinate: number): string{
