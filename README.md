@@ -1,7 +1,7 @@
 # Chess Website
 
 This project is an easy but functional chess website build with vanilla TypeScript and Vite.  
-The goal is to create an interactive chess plattform in your browser.
+The goal is to create an interactive chess platform in your browser.
 
 ---
 
