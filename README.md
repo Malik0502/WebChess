@@ -7,6 +7,7 @@ The goal is to create an interactive chess plattform in your browser.
 
 ## Features
 - Chessboard
+- movable pawns and rooks
 
 ---
 
