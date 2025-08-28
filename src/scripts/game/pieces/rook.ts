@@ -1,5 +1,7 @@
 import type { GameTile } from "../../board/entities/gameTile";
 import type { IPiece } from "./interfaces/IPiece";
+import type { IMovementInfo } from "./pieceMovement/entities/IMovementInfo";
+import type { SlidingMovement } from "./pieceMovement/slidingMovement";
 
 export class Rook implements IPiece{
     name: string;
@@ -12,8 +14,10 @@ export class Rook implements IPiece{
     selected: boolean;
     currentTile: GameTile;
     possibleMoves: GameTile[];
+
+    private movement: SlidingMovement;
     
-    constructor(name: string, color: string, startCoordinates: string, currentTile: GameTile){
+    constructor(name: string, color: string, startCoordinates: string, currentTile: GameTile, movement: SlidingMovement){
         this.name = name,
         this.color = color,
         this.value = 5,
@@ -24,49 +28,24 @@ export class Rook implements IPiece{
         this.selected = false;
         this.currentTile = currentTile;
         this.possibleMoves = [];
+        this.movement = movement
     }
     
     calcPossibleMoves(board: GameTile[][]){
         this.possibleMoves = [];
-        var rookRow: number = this.currentTile.row;
-        var rookCol: number = this.currentTile.col;
+        
+        var movementInfo: IMovementInfo = {
+            pieceColor: this.color,
+            possibleMoves: this.possibleMoves,
+            board: board,
+            pieceRow: this.currentTile.row,
+            pieceCol: this.currentTile.col
+        }
 
-        this.CalcMovesNorth(board, rookRow, rookCol);
-        this.CalcMovesSouth(board, rookRow, rookCol);
-        this.CalcMovesEast(board, rookRow, rookCol);
-        this.CalcMovesWest(board, rookRow, rookCol);
+        this.possibleMoves = this.movement.straightMovement(movementInfo);
         
         this.markAsMoveOption();
         console.log(this.possibleMoves);
-    }
-
-    private CalcMovesNorth(board: GameTile[][], rookRow: number, rookCol: number){
-        for (let index = rookRow; index >= 0; index--) {
-            if(index == rookRow) continue;
-
-            const element: GameTile = board[index][rookCol];
-
-            if(element.currentPiece && element.currentPiece.color == this.color) break;
-
-            if(element.isOccupied && element.currentPiece!.color != this.color){
-                this.possibleMoves.push(element);
-                break;
-            }
-
-            if(!element.isOccupied) this.possibleMoves.push(element);
-        }
-    }
-
-    private CalcMovesSouth(board: GameTile[][], rookRow: number, rookCol: number){
-
-    }
-
-    private CalcMovesEast(board: GameTile[][], rookRow: number, rookCol: number){
-
-    }
-
-    private CalcMovesWest(board: GameTile[][], rookRow: number, rookCol: number){
-
     }
 
     public markAsMoveOption(): void {

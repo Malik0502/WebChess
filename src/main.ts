@@ -1,13 +1,14 @@
 import { Board } from "./scripts/board/board"
 import { GameManager } from "./scripts/game/manager/gameManagement/gameManager";
-import { PieceFactory } from "./scripts/game/pieces/pieceFactory"
+import { PieceFactory } from "./scripts/game/pieces/factories/pieceFactory"
+import { SlidingMovement } from "./scripts/game/pieces/pieceMovement/slidingMovement";
 
 let gameBoard  : Board;
 let gameManager: GameManager;
 let canvas: HTMLCanvasElement;
 
 window.onload = () => {
-    gameBoard = new Board(document.getElementById("game-canvas") as HTMLCanvasElement, "#F0D9B5", "#B58863", new PieceFactory())
+    gameBoard = new Board(document.getElementById("game-canvas") as HTMLCanvasElement, "#F0D9B5", "#B58863", new PieceFactory(), new SlidingMovement())
     gameManager = new GameManager(gameBoard);
     canvas = gameBoard.canvas;
 

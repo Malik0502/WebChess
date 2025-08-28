@@ -17,7 +17,3 @@ pawn todo:
 
 - implement conversion of Pawn
 - implement en passant
-
-rook todo:
-
-- implement move calculation
