@@ -26,6 +26,7 @@ export class GameManager{
             if(this.selectedPiece?.possibleMoves.some(x => x.coordinates === nearestTile.coordinates)){
                 this.movePiece(this.selectedPiece, nearestTile);
                 this.isPieceSelected = false;
+                this.selectedPiece = undefined;
                 return;    
             }
 
@@ -36,7 +37,7 @@ export class GameManager{
         if(this.selectedPiece?.currentTile == nearestTile){
             this.selectPiece(pieceOnTile, nearestTile);
             this.deleteMoveOptions();
-            this.selectedPiece.possibleMoves = [];
+            this.selectedPiece = undefined
             return;
         }
         
