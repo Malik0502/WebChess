@@ -33,6 +33,12 @@ export class GameManager{
             
         }
 
+        if(this.selectedPiece?.currentTile == nearestTile){
+            this.selectPiece(pieceOnTile, nearestTile);
+            this.deleteMoveOptions();
+            this.selectedPiece.possibleMoves = [];
+            return;
+        }
         
         this.selectPiece(pieceOnTile, nearestTile);
 
