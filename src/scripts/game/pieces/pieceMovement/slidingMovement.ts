@@ -25,36 +25,36 @@ export class SlidingMovement{
     }
 
     private CalcVerticalMoves(movementInfo: IMovementInfo, direction: number){
-            for (let index = movementInfo.pieceRow; index >= 0 && index <= 7; index += direction) {
-                if(index == movementInfo.pieceRow) continue;
+        for (let index = movementInfo.pieceRow; index >= 0 && index <= 7; index += direction) {
+            if(index == movementInfo.pieceRow) continue;
     
-                const element: GameTile = movementInfo.board[index][movementInfo.pieceCol];
+            const element: GameTile = movementInfo.board[index][movementInfo.pieceCol];
     
-                if(element.currentPiece && element.currentPiece.color == movementInfo.pieceColor) break;
+            if(element.currentPiece && element.currentPiece.color == movementInfo.pieceColor) break;
     
-                if(element.isOccupied && element.currentPiece!.color != movementInfo.pieceColor){
-                    movementInfo.possibleMoves.push(element);
-                    break;
-                }
-    
-                if(!element.isOccupied) movementInfo.possibleMoves.push(element);
+            if(element.isOccupied && element.currentPiece!.color != movementInfo.pieceColor){
+                movementInfo.possibleMoves.push(element);
+                break;
             }
+    
+            if(!element.isOccupied) movementInfo.possibleMoves.push(element);
         }
+    }
 
-        private CalcHorizontalMoves(movementInfo: IMovementInfo, direction: number){
-            for (let index = movementInfo.pieceCol; index >= 0 && index <= 7; index += direction) {
-                if(index == movementInfo.pieceCol) continue;
+    private CalcHorizontalMoves(movementInfo: IMovementInfo, direction: number){
+        for (let index = movementInfo.pieceCol; index >= 0 && index <= 7; index += direction) {
+            if(index == movementInfo.pieceCol) continue;
     
-                const element: GameTile = movementInfo.board[movementInfo.pieceRow][index];
+            const element: GameTile = movementInfo.board[movementInfo.pieceRow][index];
     
-                if(element.currentPiece && element.currentPiece.color == movementInfo.pieceColor) break;
+            if(element.currentPiece && element.currentPiece.color == movementInfo.pieceColor) break;
     
-                if(element.isOccupied && element.currentPiece!.color != movementInfo.pieceColor){
-                    movementInfo.possibleMoves.push(element);
-                    break;
-                }
-    
-                if(!element.isOccupied) movementInfo.possibleMoves.push(element);
+            if(element.isOccupied && element.currentPiece!.color != movementInfo.pieceColor){
+                movementInfo.possibleMoves.push(element);
+                break;
             }
+    
+            if(!element.isOccupied) movementInfo.possibleMoves.push(element);
         }
+    }
 }
