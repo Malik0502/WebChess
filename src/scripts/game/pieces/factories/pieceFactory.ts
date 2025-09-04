@@ -16,7 +16,7 @@ export class PieceFactory implements IPieceFactory{
             return new Pawn(name, color, tile.coordinates, tile);
         }
         if (name.includes("bishop")) {
-            return new Bishop(name, color, tile.coordinates, tile);
+            return new Bishop(name, color, tile.coordinates, tile, movement);
         }
         if (name.includes("knight")) {
             return new Knight(name, color, tile.coordinates, tile);
