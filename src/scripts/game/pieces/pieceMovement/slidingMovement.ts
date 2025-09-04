@@ -11,8 +11,10 @@ const directions = {
 export class SlidingMovement{
 
     public diagonalMovement(movementInfo: IMovementInfo){
-        this.CalcSouthEastMoves(movementInfo, directions.South);
-
+        this.CalcNorthWestMoves(movementInfo);
+        this.CalcNorthEastMoves(movementInfo);
+        this.CalcSouthWestMoves(movementInfo);
+        this.CalcSouthEastMoves(movementInfo);
         return movementInfo.possibleMoves;
     }
 
@@ -61,29 +63,102 @@ export class SlidingMovement{
         }
     }
 
-    private CalcSouthEastMoves(movementInfo: IMovementInfo, direction: number){
-        for (let index = movementInfo.pieceCol; index >= 0; index += direction) {
+    private CalcNorthWestMoves(movementInfo: IMovementInfo){
+        let pieceRowIndex: number = movementInfo.pieceRow;
+        
+        for (let index = movementInfo.pieceCol; index >= 0 && pieceRowIndex >= 0; index--) {
+            
             if(index == movementInfo.pieceCol){
-                movementInfo.pieceRow += direction;
+                pieceRowIndex--;
                 continue;
             };
             
-            const element: GameTile = movementInfo.board[movementInfo.pieceRow][index];
+            const element: GameTile = movementInfo.board[pieceRowIndex][index];
     
             if(element.currentPiece && element.currentPiece.color == movementInfo.pieceColor) break;
     
             if(element.isOccupied && element.currentPiece!.color != movementInfo.pieceColor){
                 movementInfo.possibleMoves.push(element);
-                movementInfo.pieceRow += direction;
+                pieceRowIndex--;
                 break;
             }
     
-            if(!element.isOccupied){
-                movementInfo.possibleMoves.push(element);
-                movementInfo.pieceRow += direction;
-            } 
-            
-        
+            if(!element.isOccupied) movementInfo.possibleMoves.push(element);
+            pieceRowIndex--;
         }
     }
+
+    private CalcNorthEastMoves(movementInfo: IMovementInfo){
+        let pieceRowIndex: number = movementInfo.pieceRow;
+
+        for (let index = movementInfo.pieceCol; index <= 7 && pieceRowIndex >= 0; index++) {
+            if(index == movementInfo.pieceCol){
+                pieceRowIndex--;
+                continue;
+            }
+    
+            const element: GameTile = movementInfo.board[pieceRowIndex][index];
+    
+            if(element.currentPiece && element.currentPiece.color == movementInfo.pieceColor) break;
+    
+            if(element.isOccupied && element.currentPiece!.color != movementInfo.pieceColor){
+                movementInfo.possibleMoves.push(element);
+                pieceRowIndex--;
+                break;
+            }
+    
+            if(!element.isOccupied) movementInfo.possibleMoves.push(element);
+            pieceRowIndex--;
+        }
+    }
+
+    private CalcSouthWestMoves(movementInfo: IMovementInfo){
+        let pieceRowIndex: number = movementInfo.pieceRow;
+
+        for (let index = movementInfo.pieceCol; index >= 0 && pieceRowIndex <= 7; index--) {
+            if(index == movementInfo.pieceCol){
+                pieceRowIndex++;
+                continue;
+            }
+    
+            const element: GameTile = movementInfo.board[pieceRowIndex][index];
+    
+            if(element.currentPiece && element.currentPiece.color == movementInfo.pieceColor) break;
+    
+            if(element.isOccupied && element.currentPiece!.color != movementInfo.pieceColor){
+                movementInfo.possibleMoves.push(element);
+                pieceRowIndex++;
+                break;
+            }
+    
+            if(!element.isOccupied) movementInfo.possibleMoves.push(element);
+            pieceRowIndex++;
+        }
+    }
+
+     private CalcSouthEastMoves(movementInfo: IMovementInfo){
+        let pieceRowIndex: number = movementInfo.pieceRow;
+
+        for (let index = movementInfo.pieceCol; index <= 7 && pieceRowIndex <= 7; index++) {
+            if(index == movementInfo.pieceCol){
+                pieceRowIndex++;
+                continue;
+            }
+    
+            const element: GameTile = movementInfo.board[pieceRowIndex][index];
+    
+            if(element.currentPiece && element.currentPiece.color == movementInfo.pieceColor) break;
+    
+            if(element.isOccupied && element.currentPiece!.color != movementInfo.pieceColor){
+                movementInfo.possibleMoves.push(element);
+                pieceRowIndex++;
+                break;
+            }
+    
+            if(!element.isOccupied) movementInfo.possibleMoves.push(element);
+            pieceRowIndex++;
+        }
+    }
+
+    
 }
