@@ -25,7 +25,7 @@ export class PieceFactory implements IPieceFactory{
             return new Rook(name, color, tile.coordinates, tile, movement);
         }
         if (name.includes("queen")) {
-            return new Queen(name, color, tile.coordinates, tile);
+            return new Queen(name, color, tile.coordinates, tile, movement);
         }
         if (name.includes("king")) {
             return new King(name, color, tile.coordinates, tile);
