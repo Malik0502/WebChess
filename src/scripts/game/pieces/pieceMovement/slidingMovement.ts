@@ -9,8 +9,11 @@ const directions = {
 } as const;
 
 export class SlidingMovement{
-    public diagonalMovement(movementInfo: IMovementInfo){
 
+    public diagonalMovement(movementInfo: IMovementInfo){
+        this.CalcSouthEastMoves(movementInfo, directions.South);
+
+        return movementInfo.possibleMoves;
     }
 
     public straightMovement(movementInfo: IMovementInfo): GameTile[]{
@@ -55,6 +58,32 @@ export class SlidingMovement{
             }
     
             if(!element.isOccupied) movementInfo.possibleMoves.push(element);
+        }
+    }
+
+    private CalcSouthEastMoves(movementInfo: IMovementInfo, direction: number){
+        for (let index = movementInfo.pieceCol; index >= 0; index += direction) {
+            if(index == movementInfo.pieceCol){
+                movementInfo.pieceRow += direction;
+                continue;
+            };
+            
+            const element: GameTile = movementInfo.board[movementInfo.pieceRow][index];
+    
+            if(element.currentPiece && element.currentPiece.color == movementInfo.pieceColor) break;
+    
+            if(element.isOccupied && element.currentPiece!.color != movementInfo.pieceColor){
+                movementInfo.possibleMoves.push(element);
+                movementInfo.pieceRow += direction;
+                break;
+            }
+    
+            if(!element.isOccupied){
+                movementInfo.possibleMoves.push(element);
+                movementInfo.pieceRow += direction;
+            } 
+            
+        
         }
     }
 }
