@@ -27,10 +27,21 @@ export class King implements IPiece{
     }
     
     calcPossibleMoves(board: GameTile[][]){
-        throw new Error("Method not implemented.");
+        this.possibleMoves = [];
+        
+        for (let row = this.currentTile.row; row >= 0 && row <= 7; row++) {
+            if(this.currentTile.coordinates.includes("a")) continue;
+            if(this.currentTile.coordinates.includes("h")) continue;
+
+            for (let col = this.currentTile.col; col >= 0 && col <= 7; row--) {
+                    
+            }
+        }
     }
 
     markAsMoveOption(): void {
-        throw new Error("Method not implemented.");
+        this.possibleMoves.forEach(tile => {
+            tile.isMoveOption = true;
+        });
     }
 }
