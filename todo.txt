@@ -13,3 +13,7 @@ pawn todo:
 
 - implement conversion of Pawn
 - implement en passant
+
+king todo:
+
+- implement king can't move to defended squares

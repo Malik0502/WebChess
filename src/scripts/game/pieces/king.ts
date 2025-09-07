@@ -29,14 +29,21 @@ export class King implements IPiece{
     calcPossibleMoves(board: GameTile[][]){
         this.possibleMoves = [];
         
-        for (let row = this.currentTile.row; row >= 0 && row <= 7; row++) {
-            if(this.currentTile.coordinates.includes("a")) continue;
-            if(this.currentTile.coordinates.includes("h")) continue;
+        for (let row = this.currentTile.row - 1; row <= this.currentTile.row + 1; row++) {
+            if(row < 0 || row >= 8) continue;
+            for (let col = this.currentTile.col - 1; col <= this.currentTile.col + 1; col++) {
+                const currentTile = board[row][col];
+                
+                if(col < 0 || col >= 8) continue;
 
-            for (let col = this.currentTile.col; col >= 0 && col <= 7; row--) {
-                    
+                if(currentTile.isOccupied && currentTile.currentPiece!.color == this.color) continue;
+
+                this.possibleMoves.push(board[row][col]);
             }
         }
+
+        this.markAsMoveOption();
+        console.log(this.possibleMoves)
     }
 
     markAsMoveOption(): void {
