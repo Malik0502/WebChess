@@ -1,4 +1,5 @@
 import type { GameTile } from "../../board/entities/gameTile";
+import { white } from "../../common/constants/pieceColor";
 import type { IPiece } from "./interfaces/IPiece";
 import type { IMovementInfo } from "./pieceMovement/entities/IMovementInfo";
 import type { SlidingMovement } from "./pieceMovement/slidingMovement";
@@ -21,7 +22,7 @@ export class Rook implements IPiece{
         this.name = name,
         this.color = color,
         this.value = 5,
-        this.spritePath = this.color === "white" ? "src/assets/pw.svg" : "src/assets/pb.svg";
+        this.spritePath = this.color === white ? "src/assets/pw.svg" : "src/assets/pb.svg";
         this.startCoordinates = startCoordinates;
         this.currentCoordinates = startCoordinates;
         this.hasMoved = false;

@@ -13,7 +13,6 @@ export class GameTile{
     col: number;
     currentPiece: IPiece | undefined;
 
-
     constructor(centerPoint: [x: number, y: number], width: number, height: number, color: string, isOccupied: boolean, coordinates: string, row: number, col: number){
         this.centerPoint = centerPoint;
         this.width = width;

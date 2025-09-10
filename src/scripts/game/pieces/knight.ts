@@ -1,4 +1,5 @@
 import type { GameTile } from "../../board/entities/gameTile";
+import { white } from "../../common/constants/pieceColor";
 import type { IPiece } from "./interfaces/IPiece";
 
 export class Knight implements IPiece{
@@ -17,7 +18,7 @@ export class Knight implements IPiece{
         this.name = name,
         this.color = color,
         this.value = 3,
-        this.spritePath = this.color === "white" ? "src/assets/pw.svg" : "src/assets/pb.svg";
+        this.spritePath = this.color === white ? "src/assets/pw.svg" : "src/assets/pb.svg";
         this.startCoordinates = startCoordinates;
         this.currentCoordinates = startCoordinates;
         this.hasMoved = false;

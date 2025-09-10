@@ -1,4 +1,5 @@
 import type { GameTile } from "../../board/entities/gameTile";
+import { white } from "../../common/constants/pieceColor";
 import { FilePosVerifier } from "./filePosVerifier";
 import type { IPiece } from "./interfaces/IPiece";
 
@@ -20,7 +21,7 @@ export class Pawn implements IPiece{
         this.name = name,
         this.color = color,
         this.value = 1,
-        this.spritePath = this.color === "white" ? "src/assets/pw.svg" : "src/assets/pb.svg";
+        this.spritePath = this.color === white ? "src/assets/pw.svg" : "src/assets/pb.svg";
         this.startCoordinates = startCoordinates;
         this.currentCoordinates = startCoordinates;
         this.hasMoved = false;
@@ -33,7 +34,7 @@ export class Pawn implements IPiece{
 
     calcPossibleMoves(board: GameTile[][]){
 
-            if(this.color === "white"){
+            if(this.color === white){
                 if(this.currentCoordinates.includes("8")){
                     this.convertPiece();
                     return;

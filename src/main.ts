@@ -1,15 +1,18 @@
 import { Board } from "./scripts/board/board"
 import { GameManager } from "./scripts/game/manager/gameManagement/gameManager";
+import { TurnManager } from "./scripts/game/manager/turnManagement/turnManager";
 import { PieceFactory } from "./scripts/game/pieces/factories/pieceFactory"
 import { SlidingMovement } from "./scripts/game/pieces/pieceMovement/slidingMovement";
 
 let gameBoard  : Board;
 let gameManager: GameManager;
+let turnManager: TurnManager;
 let canvas: HTMLCanvasElement;
 
 window.onload = () => {
     gameBoard = new Board(document.getElementById("game-canvas") as HTMLCanvasElement, "#F0D9B5", "#B58863", new PieceFactory(), new SlidingMovement())
-    gameManager = new GameManager(gameBoard);
+    turnManager = new TurnManager();
+    gameManager = new GameManager(gameBoard, turnManager);
     canvas = gameBoard.canvas;
 
     canvas.addEventListener("click", handleClick)
