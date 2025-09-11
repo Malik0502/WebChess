@@ -1,2 +1,2 @@
-export const white: string = "white";
-export const black: string = "black"
+export const WHITE: string = "white";
+export const BLACK: string = "black"
