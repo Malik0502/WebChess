@@ -1,5 +1,6 @@
-import { PiecePosition } from "../common/records/piecePosition";
+import { StartPiecePosition } from "../common/records/startPiecePosition";
 import { SpriteMap } from "../common/records/spriteMap";
+import { StartPositionPieceColor } from "../common/records/startPositionPieceColor";
 import type { IPiece } from "../game/pieces/interfaces/IPiece";
 import type { IPieceFactory } from "../game/pieces/interfaces/IPieceFactory";
 import type { SlidingMovement } from "../game/pieces/pieceMovement/slidingMovement";
@@ -112,9 +113,10 @@ export class Board{
             for (let col = 0; col < this.gameTiles[row].length; col++) {
                 
                 const tile = this.gameTiles[row][col];
-                const pieceName = PiecePosition[tile.coordinates];
+                const pieceName = StartPiecePosition[tile.coordinates];
+                const pieceColor = StartPositionPieceColor[tile.coordinates]
                 if (pieceName) {
-                    const piece: IPiece = this.createGamePiece(pieceName, tile);
+                    const piece: IPiece = this.createGamePiece(pieceName, pieceColor, tile);
                     this.drawPieceOnBoard(piece, tile, false);
                     this.gamePieces.push(piece);
                 }
@@ -123,13 +125,15 @@ export class Board{
     }
 
     public drawPieceOnBoard(piece: IPiece, tile: GameTile, shouldSquareRepaint: boolean): void{
+        const spriteMapName: string = `${piece.color}-${piece.name}`;
+        
         if(shouldSquareRepaint){
             this.canvasCtx!.fillStyle = tile.color;
             this.canvasCtx!.fillRect(tile.cornerPoint[0], tile.cornerPoint[1], tile.width, tile.height);
         }
         
         this.canvasCtx?.drawImage(
-            SpriteMap[piece.name],
+            SpriteMap[spriteMapName]!,
             tile.centerPoint[0] - tile.width / 2,
             tile.centerPoint[1] - tile.height / 1.83,
             tile.width,
@@ -204,10 +208,7 @@ export class Board{
         return gameTile!;
     }
 
-    private createGamePiece(pieceName: string, tile: GameTile): IPiece {
-        const splitName = pieceName.split("-");
-        const pieceColor = splitName[0];
-
+    private createGamePiece(pieceName: string, pieceColor: string, tile: GameTile): IPiece {
         return this.pieceFactory.createPiece(pieceName, pieceColor, tile, this.movement)!;
     }
  
@@ -256,8 +257,10 @@ export class Board{
 
     private fillRecordWithPawns(){
         for (let col of "abcdefgh") {
-            PiecePosition[`${col}2`] = "white-pawn";
-            PiecePosition[`${col}7`] = "black-pawn";
+            StartPiecePosition[`${col}2`] = "pawn";
+            StartPositionPieceColor[`${col}2`] = "white";
+            StartPiecePosition[`${col}7`] = "pawn";
+            StartPositionPieceColor[`${col}7`] = "black";
         }
     }
 }

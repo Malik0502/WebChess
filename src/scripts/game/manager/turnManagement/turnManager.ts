@@ -1,6 +1,8 @@
 import type { GameTile } from "../../../board/entities/gameTile";
 import { BLACK, WHITE } from "../../../common/constants/pieceColor";
 import type { IPiece } from "../../pieces/interfaces/IPiece";
+import type { AlgebraicNotationParser } from "./algebraicNotationParser";
+import type { Move } from "./entities/move";
 import type { Turn } from "./entities/turn";
 
 export class TurnManager{
@@ -9,13 +11,16 @@ export class TurnManager{
     activeColor: string;
     turns: Turn[];
 
-    constructor(){
+    private algebraicNotationParser: AlgebraicNotationParser;
+
+    constructor(algebraicNotationParser: AlgebraicNotationParser){
         this.startColor = WHITE;
         this.activeColor = this.startColor;
         this.turns = [];
+        this.algebraicNotationParser = algebraicNotationParser;
     }
 
-    isSelectedPieceEqualActiveTurn(pieceColor: string): boolean{
+    isSelectedPieceEqualActiveTurnColor(pieceColor: string): boolean{
         return pieceColor == this.activeColor ? true : false;
     }
 
@@ -23,7 +28,7 @@ export class TurnManager{
         this.activeColor = lastPieceColor == WHITE ? BLACK : WHITE;
     }
 
-    addToTurnHistory(move: [start: string, end: string], piece: IPiece, nearestTile: GameTile){
+    addToTurnHistory(move: Move, piece: IPiece, nearestTile: GameTile){
         if(piece.color == WHITE){
             let turn: Turn = { 
                 turn: this.turns.length + 1, 
@@ -35,17 +40,22 @@ export class TurnManager{
                 blackAlgebraicNotation: undefined
             };
             this.turns.push(turn);
+            this.addAlgebraicNotationToTurn(turn, piece);
             return;
         }
-        this.turns[this.turns.length - 1].blackMove = move;
-        this.turns[this.turns.length - 1].isWhiteCaptured = nearestTile.isOccupied;     
+
+        let turn: Turn = this.turns[this.turns.length - 1];
+
+        turn.blackMove = move;
+        turn.isWhiteCaptured = nearestTile.isOccupied;     
+        this.addAlgebraicNotationToTurn(turn, piece);
     }
 
-    movesToAlgebraicNotation(turn: Turn, piece: IPiece, nearestTile: GameTile){
+    addAlgebraicNotationToTurn(turn: Turn, piece: IPiece){
         if(piece.color == WHITE){
-            
+             turn.whiteAlgebraicNotation = this.algebraicNotationParser.parseAlgebraicNotation(turn, piece);
         }
+
+        turn.blackAlgebraicNotation = this.algebraicNotationParser.parseAlgebraicNotation(turn, piece);
     }
-
-
 }

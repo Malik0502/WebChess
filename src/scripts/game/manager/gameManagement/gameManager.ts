@@ -1,6 +1,7 @@
 import type { Board } from "../../../board/board";
 import { GameTile } from "../../../board/entities/gameTile";
 import type { IPiece } from "../../pieces/interfaces/IPiece";
+import type { Move } from "../turnManagement/entities/move";
 import type { TurnManager } from "../turnManagement/turnManager";
 
 export class GameManager{
@@ -24,7 +25,7 @@ export class GameManager{
         const pieceOnTile: IPiece = this.getPieceOnTile(nearestTile);
     
 
-        if(!this.selectedPiece && pieceOnTile && !this.turnManager.isSelectedPieceEqualActiveTurn(pieceOnTile.color))
+        if(!this.selectedPiece && pieceOnTile && !this.turnManager.isSelectedPieceEqualActiveTurnColor(pieceOnTile.color))
             return;
 
         if(this.isPieceSelected && this.selectedPiece?.currentTile != nearestTile){
@@ -95,7 +96,7 @@ export class GameManager{
     private handleMoving(nearestTile: GameTile){
         
         if(!this.selectedPiece) return
-        let move: [start: string, end: string] = [this.selectedPiece.currentCoordinates, nearestTile.coordinates]
+        let move: Move = {start: this.selectedPiece.currentCoordinates, end: nearestTile.coordinates, piece: this.selectedPiece};
         this.turnManager.addToTurnHistory(move, this.selectedPiece, nearestTile);
         
         this.movePiece(this.selectedPiece!, nearestTile);
