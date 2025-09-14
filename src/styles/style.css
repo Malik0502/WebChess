@@ -1,5 +1,5 @@
 body{
-    background-color: #302E2B;
+    background-color: #333230;
 }
 
 .game-container{
@@ -7,10 +7,61 @@ body{
     display: flex;
     justify-content: center;
     align-items: center;
+    gap: 20px;
 }
 
 .game-canvas{
     width: 800px;
     height: 800px;
     border: 1px solid #000000;   
+}
+
+.move-table-container {
+    height: 800px;
+    overflow-y: auto;
+    background-color: #403F3C;
+    border: 2px solid #444;
+    border-radius: 6px;
+    padding: 10px;
+    box-sizing: border-box;
+
+    scrollbar-width: thin;
+    scrollbar-color: #444 #1e1e1e;
+}
+
+.move-table {
+    width: 250px;
+    border-collapse: collapse;
+    text-align: center;
+    color: #fff;
+    font-family: Arial, sans-serif;
+}
+
+.move-table th {
+    background-color: #333;
+    padding: 8px;
+    font-weight: bold;
+    position: sticky;
+    top: 0;
+}
+
+.move-table td {
+    padding: 6px;
+}
+
+.move-table-container::-webkit-scrollbar {
+    width: 10px;
+}
+
+.move-table-container::-webkit-scrollbar-track {
+    background: #403F3C;
+}
+
+.move-table-container::-webkit-scrollbar-thumb {
+    background-color: #444;
+    border-radius: 5px;
+}
+
+.move-table-container::-webkit-scrollbar-thumb:hover {
+    background-color: #666;
 }

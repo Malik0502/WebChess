@@ -4,17 +4,20 @@ import { AlgebraicNotationParser } from "./scripts/game/manager/turnManagement/a
 import { TurnManager } from "./scripts/game/manager/turnManagement/turnManager";
 import { PieceFactory } from "./scripts/game/pieces/factories/pieceFactory"
 import { SlidingMovement } from "./scripts/game/pieces/pieceMovement/slidingMovement";
+import { TableRenderer } from "./scripts/table/tableRenderer";
 
 let gameBoard  : Board;
 let gameManager: GameManager;
 let turnManager: TurnManager;
 let algebraicNotationParser: AlgebraicNotationParser;
+let tableRenderer: TableRenderer;
 let canvas: HTMLCanvasElement;
 
 window.onload = () => {
     gameBoard = new Board(document.getElementById("game-canvas") as HTMLCanvasElement, "#F0D9B5", "#B58863", new PieceFactory(), new SlidingMovement())
     algebraicNotationParser = new AlgebraicNotationParser();
-    turnManager = new TurnManager(algebraicNotationParser);
+    tableRenderer = new TableRenderer();
+    turnManager = new TurnManager(algebraicNotationParser, tableRenderer);
     gameManager = new GameManager(gameBoard, turnManager);
     canvas = gameBoard.canvas;
 

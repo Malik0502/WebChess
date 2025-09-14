@@ -1,5 +1,6 @@
 import type { GameTile } from "../../../board/entities/gameTile";
 import { BLACK, WHITE } from "../../../common/constants/pieceColor";
+import type { TableRenderer } from "../../../table/tableRenderer";
 import type { IPiece } from "../../pieces/interfaces/IPiece";
 import type { AlgebraicNotationParser } from "./algebraicNotationParser";
 import type { Move } from "./entities/move";
@@ -12,12 +13,14 @@ export class TurnManager{
     turns: Turn[];
 
     private algebraicNotationParser: AlgebraicNotationParser;
+    private tableRenderer: TableRenderer;
 
-    constructor(algebraicNotationParser: AlgebraicNotationParser){
+    constructor(algebraicNotationParser: AlgebraicNotationParser, tableRenderer: TableRenderer){
         this.startColor = WHITE;
         this.activeColor = this.startColor;
         this.turns = [];
         this.algebraicNotationParser = algebraicNotationParser;
+        this.tableRenderer = tableRenderer;
     }
 
     isSelectedPieceEqualActiveTurnColor(pieceColor: string): boolean{
@@ -53,9 +56,12 @@ export class TurnManager{
 
     addAlgebraicNotationToTurn(turn: Turn, piece: IPiece){
         if(piece.color == WHITE){
-             turn.whiteAlgebraicNotation = this.algebraicNotationParser.parseAlgebraicNotation(turn, piece);
+            turn.whiteAlgebraicNotation = this.algebraicNotationParser.parseAlgebraicNotation(turn, piece);
+            this.tableRenderer.renderTurns(this.turns);
+            return;
         }
 
         turn.blackAlgebraicNotation = this.algebraicNotationParser.parseAlgebraicNotation(turn, piece);
+        this.tableRenderer.renderTurns(this.turns);
     }
 }
