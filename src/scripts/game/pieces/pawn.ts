@@ -50,7 +50,6 @@ export class Pawn implements IPiece{
             }
              
         this.markAsMoveOption();
-        console.log(this.possibleMoves);
     }
     
     private calcArrayPosBlack(board: GameTile[][]): GameTile[]{        

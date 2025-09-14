@@ -46,7 +46,6 @@ export class Rook implements IPiece{
         this.possibleMoves = this.movement.straightMovement(movementInfo);
         
         this.markAsMoveOption();
-        console.log(this.possibleMoves);
     }
 
     public markAsMoveOption(): void {

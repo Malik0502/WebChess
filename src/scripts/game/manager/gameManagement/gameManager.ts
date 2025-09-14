@@ -46,8 +46,6 @@ export class GameManager{
             this.selectPiece(pieceOnTile, nearestTile);
             pieceOnTile.calcPossibleMoves(this.board.gameTiles);
         }
-
-        console.log(this.turnManager.turns);
     }
 
     private calcNearestTile(mousePos: [x: number, y: number]): GameTile {
@@ -96,7 +94,7 @@ export class GameManager{
     private handleMoving(nearestTile: GameTile){
         
         if(!this.selectedPiece) return
-        let move: Move = {start: this.selectedPiece.currentCoordinates, end: nearestTile.coordinates, piece: this.selectedPiece};
+        let move: Move = {start: this.selectedPiece.currentCoordinates, end: nearestTile.coordinates};
         this.turnManager.addToTurnHistory(move, this.selectedPiece, nearestTile);
         
         this.movePiece(this.selectedPiece!, nearestTile);

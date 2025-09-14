@@ -44,7 +44,6 @@ export class King implements IPiece{
         }
 
         this.markAsMoveOption();
-        console.log(this.possibleMoves)
     }
 
     markAsMoveOption(): void {

@@ -49,7 +49,6 @@ export class Queen implements IPiece{
         this.possibleMoves.concat(straightPossibleMovements, diagonalPossibleMovements);
                 
         this.markAsMoveOption();
-        console.log(this.possibleMoves);
     }
 
     markAsMoveOption(): void {

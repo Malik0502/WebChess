@@ -48,7 +48,6 @@ export class Board{
         });
     
         this.drawCoordinatesOnBoard();
-        console.log(this.gamePieces)
     }
 
     private drawChessboardPattern(): void {

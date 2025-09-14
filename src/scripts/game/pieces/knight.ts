@@ -42,7 +42,6 @@ export class Knight implements IPiece{
         this.calcHorizontalMoves(board, directionWest);
 
         this.markAsMoveOption();
-        console.log(this.possibleMoves)
     }
 
 

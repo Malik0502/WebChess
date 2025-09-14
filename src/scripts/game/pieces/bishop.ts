@@ -46,7 +46,6 @@ export class Bishop implements IPiece{
         this.possibleMoves = this.movement.diagonalMovement(movementInfo);
                 
         this.markAsMoveOption();
-        console.log(this.possibleMoves);
     }
 
     markAsMoveOption(): void {
