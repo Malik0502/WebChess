@@ -1,15 +1,19 @@
 import type { Board } from "../../../board/board";
 import { GameTile } from "../../../board/entities/gameTile";
 import type { IPiece } from "../../pieces/interfaces/IPiece";
+import type { Move } from "../turnManagement/entities/move";
+import type { TurnManager } from "../turnManagement/turnManager";
 
 export class GameManager{
     
     private board: Board;
+    private turnManager: TurnManager;
     private isPieceSelected: boolean;
     private selectedPiece: IPiece | undefined;
 
-    constructor(board: Board){
+    constructor(board: Board, turnManager: TurnManager){
         this.board = board;
+        this.turnManager = turnManager;
         this.isPieceSelected = false;
     }
 
@@ -18,20 +22,17 @@ export class GameManager{
 
         if(!this.isPieceSelected && !nearestTile.isOccupied) return;
         
-        // Gets piece that stands on coordinates of nearest tile
         const pieceOnTile: IPiece = this.getPieceOnTile(nearestTile);
-        
-        // If a piece is selected && its a different tile than the selected tile
+    
+
+        if(!this.selectedPiece && pieceOnTile && !this.turnManager.isSelectedPieceEqualActiveTurnColor(pieceOnTile.color))
+            return;
+
         if(this.isPieceSelected && this.selectedPiece?.currentTile != nearestTile){
             if(this.selectedPiece?.possibleMoves.some(x => x.coordinates === nearestTile.coordinates)){
-                this.movePiece(this.selectedPiece, nearestTile);
-                this.isPieceSelected = false;
-                this.selectedPiece = undefined;
+                this.handleMoving(nearestTile);
                 return;    
             }
-
-            if(!pieceOnTile) return;
-            
         }
 
         if(this.selectedPiece?.currentTile == nearestTile){
@@ -41,9 +42,12 @@ export class GameManager{
             return;
         }
         
-        this.selectPiece(pieceOnTile, nearestTile);
+        if(!this.selectedPiece || this.selectedPiece && this.selectedPiece.color == pieceOnTile.color){
+            this.selectPiece(pieceOnTile, nearestTile);
+            pieceOnTile.calcPossibleMoves(this.board.gameTiles);
+        }
 
-        pieceOnTile.calcPossibleMoves(this.board.gameTiles);
+        console.log(this.turnManager.turns);
     }
 
     private calcNearestTile(mousePos: [x: number, y: number]): GameTile {
@@ -61,7 +65,6 @@ export class GameManager{
                 }
             }
         }
-
         return nearestTile[0]!;
     }
 
@@ -90,13 +93,24 @@ export class GameManager{
         throw new Error(`Tile for piece at ${piece.currentCoordinates} not found`);
     }
 
-    private refreshSelectedPieces(selectedPiece: IPiece): void {
-        this.board.gamePieces.forEach(gamePiece => {
-            if (gamePiece !== selectedPiece && gamePiece.selected) {
-                this.board.repaintPieces(gamePiece, this.getTileOnPiece(gamePiece));
-                gamePiece.selected = false;
-            }
-        });
+    private handleMoving(nearestTile: GameTile){
+        
+        if(!this.selectedPiece) return
+        let move: Move = {start: this.selectedPiece.currentCoordinates, end: nearestTile.coordinates, piece: this.selectedPiece};
+        this.turnManager.addToTurnHistory(move, this.selectedPiece, nearestTile);
+        
+        this.movePiece(this.selectedPiece!, nearestTile);
+        this.isPieceSelected = false;
+        this.turnManager.changeActiveColor(this.selectedPiece!.color);
+        this.selectedPiece = undefined;
+    }
+
+    private movePiece(piece: IPiece, clickedTile: GameTile): void {
+        
+        this.board.removePieceFromTile(piece);
+        this.board.drawPieceOnBoard(piece, clickedTile, true);
+
+        this.changePropsAfterMove(piece, clickedTile);
     }
 
     private selectPiece(pieceOnTile: IPiece, nearestTile: GameTile): void{
@@ -113,13 +127,13 @@ export class GameManager{
         this.refreshSelectedPieces(pieceOnTile);
     }
 
-    private movePiece(piece: IPiece, clickedTile: GameTile): void {
-        
-        this.board.removePieceFromTile(piece);
-        this.board.drawPieceOnBoard(piece, clickedTile, true);
-
-        this.changePropsAfterMove(piece, clickedTile);
-
+    private refreshSelectedPieces(selectedPiece: IPiece): void {
+        this.board.gamePieces.forEach(gamePiece => {
+            if (gamePiece !== selectedPiece && gamePiece.selected) {
+                this.board.repaintPieces(gamePiece, this.getTileOnPiece(gamePiece));
+                gamePiece.selected = false;
+            }
+        });
     }
 
     private changePropsAfterMove(piece: IPiece, clickedTile: GameTile): void{

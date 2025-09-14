@@ -1,18 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./src/styles/style.css">
-    <title>Chess</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./src/styles/style.css">
+  <title>Chess</title>
 </head>
 <body>
-    <div class="game-container">
-        <canvas class="game-canvas" id="game-canvas" width="800" height="800">
+  <div class="game-container">
+    <canvas class="game-canvas" id="game-canvas" width="800" height="800"></canvas>
 
-        </canvas>
+    <div class="move-table-container">
+      <table class="move-table" id="turn-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>White</th>
+            <th>Black</th>
+          </tr>
+        </thead>
+        <tbody id="move-list">
+        </tbody>
+      </table>
     </div>
-    
+  </div>
+
+  <script type="module" src="./src/main.ts"></script>
 </body>
-    <script type="module" src="./src/main.ts"></script>
 </html>

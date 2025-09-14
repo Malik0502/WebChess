@@ -1,3 +1,6 @@
+import { StartPiecePosition } from "../common/records/startPiecePosition";
+import { SpriteMap } from "../common/records/spriteMap";
+import { StartPositionPieceColor } from "../common/records/startPositionPieceColor";
 import type { IPiece } from "../game/pieces/interfaces/IPiece";
 import type { IPieceFactory } from "../game/pieces/interfaces/IPieceFactory";
 import type { SlidingMovement } from "../game/pieces/pieceMovement/slidingMovement";
@@ -13,44 +16,6 @@ export class Board{
     gamePieces: IPiece[];
     gameTileWidth: number;
     gameTileHeight: number;
-
-
-    spriteMap: Record<string, HTMLImageElement> = {
-        "white-pawn": new Image(),
-        "white-bishop": new Image(),
-        "white-knight": new Image(),
-        "white-rook": new Image(),
-        "white-queen": new Image(),
-        "white-king": new Image(),
-        "black-pawn": new Image(),
-        "black-bishop": new Image(),
-        "black-knight": new Image(),
-        "black-rook": new Image(),
-        "black-queen": new Image(),
-        "black-king": new Image(),
-    }
-
-    private piecePositions: Record<string, string> = {
-        "e1": "white-king",
-        "e8": "black-king",
-        "d1": "white-queen",
-        "d8": "black-queen",
-
-        "c1": "white-bishop",
-        "f1": "white-bishop",
-        "c8": "black-bishop",
-        "f8": "black-bishop",
-
-        "b1": "white-knight",
-        "g1": "white-knight",
-        "b8": "black-knight",
-        "g8": "black-knight",
-
-        "a1": "white-rook",
-        "h1": "white-rook",
-        "a8": "black-rook",
-        "h8": "black-rook",
-    }
 
     private pieceFactory: IPieceFactory;
     private movement: SlidingMovement;
@@ -77,7 +42,7 @@ export class Board{
     private drawChessBoard(): void{
         this.drawChessboardPattern();
         Promise.all(
-        Object.values(this.spriteMap).map(img => new Promise(resolve => img.onload = resolve))
+        Object.values(SpriteMap).map(img => new Promise(resolve => img.onload = resolve))
         ).then(() => {
             this.drawStartPiecesOnChessBoard();
         });
@@ -148,9 +113,10 @@ export class Board{
             for (let col = 0; col < this.gameTiles[row].length; col++) {
                 
                 const tile = this.gameTiles[row][col];
-                const pieceName = this.piecePositions[tile.coordinates];
+                const pieceName = StartPiecePosition[tile.coordinates];
+                const pieceColor = StartPositionPieceColor[tile.coordinates]
                 if (pieceName) {
-                    const piece: IPiece = this.createGamePiece(pieceName, tile);
+                    const piece: IPiece = this.createGamePiece(pieceName, pieceColor, tile);
                     this.drawPieceOnBoard(piece, tile, false);
                     this.gamePieces.push(piece);
                 }
@@ -159,13 +125,15 @@ export class Board{
     }
 
     public drawPieceOnBoard(piece: IPiece, tile: GameTile, shouldSquareRepaint: boolean): void{
+        const spriteMapName: string = `${piece.color}-${piece.name}`;
+        
         if(shouldSquareRepaint){
             this.canvasCtx!.fillStyle = tile.color;
             this.canvasCtx!.fillRect(tile.cornerPoint[0], tile.cornerPoint[1], tile.width, tile.height);
         }
         
         this.canvasCtx?.drawImage(
-            this.spriteMap[piece.name],
+            SpriteMap[spriteMapName]!,
             tile.centerPoint[0] - tile.width / 2,
             tile.centerPoint[1] - tile.height / 1.83,
             tile.width,
@@ -240,10 +208,7 @@ export class Board{
         return gameTile!;
     }
 
-    private createGamePiece(pieceName: string, tile: GameTile): IPiece {
-        const splitName = pieceName.split("-");
-        const pieceColor = splitName[0];
-
+    private createGamePiece(pieceName: string, pieceColor: string, tile: GameTile): IPiece {
         return this.pieceFactory.createPiece(pieceName, pieceColor, tile, this.movement)!;
     }
  
@@ -263,18 +228,18 @@ export class Board{
     }
 
     private connectImageSrcToSpriteMap(){
-        this.spriteMap["white-pawn"].src = "src/assets/pw.svg"
-        this.spriteMap["white-bishop"].src = "src/assets/bw.svg"
-        this.spriteMap["white-knight"].src = "src/assets/nw.svg"
-        this.spriteMap["white-rook"].src = "src/assets/rw.svg"
-        this.spriteMap["white-queen"].src = "src/assets/qw.svg"
-        this.spriteMap["white-king"].src = "src/assets/kw.svg"
-        this.spriteMap["black-pawn"].src = "src/assets/pb.svg"
-        this.spriteMap["black-bishop"].src = "src/assets/bb.svg" 
-        this.spriteMap["black-knight"].src = "src/assets/nb.svg"
-        this.spriteMap["black-rook"].src = "src/assets/rb.svg"
-        this.spriteMap["black-queen"].src = "src/assets/qb.svg"
-        this.spriteMap["black-king"].src = "src/assets/kb.svg"
+        SpriteMap["white-pawn"].src = "src/assets/pw.svg"
+        SpriteMap["white-bishop"].src = "src/assets/bw.svg"
+        SpriteMap["white-knight"].src = "src/assets/nw.svg"
+        SpriteMap["white-rook"].src = "src/assets/rw.svg"
+        SpriteMap["white-queen"].src = "src/assets/qw.svg"
+        SpriteMap["white-king"].src = "src/assets/kw.svg"
+        SpriteMap["black-pawn"].src = "src/assets/pb.svg"
+        SpriteMap["black-bishop"].src = "src/assets/bb.svg" 
+        SpriteMap["black-knight"].src = "src/assets/nb.svg"
+        SpriteMap["black-rook"].src = "src/assets/rb.svg"
+        SpriteMap["black-queen"].src = "src/assets/qb.svg"
+        SpriteMap["black-king"].src = "src/assets/kb.svg"
     }
 
     repaintPieces(piece: IPiece, tile: GameTile): void{
@@ -292,8 +257,10 @@ export class Board{
 
     private fillRecordWithPawns(){
         for (let col of "abcdefgh") {
-            this.piecePositions[`${col}2`] = "white-pawn";
-            this.piecePositions[`${col}7`] = "black-pawn";
+            StartPiecePosition[`${col}2`] = "pawn";
+            StartPositionPieceColor[`${col}2`] = "white";
+            StartPiecePosition[`${col}7`] = "pawn";
+            StartPositionPieceColor[`${col}7`] = "black";
         }
     }
 }
