@@ -1,21 +1,32 @@
 import type { Board } from "../../../board/board";
-import type { BoardRenderer } from "../../../board/boardRenderer";
+import type { BoardRenderer } from "../../../board/renderer/boardRenderer";
 import { GameTile } from "../../../board/entities/gameTile";
 import type { IPiece } from "../../pieces/interfaces/IPiece";
 import type { Move } from "../turnManagement/entities/move";
 import type { TurnManager } from "../turnManagement/turnManager";
+import type { PieceRenderer } from "../../../board/renderer/pieceRenderer";
+import type { MovePreviewRenderer } from "../../../board/renderer/movePreviewRenderer";
+import type { TileRenderer } from "../../../board/renderer/tileRenderer";
 
 export class GameManager{
     
     private boardRenderer: BoardRenderer;
+    private pieceRenderer: PieceRenderer;
+    private movePreviewRenderer: MovePreviewRenderer;
+    private tileRenderer: TileRenderer;
+
     private turnManager: TurnManager;
     private isPieceSelected: boolean;
     private selectedPiece: IPiece | undefined;
 
     private board: Board;
 
-    constructor(boardRenderer: BoardRenderer, turnManager: TurnManager){
+    constructor(boardRenderer: BoardRenderer, pieceRenderer: PieceRenderer, movePreviewRenderer: MovePreviewRenderer, tileRenderer: TileRenderer, turnManager: TurnManager){
         this.boardRenderer = boardRenderer;
+        this.pieceRenderer = pieceRenderer;
+        this.movePreviewRenderer = movePreviewRenderer;
+        this.tileRenderer = tileRenderer;
+
         this.turnManager = turnManager;
         this.isPieceSelected = false;
         
@@ -51,7 +62,7 @@ export class GameManager{
             this.deleteMoveOptions();
             this.selectPiece(pieceOnTile, nearestTile);
             pieceOnTile.calcPossibleMoves(this.board.gameTiles);
-            this.boardRenderer.paintMovePreview();
+            this.movePreviewRenderer.paintMovePreview();
         }
     }
 
@@ -75,27 +86,11 @@ export class GameManager{
 
     // Gets the piece that stands on method parameter tile
     private getPieceOnTile(tile: GameTile) : IPiece{
-        let piece: IPiece | undefined;
-        
-        this.board.gamePieces.forEach(gamePiece => {
-            if(gamePiece.currentCoordinates == tile.coordinates){
-                piece = gamePiece;
-            }
-        });
-
-        return piece!;
+        return tile.currentPiece!;
     }
 
     private getTileOnPiece(piece: IPiece): GameTile {
-        for (const row of this.board.gameTiles) {
-            for (const tile of row) {
-                if (tile.coordinates === piece.currentCoordinates) {
-                    return tile;
-                }
-            }
-        }
-
-        throw new Error(`Tile for piece at ${piece.currentCoordinates} not found`);
+        return piece.currentTile;
     }
 
     private handleMoving(nearestTile: GameTile){
@@ -112,15 +107,15 @@ export class GameManager{
 
     private movePiece(piece: IPiece, clickedTile: GameTile): void {
         
-        this.boardRenderer.removePieceFromTile(piece);
-        this.boardRenderer.drawPieceOnBoard(piece, clickedTile, true);
+        this.tileRenderer.drawChessRectangle(piece.currentTile.cornerPoint[0], piece.currentTile.cornerPoint[1], clickedTile.width, clickedTile.height, piece.currentTile.color);
+        this.pieceRenderer.drawPieceOnBoard(piece, clickedTile, true);
 
         this.changePropsAfterMove(piece, clickedTile);
     }
 
     private selectPiece(pieceOnTile: IPiece, nearestTile: GameTile): void{
         // marks selected piece yellow
-        this.boardRenderer.repaintPieces(pieceOnTile, nearestTile);
+        this.pieceRenderer.repaintPieces(pieceOnTile, nearestTile);
 
         // toggle selection
         pieceOnTile.selected = !pieceOnTile.selected;
@@ -135,7 +130,7 @@ export class GameManager{
     private refreshSelectedPieces(selectedPiece: IPiece): void {
         this.board.gamePieces.forEach(gamePiece => {
             if (gamePiece !== selectedPiece && gamePiece.selected) {
-                this.boardRenderer.repaintPieces(gamePiece, this.getTileOnPiece(gamePiece));
+                this.pieceRenderer.repaintPieces(gamePiece, this.getTileOnPiece(gamePiece));
                 gamePiece.selected = false;
             }
         });
@@ -145,7 +140,7 @@ export class GameManager{
         
         if(clickedTile.isOccupied && clickedTile.coordinates != piece.currentCoordinates) this.capturePiece(clickedTile)
         
-        this.boardRenderer.repaintMoveOptionTilesNormal();
+        this.movePreviewRenderer.repaintMoveOptionTilesNormal();
         piece.possibleMoves.forEach(x => x.isMoveOption = false);
         piece.selected = false;
         piece.hasMoved = true;
@@ -159,7 +154,7 @@ export class GameManager{
     }
 
     private deleteMoveOptions(){
-        this.boardRenderer.repaintMoveOptionTilesNormal();
+        this.movePreviewRenderer.repaintMoveOptionTilesNormal();
         this.board.gameTiles.forEach(row => {
             row.forEach(col => col.isMoveOption = false)
         });

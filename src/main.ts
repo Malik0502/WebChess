@@ -1,5 +1,9 @@
 import { Board } from "./scripts/board/board"
-import { BoardRenderer } from "./scripts/board/boardRenderer";
+import { BoardRenderer } from "./scripts/board/renderer/boardRenderer";
+import { MovePreviewRenderer } from "./scripts/board/renderer/movePreviewRenderer";
+import { PieceRenderer } from "./scripts/board/renderer/pieceRenderer";
+import { SpriteRenderer } from "./scripts/board/renderer/spriteRenderer";
+import { TileRenderer } from "./scripts/board/renderer/tileRenderer";
 import { BlackTileColor, WhiteTileColor } from "./scripts/common/constants/canvasColors";
 import { GameManager } from "./scripts/game/manager/gameManagement/gameManager";
 import { AlgebraicNotationParser } from "./scripts/game/manager/turnManagement/algebraicNotationParser";
@@ -9,7 +13,13 @@ import { SlidingMovement } from "./scripts/game/pieces/pieceMovement/slidingMove
 import { TableRenderer } from "./scripts/table/tableRenderer";
 
 let gameBoard: Board;
-let boardRenderer: BoardRenderer; 
+
+let boardRenderer: BoardRenderer;
+let spriteRenderer: SpriteRenderer;
+let tileRenderer: TileRenderer;
+let pieceRenderer: PieceRenderer;
+let movePreviewRenderer: MovePreviewRenderer;
+
 let gameManager: GameManager;
 let turnManager: TurnManager;
 let algebraicNotationParser: AlgebraicNotationParser;
@@ -17,13 +27,24 @@ let tableRenderer: TableRenderer;
 let canvas: HTMLCanvasElement;
 
 window.onload = () => {
+
+    canvas = document.getElementById("game-canvas") as HTMLCanvasElement;
+    const canvasContext: CanvasRenderingContext2D = canvas.getContext("2d")!;
+
     gameBoard = new Board(new PieceFactory(), new SlidingMovement())
-    boardRenderer = new BoardRenderer(gameBoard, document.getElementById("game-canvas") as HTMLCanvasElement, WhiteTileColor, BlackTileColor)
-    algebraicNotationParser = new AlgebraicNotationParser();
+
+    spriteRenderer = new SpriteRenderer();
+    tileRenderer = new TileRenderer(canvasContext, gameBoard);
+    pieceRenderer = new PieceRenderer(canvasContext, gameBoard, tileRenderer);
+    movePreviewRenderer = new MovePreviewRenderer(gameBoard, canvasContext, tileRenderer, pieceRenderer); 
+    boardRenderer = new BoardRenderer(gameBoard, canvas, spriteRenderer, tileRenderer, pieceRenderer, WhiteTileColor, BlackTileColor)
     tableRenderer = new TableRenderer();
+    
+
+    algebraicNotationParser = new AlgebraicNotationParser();
+
     turnManager = new TurnManager(algebraicNotationParser, tableRenderer);
-    gameManager = new GameManager(boardRenderer, turnManager);
-    canvas = boardRenderer.canvas;
+    gameManager = new GameManager(boardRenderer, pieceRenderer, movePreviewRenderer, tileRenderer, turnManager);
 
     canvas.addEventListener("click", handleClick)
     
