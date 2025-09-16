@@ -7,7 +7,9 @@ The goal is to create an interactive chess platform in your browser.
 
 ## Features
 - Chessboard
-- movable pawns, bishops, rooks and queens
+- movable pieces
+- preview of all possible moves on selected piece
+- turnlist with number of turns and algebraic notation of all moves 
 
 ---
 
