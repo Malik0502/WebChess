@@ -10,7 +10,7 @@ const directions = {
 
 export class SlidingMovement{
 
-    public diagonalMovement(movementInfo: IMovementInfo){
+    diagonalMovement(movementInfo: IMovementInfo){
         this.CalcNorthWestMoves(movementInfo);
         this.CalcNorthEastMoves(movementInfo);
         this.CalcSouthWestMoves(movementInfo);
@@ -18,7 +18,7 @@ export class SlidingMovement{
         return movementInfo.possibleMoves;
     }
 
-    public straightMovement(movementInfo: IMovementInfo): GameTile[]{
+    straightMovement(movementInfo: IMovementInfo): GameTile[]{
         
         this.CalcVerticalMoves(movementInfo, directions.North);
         this.CalcVerticalMoves(movementInfo, directions.South);

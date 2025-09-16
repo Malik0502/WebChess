@@ -48,7 +48,7 @@ export class Rook implements IPiece{
         this.markAsMoveOption();
     }
 
-    public markAsMoveOption(): void {
+    markAsMoveOption(): void {
         this.possibleMoves.forEach(tile => {
             tile.isMoveOption = true;
         });

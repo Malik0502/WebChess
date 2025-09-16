@@ -1,7 +1,7 @@
 import type { Turn } from "../game/manager/turnManagement/entities/turn";
 
 export class TableRenderer{
-    public renderTurns(turns: Turn[]){
+    renderTurns(turns: Turn[]){
         const tbody = document.querySelector<HTMLTableSectionElement>('#turn-table tbody');
 
         if(!tbody) return;

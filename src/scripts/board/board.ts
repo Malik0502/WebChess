@@ -123,7 +123,7 @@ export class Board{
         }
     }
 
-    public drawPieceOnBoard(piece: IPiece, tile: GameTile, shouldSquareRepaint: boolean): void{
+    drawPieceOnBoard(piece: IPiece, tile: GameTile, shouldSquareRepaint: boolean): void{
         const spriteMapName: string = `${piece.color}-${piece.name}`;
         
         if(shouldSquareRepaint){
@@ -142,7 +142,7 @@ export class Board{
         tile.currentPiece = piece;
     }
 
-    public removePieceFromTile(piece: IPiece): void{
+    removePieceFromTile(piece: IPiece): void{
         this.canvasCtx!.fillStyle = piece.currentTile.color;
         this.canvasCtx?.fillRect(
             piece.currentTile.cornerPoint[0],
@@ -262,4 +262,21 @@ export class Board{
             StartPositionPieceColor[`${col}7`] = "black";
         }
     }
+
+    paintMovePreview(tile: GameTile){
+        this.canvasCtx!.fillStyle = "#c7b99b";
+        this.canvasCtx!.beginPath();
+        this.canvasCtx!.arc(tile.centerPoint[0], tile.centerPoint[1], tile.width / 4, 0, 2 * Math.PI);
+        this.canvasCtx!.fill();
+        this.canvasCtx!.stroke();
+    }
+
+    repaintMoveOptionTiles(tiles: GameTile[]){
+        tiles.forEach(tile => {
+            if(tile.isMoveOption){
+                this.canvasCtx!.fillStyle = tile.color; 
+            }
+        });
+    }
+
 }

@@ -44,6 +44,7 @@ export class GameManager{
         
         if(!this.selectedPiece || this.selectedPiece && this.selectedPiece.color == pieceOnTile.color){
             this.selectPiece(pieceOnTile, nearestTile);
+            
             pieceOnTile.calcPossibleMoves(this.board.gameTiles);
         }
     }
