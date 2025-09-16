@@ -43,9 +43,10 @@ export class GameManager{
         }
         
         if(!this.selectedPiece || this.selectedPiece && this.selectedPiece.color == pieceOnTile.color){
+            this.deleteMoveOptions();
             this.selectPiece(pieceOnTile, nearestTile);
-            
             pieceOnTile.calcPossibleMoves(this.board.gameTiles);
+            this.board.paintMovePreview();
         }
     }
 
@@ -139,6 +140,7 @@ export class GameManager{
         
         if(clickedTile.isOccupied && clickedTile.coordinates != piece.currentCoordinates) this.capturePiece(clickedTile)
         
+        this.board.repaintMoveOptionTilesNormal();
         piece.possibleMoves.forEach(x => x.isMoveOption = false);
         piece.selected = false;
         piece.hasMoved = true;
@@ -152,9 +154,11 @@ export class GameManager{
     }
 
     private deleteMoveOptions(){
+        this.board.repaintMoveOptionTilesNormal();
         this.board.gameTiles.forEach(row => {
             row.forEach(col => col.isMoveOption = false)
         });
+
     }
 
     // just handles removing piece from array right now

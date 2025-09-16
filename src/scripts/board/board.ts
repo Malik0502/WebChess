@@ -71,12 +71,7 @@ export class Board{
                     lastColor = this.darkTileColor;
                 }
 
-                this.canvasCtx?.fillRect(
-                    xPosRectangle,
-                    yPosRectangle,
-                    this.gameTileWidth,
-                    this.gameTileHeight
-                );
+                this.drawChessRectangle(xPosRectangle, yPosRectangle, this.gameTileWidth, this.gameTileHeight, this.canvasCtx!.fillStyle);
 
                 const tile = this.createGameTile(
                     this.gameTileWidth, 
@@ -105,6 +100,11 @@ export class Board{
         }
 
         console.log(this.gameTiles);
+    }
+
+    private drawChessRectangle(xCornerPoint: number, yCornerPoint: number, tileWidth: number, tileHeight: number, tileColor: string){
+        this.canvasCtx!.fillStyle = tileColor;
+        this.canvasCtx!.fillRect(xCornerPoint, yCornerPoint, tileWidth, tileHeight);
     }
 
     private drawStartPiecesOnChessBoard(): void {
@@ -263,20 +263,50 @@ export class Board{
         }
     }
 
-    paintMovePreview(tile: GameTile){
-        this.canvasCtx!.fillStyle = "#c7b99b";
+    paintMovePreview(){
+        for(const row of this.gameTiles){
+            for(const tile of row){
+                if(!tile.isMoveOption) continue;
+
+                if(!tile.isOccupied){
+                    this.paintMovePreviewEmptyTile(tile);
+                    continue
+                }
+                this.paintMovePreviewOccupiedTile(tile);  
+            }
+        }
+    }
+
+    private paintMovePreviewEmptyTile(tile: GameTile){
+        this.canvasCtx!.fillStyle = "rgba(60, 60, 60, 0.4)";
+        this.canvasCtx!.strokeStyle = "rgba(60, 60, 60, 0.4)";
         this.canvasCtx!.beginPath();
-        this.canvasCtx!.arc(tile.centerPoint[0], tile.centerPoint[1], tile.width / 4, 0, 2 * Math.PI);
+        this.canvasCtx!.arc(tile.centerPoint[0], tile.centerPoint[1], tile.width / 6, 0, 2 * Math.PI);
+        this.canvasCtx!.lineWidth = 1;
         this.canvasCtx!.fill();
         this.canvasCtx!.stroke();
     }
 
-    repaintMoveOptionTiles(tiles: GameTile[]){
-        tiles.forEach(tile => {
-            if(tile.isMoveOption){
-                this.canvasCtx!.fillStyle = tile.color; 
+    private paintMovePreviewOccupiedTile(tile: GameTile){
+        this.canvasCtx!.strokeStyle = "rgba(60, 60, 60, 0.4)";
+        this.canvasCtx!.beginPath();
+        this.canvasCtx!.arc(tile.centerPoint[0], tile.centerPoint[1], tile.width / 2.25, 0, 2 * Math.PI);
+        this.canvasCtx!.lineWidth = 8;
+        this.canvasCtx!.stroke();
+    }
+
+    repaintMoveOptionTilesNormal(){
+        for(const row of this.gameTiles){
+            for(const tile of row){
+                if(!tile.isMoveOption) continue;
+
+                if(!tile.isOccupied){
+                    this.drawChessRectangle(tile.cornerPoint[0], tile.cornerPoint[1], tile.width, tile.height, tile.color);
+                    continue;
+                }
+                this.drawPieceOnBoard(tile.currentPiece!, tile, tile.isOccupied);
             }
-        });
+        }
     }
 
 }
