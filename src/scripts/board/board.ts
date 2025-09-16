@@ -1,217 +1,68 @@
 import { StartPiecePosition } from "../common/records/startPiecePosition";
-import { SpriteMap } from "../common/records/spriteMap";
 import { StartPositionPieceColor } from "../common/records/startPositionPieceColor";
 import type { IPiece } from "../game/pieces/interfaces/IPiece";
 import type { IPieceFactory } from "../game/pieces/interfaces/IPieceFactory";
 import type { SlidingMovement } from "../game/pieces/pieceMovement/slidingMovement";
 import { GameTile } from "./entities/gameTile";
 
-export class Board{
-    canvas: HTMLCanvasElement;
-    canvasCtx: CanvasRenderingContext2D | null;
-    whiteTileColor: string;
-    darkTileColor: string;
-    // [row][col]
+export class Board {
     gameTiles: GameTile[][];
     gamePieces: IPiece[];
-    gameTileWidth: number;
-    gameTileHeight: number;
-
     private pieceFactory: IPieceFactory;
     private movement: SlidingMovement;
 
-    constructor(canvas: HTMLCanvasElement, whiteTileColor: string, darkTileColor: string, pieceFactory: IPieceFactory, movement: SlidingMovement){
-        this.canvas = canvas;
-        this.canvasCtx = canvas.getContext("2d");
-        const canvasSize = this.getCanvasSize(); 
-        this.whiteTileColor = whiteTileColor;
-        this.darkTileColor = darkTileColor;
+    constructor(pieceFactory: IPieceFactory, movement: SlidingMovement) {
         this.gameTiles = [];
         this.gamePieces = [];
-        this.connectImageSrcToSpriteMap();
         this.pieceFactory = pieceFactory;
         this.movement = movement;
         this.fillRecordWithPawns();
-        
-        this.gameTileWidth = Math.round(canvasSize[0] / 8)
-        this.gameTileHeight = Math.round(canvasSize[1] / 8) 
-
-        this.drawChessBoard();
     }
 
-    private drawChessBoard(): void{
-        this.drawChessboardPattern();
-        Promise.all(
-        Object.values(SpriteMap).map(img => new Promise(resolve => img.onload = resolve))
-        ).then(() => {
-            this.drawStartPiecesOnChessBoard();
-        });
-    
-        this.drawCoordinatesOnBoard();
-    }
-
-    private drawChessboardPattern(): void {
-        let xPosRectangle: number = 0;
-        let yPosRectangle: number = 0;
-        let lastColor: string = this.darkTileColor;
-
-        for (let y = 8; y >= 1; y--) {
-            const rowTiles: GameTile[] = [];
-            const rowIndex: number = 8 - y;
-
-            for (let x = 1; x <= 8; x++) {
-                const colIndex: number = x - 1;
-
-                // change tile color
-                if (lastColor === this.darkTileColor) {
-                    this.canvasCtx!.fillStyle = this.whiteTileColor;
-                    lastColor = this.whiteTileColor;
-                } else {
-                    this.canvasCtx!.fillStyle = this.darkTileColor;
-                    lastColor = this.darkTileColor;
-                }
-
-                this.drawChessRectangle(xPosRectangle, yPosRectangle, this.gameTileWidth, this.gameTileHeight, this.canvasCtx!.fillStyle);
-
-                const tile = this.createGameTile(
-                    this.gameTileWidth, 
-                    this.gameTileHeight, 
-                    yPosRectangle, 
-                    xPosRectangle, 
-                    lastColor, 
-                    x, 
-                    this.convertNumCoordToChessCoord(x, y),
-                    rowIndex,
-                    colIndex
-                );
-
-                rowTiles.push(tile);
-                xPosRectangle += Math.round(this.gameTileWidth);
-            }
-
-            this.gameTiles.push(rowTiles);
-        
-            // calculate rectangle start pos in new row
-            yPosRectangle += Math.round(this.gameTileHeight);
-            xPosRectangle = 0;
-
-            // invert next rows start color
-            lastColor = lastColor === this.darkTileColor ? this.whiteTileColor : this.darkTileColor;
-        }
-
-        console.log(this.gameTiles);
-    }
-
-    private drawChessRectangle(xCornerPoint: number, yCornerPoint: number, tileWidth: number, tileHeight: number, tileColor: string){
-        this.canvasCtx!.fillStyle = tileColor;
-        this.canvasCtx!.fillRect(xCornerPoint, yCornerPoint, tileWidth, tileHeight);
-    }
-
-    private drawStartPiecesOnChessBoard(): void {
-        for (let row = 0; row < this.gameTiles.length; row++) {
-            for (let col = 0; col < this.gameTiles[row].length; col++) {
-                
-                const tile = this.gameTiles[row][col];
-                const pieceName = StartPiecePosition[tile.coordinates];
-                const pieceColor = StartPositionPieceColor[tile.coordinates]
-                if (pieceName) {
-                    const piece: IPiece = this.createGamePiece(pieceName, pieceColor, tile);
-                    this.drawPieceOnBoard(piece, tile, false);
-                    this.gamePieces.push(piece);
-                }
-            }
-        }
-    }
-
-    drawPieceOnBoard(piece: IPiece, tile: GameTile, shouldSquareRepaint: boolean): void{
-        const spriteMapName: string = `${piece.color}-${piece.name}`;
-        
-        if(shouldSquareRepaint){
-            this.canvasCtx!.fillStyle = tile.color;
-            this.canvasCtx!.fillRect(tile.cornerPoint[0], tile.cornerPoint[1], tile.width, tile.height);
-        }
-        
-        this.canvasCtx?.drawImage(
-            SpriteMap[spriteMapName]!,
-            tile.centerPoint[0] - tile.width / 2,
-            tile.centerPoint[1] - tile.height / 1.83,
-            tile.width,
-            tile.height
-        );
-        tile.isOccupied = true;
-        tile.currentPiece = piece;
-    }
-
-    removePieceFromTile(piece: IPiece): void{
-        this.canvasCtx!.fillStyle = piece.currentTile.color;
-        this.canvasCtx?.fillRect(
-            piece.currentTile.cornerPoint[0],
-            piece.currentTile.cornerPoint[1],
-            this.gameTileWidth,
-            this.gameTileHeight
-        );
-
-    }
-
-    private drawCoordinatesOnBoard(): void {
-        this.canvasCtx!.font = "24px serif";
-        for (const row of this.gameTiles) {
-            for (const tile of row) {
-                this.drawCoordinateOnBoard(tile);
-            }
-        }
-    }
-
-    private drawCoordinateOnBoard(tile: GameTile): void{
-        this.canvasCtx!.fillStyle = tile.color === this.darkTileColor ? this.whiteTileColor : this.darkTileColor;
-        if(tile.coordinates.includes("a")){
-            this.canvasCtx?.fillText(tile.coordinates.charAt(1), tile.centerPoint[0] - tile.width / 2, tile.centerPoint[1] - tile.height / 4)
-        }
-
-        if(tile.coordinates.includes("1")){
-            this.canvasCtx?.fillText(tile.coordinates.charAt(0), tile.centerPoint[0] + tile.width / 2.66, tile.centerPoint[1] + tile.height / 2.5)
-        }
-    }
-
-    getCanvasSize(): [x: number, y: number]{
-        return [this.canvas.width, this.canvas.height]
-    }
-    
-    private createGameTile(gameTileWidth: number, gameTileHeight: number ,yPosRectangle: number, xPosRectangle: number, lastColor: string, x: number, coordinates: string, row: number, col: number) : GameTile{
+    createGameTile(
+        gameTileWidth: number,
+        gameTileHeight: number,
+        yPosRectangle: number,
+        xPosRectangle: number,
+        lastColor: string,
+        x: number,
+        coordinates: string,
+        row: number,
+        col: number
+    ): GameTile {
         let gameTile: GameTile | undefined;
-        if(x === 1){
+        if (x === 1) {
             gameTile = new GameTile(
-            [gameTileWidth / 2, yPosRectangle + gameTileHeight / 2],
-            gameTileWidth,
-            gameTileHeight,
-            lastColor,
-            false,
-            coordinates,
-            row, 
-            col
+                [gameTileWidth / 2, yPosRectangle + gameTileHeight / 2],
+                gameTileWidth,
+                gameTileHeight,
+                lastColor,
+                false,
+                coordinates,
+                row,
+                col
             );
-        }
-        else{
+        } else {
             gameTile = new GameTile(
-            [xPosRectangle + gameTileWidth / 2, yPosRectangle + gameTileHeight / 2],
-            gameTileWidth,
-            gameTileHeight,
-            lastColor,
-            false,
-            coordinates,
-            row,
-            col
+                [xPosRectangle + gameTileWidth / 2, yPosRectangle + gameTileHeight / 2],
+                gameTileWidth,
+                gameTileHeight,
+                lastColor,
+                false,
+                coordinates,
+                row,
+                col
             );
         }
 
         return gameTile!;
     }
 
-    private createGamePiece(pieceName: string, pieceColor: string, tile: GameTile): IPiece {
+    createGamePiece(pieceName: string, pieceColor: string, tile: GameTile): IPiece {
         return this.pieceFactory.createPiece(pieceName, pieceColor, tile, this.movement)!;
     }
- 
-    private convertNumCoordToChessCoord(xCoordinate: number, yCoordinate: number): string{
+
+    convertNumCoordToChessCoord(xCoordinate: number, yCoordinate: number): string {
         const chessCoordinates: Map<number, string> = new Map([
             [1, "a"],
             [2, "b"],
@@ -223,38 +74,10 @@ export class Board{
             [8, "h"],
         ]);
 
-       return  chessCoordinates.get(xCoordinate)! + yCoordinate;
+        return chessCoordinates.get(xCoordinate)! + yCoordinate;
     }
 
-    private connectImageSrcToSpriteMap(){
-        SpriteMap["white-pawn"].src = "src/assets/pw.svg"
-        SpriteMap["white-bishop"].src = "src/assets/bw.svg"
-        SpriteMap["white-knight"].src = "src/assets/nw.svg"
-        SpriteMap["white-rook"].src = "src/assets/rw.svg"
-        SpriteMap["white-queen"].src = "src/assets/qw.svg"
-        SpriteMap["white-king"].src = "src/assets/kw.svg"
-        SpriteMap["black-pawn"].src = "src/assets/pb.svg"
-        SpriteMap["black-bishop"].src = "src/assets/bb.svg" 
-        SpriteMap["black-knight"].src = "src/assets/nb.svg"
-        SpriteMap["black-rook"].src = "src/assets/rb.svg"
-        SpriteMap["black-queen"].src = "src/assets/qb.svg"
-        SpriteMap["black-king"].src = "src/assets/kb.svg"
-    }
-
-    repaintPieces(piece: IPiece, tile: GameTile): void{
-        if(!piece.selected){
-            this.canvasCtx!.fillStyle = "rgba(246, 235, 114, 0.45)";
-        }
-        else{
-            this.canvasCtx!.fillStyle = tile.color;
-        }
-        
-        this.canvasCtx?.fillRect(tile.cornerPoint[0], tile.cornerPoint[1], this.gameTileWidth, this.gameTileHeight);
-        this.drawCoordinateOnBoard(tile);
-        this.drawPieceOnBoard(piece, tile, false)
-    }
-
-    private fillRecordWithPawns(){
+    fillRecordWithPawns(): void {
         for (let col of "abcdefgh") {
             StartPiecePosition[`${col}2`] = "pawn";
             StartPositionPieceColor[`${col}2`] = "white";
@@ -262,51 +85,4 @@ export class Board{
             StartPositionPieceColor[`${col}7`] = "black";
         }
     }
-
-    paintMovePreview(){
-        for(const row of this.gameTiles){
-            for(const tile of row){
-                if(!tile.isMoveOption) continue;
-
-                if(!tile.isOccupied){
-                    this.paintMovePreviewEmptyTile(tile);
-                    continue
-                }
-                this.paintMovePreviewOccupiedTile(tile);  
-            }
-        }
-    }
-
-    private paintMovePreviewEmptyTile(tile: GameTile){
-        this.canvasCtx!.fillStyle = "rgba(60, 60, 60, 0.4)";
-        this.canvasCtx!.strokeStyle = "rgba(60, 60, 60, 0.4)";
-        this.canvasCtx!.beginPath();
-        this.canvasCtx!.arc(tile.centerPoint[0], tile.centerPoint[1], tile.width / 6, 0, 2 * Math.PI);
-        this.canvasCtx!.lineWidth = 1;
-        this.canvasCtx!.fill();
-        this.canvasCtx!.stroke();
-    }
-
-    private paintMovePreviewOccupiedTile(tile: GameTile){
-        this.canvasCtx!.strokeStyle = "rgba(60, 60, 60, 0.4)";
-        this.canvasCtx!.beginPath();
-        this.canvasCtx!.arc(tile.centerPoint[0], tile.centerPoint[1], tile.width / 2.25, 0, 2 * Math.PI);
-        this.canvasCtx!.lineWidth = 8;
-        this.canvasCtx!.stroke();
-    }
-
-    repaintMoveOptionTilesNormal(){
-        for(const row of this.gameTiles){
-            for(const tile of row){
-                if(!tile.isMoveOption) continue;
-
-                if(!tile.isOccupied){
-                    this.drawChessRectangle(tile.cornerPoint[0], tile.cornerPoint[1], tile.width, tile.height, tile.color);
-                    continue;
-                }
-                this.drawPieceOnBoard(tile.currentPiece!, tile, tile.isOccupied);
-            }
-        }
-    }
-
 }

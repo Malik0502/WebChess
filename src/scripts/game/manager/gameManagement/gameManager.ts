@@ -1,4 +1,5 @@
 import type { Board } from "../../../board/board";
+import type { BoardRenderer } from "../../../board/boardRenderer";
 import { GameTile } from "../../../board/entities/gameTile";
 import type { IPiece } from "../../pieces/interfaces/IPiece";
 import type { Move } from "../turnManagement/entities/move";
@@ -6,15 +7,19 @@ import type { TurnManager } from "../turnManagement/turnManager";
 
 export class GameManager{
     
-    private board: Board;
+    private boardRenderer: BoardRenderer;
     private turnManager: TurnManager;
     private isPieceSelected: boolean;
     private selectedPiece: IPiece | undefined;
 
-    constructor(board: Board, turnManager: TurnManager){
-        this.board = board;
+    private board: Board;
+
+    constructor(boardRenderer: BoardRenderer, turnManager: TurnManager){
+        this.boardRenderer = boardRenderer;
         this.turnManager = turnManager;
         this.isPieceSelected = false;
+        
+        this.board = boardRenderer.board;
     }
 
     handleMouseClick(mousePos: [number, number]): void{
@@ -46,7 +51,7 @@ export class GameManager{
             this.deleteMoveOptions();
             this.selectPiece(pieceOnTile, nearestTile);
             pieceOnTile.calcPossibleMoves(this.board.gameTiles);
-            this.board.paintMovePreview();
+            this.boardRenderer.paintMovePreview();
         }
     }
 
@@ -107,15 +112,15 @@ export class GameManager{
 
     private movePiece(piece: IPiece, clickedTile: GameTile): void {
         
-        this.board.removePieceFromTile(piece);
-        this.board.drawPieceOnBoard(piece, clickedTile, true);
+        this.boardRenderer.removePieceFromTile(piece);
+        this.boardRenderer.drawPieceOnBoard(piece, clickedTile, true);
 
         this.changePropsAfterMove(piece, clickedTile);
     }
 
     private selectPiece(pieceOnTile: IPiece, nearestTile: GameTile): void{
         // marks selected piece yellow
-        this.board.repaintPieces(pieceOnTile, nearestTile);
+        this.boardRenderer.repaintPieces(pieceOnTile, nearestTile);
 
         // toggle selection
         pieceOnTile.selected = !pieceOnTile.selected;
@@ -130,7 +135,7 @@ export class GameManager{
     private refreshSelectedPieces(selectedPiece: IPiece): void {
         this.board.gamePieces.forEach(gamePiece => {
             if (gamePiece !== selectedPiece && gamePiece.selected) {
-                this.board.repaintPieces(gamePiece, this.getTileOnPiece(gamePiece));
+                this.boardRenderer.repaintPieces(gamePiece, this.getTileOnPiece(gamePiece));
                 gamePiece.selected = false;
             }
         });
@@ -140,7 +145,7 @@ export class GameManager{
         
         if(clickedTile.isOccupied && clickedTile.coordinates != piece.currentCoordinates) this.capturePiece(clickedTile)
         
-        this.board.repaintMoveOptionTilesNormal();
+        this.boardRenderer.repaintMoveOptionTilesNormal();
         piece.possibleMoves.forEach(x => x.isMoveOption = false);
         piece.selected = false;
         piece.hasMoved = true;
@@ -154,7 +159,7 @@ export class GameManager{
     }
 
     private deleteMoveOptions(){
-        this.board.repaintMoveOptionTilesNormal();
+        this.boardRenderer.repaintMoveOptionTilesNormal();
         this.board.gameTiles.forEach(row => {
             row.forEach(col => col.isMoveOption = false)
         });
