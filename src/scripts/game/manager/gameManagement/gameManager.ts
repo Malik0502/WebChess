@@ -1,5 +1,4 @@
 import type { Board } from "../../../board/board";
-import type { BoardRenderer } from "../../../board/renderer/boardRenderer";
 import { GameTile } from "../../../board/entities/gameTile";
 import type { IPiece } from "../../pieces/interfaces/IPiece";
 import type { Move } from "../turnManagement/entities/move";
@@ -10,7 +9,6 @@ import type { TileRenderer } from "../../../board/renderer/tileRenderer";
 
 export class GameManager{
     
-    private boardRenderer: BoardRenderer;
     private pieceRenderer: PieceRenderer;
     private movePreviewRenderer: MovePreviewRenderer;
     private tileRenderer: TileRenderer;
@@ -21,8 +19,7 @@ export class GameManager{
 
     private board: Board;
 
-    constructor(boardRenderer: BoardRenderer, pieceRenderer: PieceRenderer, movePreviewRenderer: MovePreviewRenderer, tileRenderer: TileRenderer, turnManager: TurnManager){
-        this.boardRenderer = boardRenderer;
+    constructor(board: Board, pieceRenderer: PieceRenderer, movePreviewRenderer: MovePreviewRenderer, tileRenderer: TileRenderer, turnManager: TurnManager){
         this.pieceRenderer = pieceRenderer;
         this.movePreviewRenderer = movePreviewRenderer;
         this.tileRenderer = tileRenderer;
@@ -30,7 +27,7 @@ export class GameManager{
         this.turnManager = turnManager;
         this.isPieceSelected = false;
         
-        this.board = boardRenderer.board;
+        this.board = board;
     }
 
     handleMouseClick(mousePos: [number, number]): void{

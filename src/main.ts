@@ -44,7 +44,7 @@ window.onload = () => {
     algebraicNotationParser = new AlgebraicNotationParser();
 
     turnManager = new TurnManager(algebraicNotationParser, tableRenderer);
-    gameManager = new GameManager(boardRenderer, pieceRenderer, movePreviewRenderer, tileRenderer, turnManager);
+    gameManager = new GameManager(gameBoard, pieceRenderer, movePreviewRenderer, tileRenderer, turnManager);
 
     canvas.addEventListener("click", handleClick)
     
