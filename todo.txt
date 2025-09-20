@@ -1,6 +1,7 @@
 Current Bugs:
 
-- when pawn moves on tiles with coordinate chars or numbers it will be erased after moving
+- when pieces moves on tiles with coordinate chars or numbers it will be erased after moving
+- pawns can captures pieces of same color
 
 general:
 
