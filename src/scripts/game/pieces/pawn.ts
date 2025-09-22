@@ -64,13 +64,13 @@ export class Pawn implements IPiece{
         // Not on "a" file and diagonal down left file has piece
         if(!this.filePosVerifier.isOnAFile(this) && board[pieceRow + 1][pieceCol - 1].isOccupied){
             // diagonal down left of pawn
-            possibleMoves.push(board[pieceRow + 1][pieceCol - 1]);
+            if(board[pieceRow + 1][pieceCol - 1].currentPiece!.color != this.color) possibleMoves.push(board[pieceRow + 1][pieceCol - 1]);
         }
 
         // Not on "h" file and diagonal down right file has piece
         if(!this.filePosVerifier.isOnHFile(this) && board[pieceRow + 1][pieceCol + 1].isOccupied){
             // diagonal down right of pawn
-            possibleMoves.push(board[pieceRow + 1][pieceCol + 1]);
+            if(board[pieceRow + 1][pieceCol + 1].currentPiece!.color != this.color) possibleMoves.push(board[pieceRow + 1][pieceCol + 1]);
         }
 
         // Tile in front of piece is not occupied
@@ -96,13 +96,13 @@ export class Pawn implements IPiece{
         // Not on "a" file and diagonal up left file has piece
         if(!this.filePosVerifier.isOnAFile(this) && board[pieceRow - 1][pieceCol - 1].isOccupied){
             // diagonal up left of pawn
-            possibleMoves.push(board[pieceRow - 1][pieceCol - 1]);
+            if(board[pieceRow - 1][pieceCol - 1].currentPiece!.color != this.color) possibleMoves.push(board[pieceRow - 1][pieceCol - 1]); 
         }
 
         // Not on "h" file and diagonal up right file has piece
         if(!this.filePosVerifier.isOnHFile(this) && board[pieceRow - 1][pieceCol + 1].isOccupied){
             // diagonal up right of pawn
-            possibleMoves.push(board[pieceRow - 1][pieceCol + 1]);
+            if(board[pieceRow - 1][pieceCol + 1].currentPiece!.color != this.color) possibleMoves.push(board[pieceRow - 1][pieceCol + 1]);            
         }
 
 
