@@ -31,17 +31,17 @@ export class BoardRenderer {
         this.gameTileHeight = Math.round(h / 8);
 
         this.spriteRenderer.connectImageSrcToSpriteMap();
-        this.drawChessBoard();
     }
 
-    private drawChessBoard(): void {
+    drawChessBoard(): Promise<void> {
         this.tileRenderer.drawChessboardPattern(this.darkTileColor, this.whiteTileColor, this.gameTileWidth, this.gameTileHeight);
-        Promise.all(
+
+        return Promise.all(
             Object.values(SpriteMap).map(img => new Promise(resolve => img.onload = resolve))
         ).then(() => {
             this.pieceRenderer.drawStartPiecesOnChessBoard();
+        }).then(() => {
+            this.tileRenderer.drawCoordinatesOnBoard();
         });
-
-        this.tileRenderer.drawCoordinatesOnBoard();
-    }    
+    } 
 }

@@ -15,6 +15,7 @@ export class Bishop implements IPiece{
     selected: boolean;
     currentTile: GameTile;
     possibleMoves: GameTile[];
+    controlledTiles: GameTile[];
 
     private movement: SlidingMovement;
     
@@ -30,9 +31,10 @@ export class Bishop implements IPiece{
         this.currentTile = currentTile;
         this.possibleMoves = [];
         this.movement = movement;
+        this.controlledTiles = [];
     }
     
-    calcPossibleMoves(board: GameTile[][]){
+    calcPossibleMoves(board: GameTile[][]): GameTile[]{
         this.possibleMoves = [];
 
         var movementInfo: IMovementInfo = {
@@ -46,6 +48,8 @@ export class Bishop implements IPiece{
         this.possibleMoves = this.movement.diagonalMovement(movementInfo);
                 
         this.markAsMoveOption();
+
+        return this.possibleMoves;
     }
 
     markAsMoveOption(): void {

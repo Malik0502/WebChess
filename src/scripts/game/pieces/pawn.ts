@@ -14,7 +14,8 @@ export class Pawn implements IPiece{
     selected: boolean;
     currentTile: GameTile;
     possibleMoves: GameTile[];
-    
+    controlledTiles: GameTile[];
+
     private filePosVerifier: FilePosVerifier; 
     
     constructor(name: string, color: string, startCoordinates: string, currentTile: GameTile){
@@ -28,32 +29,34 @@ export class Pawn implements IPiece{
         this.selected = false;
         this.currentTile = currentTile;
         this.possibleMoves = [];
+        this.controlledTiles = [];
 
         this.filePosVerifier = new FilePosVerifier;
     }
 
-    calcPossibleMoves(board: GameTile[][]){
+    calcPossibleMoves(board: GameTile[][]): GameTile[]{
 
             if(this.color === WHITE){
-                if(this.currentCoordinates.includes("8")){
-                    this.convertPiece();
-                    return;
-                }
                 this.possibleMoves = this.calcArrayPosWhite(board);
             }
             else{
-                if(this.currentCoordinates.includes("1")){
-                    this.convertPiece();
-                    return;
-                }
                 this.possibleMoves = this.calcArrayPosBlack(board);
             }
              
         this.markAsMoveOption();
+
+        return this.possibleMoves;
+    }
+
+    calcVerticalMoves(board: GameTile[][], pieceRow: number, pieceCol: number, color: string){
+        if(color == WHITE){
+            return this.calcWhiteControlledTiles(board, pieceRow, pieceCol);
+        }
+        return this.calcBlackControlledTiles(board, pieceRow, pieceCol);
     }
     
     private calcArrayPosBlack(board: GameTile[][]): GameTile[]{        
-        let possibleMoves: GameTile[] = [];
+        const possibleMoves: GameTile[] = [];
         
         const pieceCol: number = this.currentTile.col;
         const pieceRow: number = this.currentTile.row;
@@ -61,17 +64,7 @@ export class Pawn implements IPiece{
         const frontOfPawn: GameTile = board[pieceRow + 1][pieceCol];
         const frontOfPawnTwo: GameTile | undefined = !this.currentCoordinates.includes("2") ? board[pieceRow + 2][pieceCol] : undefined;
         
-        // Not on "a" file and diagonal down left file has piece
-        if(!this.filePosVerifier.isOnAFile(this) && board[pieceRow + 1][pieceCol - 1].isOccupied){
-            // diagonal down left of pawn
-            if(board[pieceRow + 1][pieceCol - 1].currentPiece!.color != this.color) possibleMoves.push(board[pieceRow + 1][pieceCol - 1]);
-        }
-
-        // Not on "h" file and diagonal down right file has piece
-        if(!this.filePosVerifier.isOnHFile(this) && board[pieceRow + 1][pieceCol + 1].isOccupied){
-            // diagonal down right of pawn
-            if(board[pieceRow + 1][pieceCol + 1].currentPiece!.color != this.color) possibleMoves.push(board[pieceRow + 1][pieceCol + 1]);
-        }
+        possibleMoves.push(...this.calcBlackAttackMoves(board, pieceRow, pieceCol));
 
         // Tile in front of piece is not occupied
         if(!frontOfPawn.isOccupied) possibleMoves.push(frontOfPawn)
@@ -84,8 +77,34 @@ export class Pawn implements IPiece{
         return possibleMoves;
     }
 
+    private calcBlackAttackMoves(board: GameTile[][], pieceRow: number, pieceCol: number): GameTile[] {
+        const moves: GameTile[] = [];
+
+        if (!this.filePosVerifier.isOnAFile(this) && board[pieceRow + 1][pieceCol - 1].isOccupied && board[pieceRow + 1][pieceCol - 1].currentPiece!.color !== this.color){
+            moves.push(board[pieceRow + 1][pieceCol - 1]);
+        }
+
+        if (!this.filePosVerifier.isOnHFile(this) && board[pieceRow + 1][pieceCol + 1].isOccupied && board[pieceRow + 1][pieceCol + 1].currentPiece!.color !== this.color){
+            moves.push(board[pieceRow + 1][pieceCol + 1]);
+        }
+        return moves;
+    }
+
+    private calcBlackControlledTiles(board: GameTile[][], pieceRow: number, pieceCol: number): GameTile[] {
+        const controlled: GameTile[] = [];
+
+        if (!this.filePosVerifier.isOnAFile(this)){
+            controlled.push(board[pieceRow + 1][pieceCol - 1]);
+        }
+
+        if (!this.filePosVerifier.isOnHFile(this)){
+            controlled.push(board[pieceRow + 1][pieceCol + 1]);
+        }
+        return controlled;
+    }
+
     private calcArrayPosWhite(board: GameTile[][]): GameTile[]{
-        let possibleMoves: GameTile[] = [];
+        const possibleMoves: GameTile[] = [];
         
         const pieceCol: number = this.currentTile.col;
         const pieceRow: number = this.currentTile.row;
@@ -93,18 +112,7 @@ export class Pawn implements IPiece{
         const frontOfPawn: GameTile = board[pieceRow - 1][pieceCol];
         const frontOfPawnTwo: GameTile | undefined = !this.currentCoordinates.includes("7") ? board[pieceRow - 2][pieceCol] : undefined;
         
-        // Not on "a" file and diagonal up left file has piece
-        if(!this.filePosVerifier.isOnAFile(this) && board[pieceRow - 1][pieceCol - 1].isOccupied){
-            // diagonal up left of pawn
-            if(board[pieceRow - 1][pieceCol - 1].currentPiece!.color != this.color) possibleMoves.push(board[pieceRow - 1][pieceCol - 1]); 
-        }
-
-        // Not on "h" file and diagonal up right file has piece
-        if(!this.filePosVerifier.isOnHFile(this) && board[pieceRow - 1][pieceCol + 1].isOccupied){
-            // diagonal up right of pawn
-            if(board[pieceRow - 1][pieceCol + 1].currentPiece!.color != this.color) possibleMoves.push(board[pieceRow - 1][pieceCol + 1]);            
-        }
-
+        possibleMoves.push(...this.calcWhiteAttackMoves(board, pieceRow, pieceCol));
 
         // Tile in front of piece is not occupied
         if(!frontOfPawn.isOccupied) possibleMoves.push(frontOfPawn)
@@ -115,6 +123,34 @@ export class Pawn implements IPiece{
         if(!frontOfPawn.isOccupied && !frontOfPawnTwo.isOccupied && !this.hasMoved && !this.currentCoordinates.includes("7")) possibleMoves.push(frontOfPawnTwo)
 
         return possibleMoves;
+    }
+
+    private calcWhiteAttackMoves(board: GameTile[][], pieceRow: number, pieceCol: number): GameTile[] {
+        const moves: GameTile[] = [];
+
+        if (!this.filePosVerifier.isOnAFile(this) && board[pieceRow - 1][pieceCol - 1].isOccupied && board[pieceRow - 1][pieceCol - 1].currentPiece!.color !== this.color){
+            moves.push(board[pieceRow - 1][pieceCol - 1]);
+        }
+
+        if (!this.filePosVerifier.isOnHFile(this) && board[pieceRow - 1][pieceCol + 1].isOccupied && board[pieceRow - 1][pieceCol + 1].currentPiece!.color !== this.color){
+            moves.push(board[pieceRow - 1][pieceCol + 1]);
+        }
+
+        return moves;
+    }
+
+    private calcWhiteControlledTiles(board: GameTile[][], pieceRow: number, pieceCol: number): GameTile[] {
+        const controlled: GameTile[] = [];
+
+        if (!this.filePosVerifier.isOnAFile(this)){
+            controlled.push(board[pieceRow - 1][pieceCol - 1]);
+        }
+
+        if (!this.filePosVerifier.isOnHFile(this)){
+            controlled.push(board[pieceRow - 1][pieceCol + 1]);
+        }
+
+        return controlled;
     }
 
     markAsMoveOption(): void {

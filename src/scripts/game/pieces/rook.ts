@@ -15,6 +15,7 @@ export class Rook implements IPiece{
     selected: boolean;
     currentTile: GameTile;
     possibleMoves: GameTile[];
+    controlledTiles: GameTile[];
 
     private movement: SlidingMovement;
     
@@ -29,10 +30,11 @@ export class Rook implements IPiece{
         this.selected = false;
         this.currentTile = currentTile;
         this.possibleMoves = [];
-        this.movement = movement
+        this.movement = movement;
+        this.controlledTiles = [];
     }
     
-    calcPossibleMoves(board: GameTile[][]){
+    calcPossibleMoves(board: GameTile[][]): GameTile[]{
         this.possibleMoves = [];
         
         var movementInfo: IMovementInfo = {
@@ -46,6 +48,8 @@ export class Rook implements IPiece{
         this.possibleMoves = this.movement.straightMovement(movementInfo);
         
         this.markAsMoveOption();
+
+        return this.possibleMoves;
     }
 
     markAsMoveOption(): void {

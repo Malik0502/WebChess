@@ -13,6 +13,7 @@ export class Knight implements IPiece{
     selected: boolean;
     currentTile: GameTile;
     possibleMoves: GameTile[];
+    controlledTiles: GameTile[];
 
     constructor(name: string, color: string, startCoordinates: string, currentTile: GameTile){
         this.name = name,
@@ -25,9 +26,10 @@ export class Knight implements IPiece{
         this.selected = false;
         this.currentTile = currentTile;
         this.possibleMoves = [];
+        this.controlledTiles = [];
     }
     
-    calcPossibleMoves(board: GameTile[][]){
+    calcPossibleMoves(board: GameTile[][]): GameTile[]{
         this.possibleMoves = [];
 
         const directionNorth: number = -2;
@@ -42,6 +44,8 @@ export class Knight implements IPiece{
         this.calcHorizontalMoves(board, directionWest);
 
         this.markAsMoveOption();
+
+        return this.possibleMoves;
     }
 
 

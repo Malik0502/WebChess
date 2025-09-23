@@ -13,7 +13,8 @@ export class King implements IPiece{
     selected: boolean;
     currentTile: GameTile;
     possibleMoves: GameTile[];
-    
+    controlledTiles: GameTile[];
+
     constructor(name: string, color: string, startCoordinates: string, currentTile: GameTile){
         this.name = name,
         this.color = color,
@@ -25,9 +26,10 @@ export class King implements IPiece{
         this.selected = false;
         this.currentTile = currentTile
         this.possibleMoves = [];
+        this.controlledTiles = [];
     }
     
-    calcPossibleMoves(board: GameTile[][]){
+    calcPossibleMoves(board: GameTile[][]): GameTile[]{
         this.possibleMoves = [];
         
         for (let row = this.currentTile.row - 1; row <= this.currentTile.row + 1; row++) {
@@ -44,6 +46,8 @@ export class King implements IPiece{
         }
 
         this.markAsMoveOption();
+
+        return this.possibleMoves;
     }
 
     markAsMoveOption(): void {

@@ -11,4 +11,4 @@ export class Control{
         this.whiteControlling = whiteControlling;
         this.blackControlling = blackControlling;
     }
-}
+} 
