@@ -1,4 +1,5 @@
 import { Board } from "./scripts/board/board"
+import type { GameTile } from "./scripts/board/entities/gameTile";
 import { BoardRenderer } from "./scripts/board/renderer/boardRenderer";
 import { MovePreviewRenderer } from "./scripts/board/renderer/movePreviewRenderer";
 import { PieceRenderer } from "./scripts/board/renderer/pieceRenderer";

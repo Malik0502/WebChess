@@ -34,7 +34,7 @@ export class Queen implements IPiece{
         this.controlledTiles = [];
     }
     
-    calcPossibleMoves(board: GameTile[][]): GameTile[]{
+    calcPossibleMoves(board: GameTile[][], isAttack: boolean): GameTile[]{
         this.possibleMoves = [];
         
         var movementInfo: IMovementInfo = {
@@ -45,8 +45,8 @@ export class Queen implements IPiece{
             pieceCol: this.currentTile.col
         }
 
-        const straightPossibleMovements: GameTile[] = this.movement.straightMovement(movementInfo);
-        const diagonalPossibleMovements: GameTile[] = this.movement.diagonalMovement(movementInfo);
+        const straightPossibleMovements: GameTile[] = this.movement.straightMovement(movementInfo, isAttack);
+        const diagonalPossibleMovements: GameTile[] = this.movement.diagonalMovement(movementInfo, isAttack);
 
         this.possibleMoves.concat(straightPossibleMovements, diagonalPossibleMovements);
                 

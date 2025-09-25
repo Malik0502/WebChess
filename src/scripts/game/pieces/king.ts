@@ -29,7 +29,7 @@ export class King implements IPiece{
         this.controlledTiles = [];
     }
     
-    calcPossibleMoves(board: GameTile[][]): GameTile[]{
+    calcPossibleMoves(board: GameTile[][], isAttack: boolean): GameTile[]{
         this.possibleMoves = [];
         
         for (let row = this.currentTile.row - 1; row <= this.currentTile.row + 1; row++) {
@@ -39,7 +39,7 @@ export class King implements IPiece{
                 
                 if(col < 0 || col >= 8) continue;
 
-                if(currentTile.isOccupied && currentTile.currentPiece!.color == this.color) continue;
+                if(currentTile.isOccupied && currentTile.currentPiece!.color == this.color && isAttack) continue;
 
                 this.possibleMoves.push(board[row][col]);
             }

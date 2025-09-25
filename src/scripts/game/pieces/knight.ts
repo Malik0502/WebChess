@@ -29,7 +29,7 @@ export class Knight implements IPiece{
         this.controlledTiles = [];
     }
     
-    calcPossibleMoves(board: GameTile[][]): GameTile[]{
+    calcPossibleMoves(board: GameTile[][], isAttack: boolean): GameTile[]{
         this.possibleMoves = [];
 
         const directionNorth: number = -2;
@@ -37,11 +37,11 @@ export class Knight implements IPiece{
         const directionEast: number = 2;
         const directionWest: number = -2;
 
-        this.calcVerticalMoves(board, directionNorth);
-        this.calcVerticalMoves(board, directionSouth);
+        this.calcVerticalMoves(board, directionNorth, isAttack);
+        this.calcVerticalMoves(board, directionSouth, isAttack);
 
-        this.calcHorizontalMoves(board, directionEast);
-        this.calcHorizontalMoves(board, directionWest);
+        this.calcHorizontalMoves(board, directionEast, isAttack);
+        this.calcHorizontalMoves(board, directionWest, isAttack);
 
         this.markAsMoveOption();
 
@@ -49,7 +49,7 @@ export class Knight implements IPiece{
     }
 
 
-    calcVerticalMoves(board: GameTile[][], direction: number){
+    calcVerticalMoves(board: GameTile[][], direction: number, isAttack: boolean){
         const currentTile: GameTile = this.currentTile;
         
         let moves: GameTile[] = [];
@@ -68,13 +68,13 @@ export class Knight implements IPiece{
             
             if(!element) continue;
 
-            if(element.isOccupied && element.currentPiece!.color == this.color) continue;
+            if(element.isOccupied && element.currentPiece!.color == this.color && isAttack) continue;
 
             this.possibleMoves.push(element);
         }
     }
 
-    calcHorizontalMoves(board: GameTile[][], direction: number){
+    calcHorizontalMoves(board: GameTile[][], direction: number, isAttack: boolean){
         const currentTile: GameTile = this.currentTile;
         
         let moves: GameTile[] = [];
@@ -93,7 +93,7 @@ export class Knight implements IPiece{
             
             if(!element) continue;
 
-            if(element.isOccupied && element.currentPiece!.color == this.color) continue;
+            if(element.isOccupied && element.currentPiece!.color == this.color && isAttack) continue;
 
             this.possibleMoves.push(element);
         }

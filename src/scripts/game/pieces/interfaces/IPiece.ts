@@ -13,6 +13,6 @@ export interface IPiece {
     possibleMoves: GameTile[];
     controlledTiles: GameTile[];
 
-    calcPossibleMoves(board: GameTile[][]): GameTile[];
+    calcPossibleMoves(board: GameTile[][], isAttack: boolean): GameTile[];
     markAsMoveOption(): void;
 }

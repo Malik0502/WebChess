@@ -34,7 +34,7 @@ export class Bishop implements IPiece{
         this.controlledTiles = [];
     }
     
-    calcPossibleMoves(board: GameTile[][]): GameTile[]{
+    calcPossibleMoves(board: GameTile[][], isAttack: boolean): GameTile[]{
         this.possibleMoves = [];
 
         var movementInfo: IMovementInfo = {
@@ -45,7 +45,7 @@ export class Bishop implements IPiece{
             pieceCol: this.currentTile.col
         }
         
-        this.possibleMoves = this.movement.diagonalMovement(movementInfo);
+        this.possibleMoves = this.movement.diagonalMovement(movementInfo, isAttack);
                 
         this.markAsMoveOption();
 

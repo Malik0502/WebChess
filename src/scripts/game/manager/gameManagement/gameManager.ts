@@ -31,6 +31,7 @@ export class GameManager{
     }
 
     handleMouseClick(mousePos: [number, number]): void{
+        const isAttack: boolean = true;
         const nearestTile: GameTile = this.calcNearestTile(mousePos);
 
         if(!this.isPieceSelected && !nearestTile.isOccupied) return;
@@ -58,7 +59,7 @@ export class GameManager{
         if(!this.selectedPiece || this.selectedPiece && this.selectedPiece.color == pieceOnTile.color){
             this.deleteMoveOptions();
             this.selectPiece(pieceOnTile, nearestTile);
-            pieceOnTile.calcPossibleMoves(this.board.gameTiles);
+            pieceOnTile.calcPossibleMoves(this.board.gameTiles, isAttack);
             this.movePreviewRenderer.paintMovePreview();
         }
     }

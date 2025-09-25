@@ -34,7 +34,7 @@ export class Rook implements IPiece{
         this.controlledTiles = [];
     }
     
-    calcPossibleMoves(board: GameTile[][]): GameTile[]{
+    calcPossibleMoves(board: GameTile[][], isAttack: boolean): GameTile[]{
         this.possibleMoves = [];
         
         var movementInfo: IMovementInfo = {
@@ -45,7 +45,7 @@ export class Rook implements IPiece{
             pieceCol: this.currentTile.col
         }
 
-        this.possibleMoves = this.movement.straightMovement(movementInfo);
+        this.possibleMoves = this.movement.straightMovement(movementInfo, isAttack);
         
         this.markAsMoveOption();
 
