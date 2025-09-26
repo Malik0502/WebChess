@@ -20,6 +20,8 @@ export class ControlManager{
 
             this.fillTilesControl(controlledTiles, piece);
         });
+
+        this.logAllControlledTilesToConsole(board.gameTiles);
     }
 
     calcControlledTilesAfterMoving(tilePieceStandsOn: GameTile, board: Board){
@@ -33,9 +35,27 @@ export class ControlManager{
             }else{
                 controlledTiles = piece.calcPossibleMoves(board.gameTiles, isAttack);
             }
+
+            this.fillTilesControl(controlledTiles, piece);
         });
+
+        this.logAllControlledTilesToConsole(board.gameTiles);
     }
 
+    private logAllControlledTilesToConsole(gameTiles: GameTile[][]){
+        const controlledTiles: GameTile[] = []
+
+        gameTiles.forEach(row => {
+            row.forEach(tile => {
+                if(tile.control.controllingPieces.length > 0) controlledTiles.push(tile);
+            });
+        });
+
+        console.log(controlledTiles);
+    }
+
+    // some pieces are controlling the tile their standing on
+    // look into the bug. why does it behave like that
     private fillTilesControl(controlledTiles: GameTile[], piece: IPiece){
         controlledTiles.forEach(tile => {
             tile.control.controllingPieces.push(piece);

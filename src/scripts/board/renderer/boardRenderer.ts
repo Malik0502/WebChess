@@ -43,5 +43,5 @@ export class BoardRenderer {
         }).then(() => {
             this.tileRenderer.drawCoordinatesOnBoard();
         });
-    } 
+    }
 }

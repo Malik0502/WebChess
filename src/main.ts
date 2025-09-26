@@ -47,8 +47,8 @@ window.onload = () => {
     algebraicNotationParser = new AlgebraicNotationParser();
 
     turnManager = new TurnManager(algebraicNotationParser, tableRenderer);
-    gameManager = new GameManager(gameBoard, pieceRenderer, movePreviewRenderer, tileRenderer, turnManager);
     controlManager = new ControlManager();
+    gameManager = new GameManager(gameBoard, pieceRenderer, movePreviewRenderer, tileRenderer, turnManager, controlManager);
 
     boardRenderer.drawChessBoard().then(() => {
         controlManager.calcControlledTilesOnStart(gameBoard);
