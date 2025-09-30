@@ -54,8 +54,6 @@ export class ControlManager{
         console.log(controlledTiles);
     }
 
-    // some pieces are controlling the tile their standing on
-    // look into the bug. why does it behave like that
     private fillTilesControl(controlledTiles: GameTile[], piece: IPiece){
         controlledTiles.forEach(tile => {
             tile.control.controllingPieces.push(piece);

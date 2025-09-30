@@ -41,6 +41,8 @@ export class King implements IPiece{
 
                 if(currentTile.isOccupied && currentTile.currentPiece!.color == this.color && isAttack) continue;
 
+                if(currentTile.coordinates == this.currentCoordinates) continue;
+
                 this.possibleMoves.push(board[row][col]);
             }
         }
