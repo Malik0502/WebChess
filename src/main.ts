@@ -65,5 +65,6 @@ function handleClick(event: MouseEvent){
     const mousePos: [x: number, y: number] = [Math.round(event.clientX - rect.left), Math.round(event.clientY - rect.top)];
 
     gameManager.handleMouseClick(mousePos);
-    console.log(gameBoard.gamePieces)
+    console.log(gameBoard.gamePieces);
+    //console.log(gameBoard.gameTiles);
 }

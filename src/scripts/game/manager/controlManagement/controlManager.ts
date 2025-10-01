@@ -21,15 +21,28 @@ export class ControlManager{
             this.fillTilesControl(controlledTiles, piece);
         });
 
-        this.logAllControlledTilesToConsole(board.gameTiles);
+        //this.logAllControlledTilesToConsole(board.gameTiles);
     }
 
+
+    // something is wrong
+    // pawns are calculating wrong
+    // resetting control array in tiles seem to fail as well
+    // King cant move to squares he should be able to go because knight moved away
+    
     calcControlledTilesAfterMoving(previouslyStandOnTile: GameTile, piece: IPiece, board: Board){
         const controllingPieces: IPiece[] = this.getRelevantControllingPieces(previouslyStandOnTile, piece);
-        
+        this.resetControlTiles(previouslyStandOnTile);
+        this.resetControlTiles(piece.currentTile);
+
+        //console.log(controllingPieces);
+        //console.log(previouslyStandOnTile);
+        //console.log(piece.currentTile);
+
         const isAttack: boolean = false;
 
         controllingPieces.forEach(piece => {
+            this.resetPieceControlledTiles(piece);
             let controlledTiles: GameTile[] = [];
             if(piece instanceof Pawn){
                 controlledTiles = piece.calcVerticalMoves(board.gameTiles, piece.currentTile.row, piece.currentTile.col, piece.color);
@@ -38,9 +51,22 @@ export class ControlManager{
             }
 
             this.fillTilesControl(controlledTiles, piece);
-        });
+        })
 
-        this.logAllControlledTilesToConsole(board.gameTiles);
+        // old doe
+        // controllingPieces.forEach(piece => {
+        //     this.resetPieceControlledTiles(piece);
+        //     let controlledTiles: GameTile[] = [];
+        //     if(piece instanceof Pawn){
+        //         controlledTiles = piece.calcVerticalMoves(board.gameTiles, piece.currentTile.row, piece.currentTile.col, piece.color);
+        //     }else{
+        //         controlledTiles = piece.calcPossibleMoves(board.gameTiles, isAttack);
+        //     }
+
+        //     this.fillTilesControl(controlledTiles, piece);
+        // });
+
+        // this.logAllControlledTilesToConsole(board.gameTiles);
     }
 
     private getRelevantControllingPieces(previouslyStandOnTile: GameTile, piece: IPiece): IPiece[]{
@@ -75,6 +101,22 @@ export class ControlManager{
             tile.control.whiteControlling = this.countControllingPieces(tile.control.controllingPieces, WHITE);
             tile.control.blackControlling = this.countControllingPieces(tile.control.controllingPieces, BLACK);
         })
+    }
+
+    private resetControlTiles(tile: GameTile){
+        tile.control.controllingPieces = [];
+    }
+
+    private resetPieceControlledTiles(piece: IPiece){
+        piece.controlledTiles.forEach(tile => {
+            const index: number = tile.control.controllingPieces.indexOf(piece);
+            if(index > -1){
+                tile.control.controllingPieces.splice(index, 1);
+                piece.color == WHITE ? tile.control.whiteControlling-- : tile.control.blackControlling--;
+            }
+        });
+
+        piece.controlledTiles = [];
     }
 
     private countControllingPieces(pieces: IPiece[], color: string): number{

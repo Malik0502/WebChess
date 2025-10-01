@@ -31,7 +31,7 @@ export class King implements IPiece{
     
     calcPossibleMoves(board: GameTile[][], isAttack: boolean): GameTile[]{
         this.possibleMoves = [];
-        
+
         for (let row = this.currentTile.row - 1; row <= this.currentTile.row + 1; row++) {
             if(row < 0 || row >= 8) continue;
             for (let col = this.currentTile.col - 1; col <= this.currentTile.col + 1; col++) {
@@ -40,8 +40,12 @@ export class King implements IPiece{
                 if(col < 0 || col >= 8) continue;
 
                 if(currentTile.isOccupied && currentTile.currentPiece!.color == this.color && isAttack) continue;
-
-                if(currentTile.coordinates == this.currentCoordinates) continue;
+                
+                if(!isAttack && currentTile.coordinates == this.currentCoordinates) continue;
+                
+                const quantityControllingPieces: number = this.color == WHITE ? currentTile.control.blackControlling : currentTile.control.whiteControlling;
+                
+                if(quantityControllingPieces > 0) continue;
 
                 this.possibleMoves.push(board[row][col]);
             }
