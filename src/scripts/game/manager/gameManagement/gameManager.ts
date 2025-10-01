@@ -103,7 +103,7 @@ export class GameManager{
 
         this.turnManager.addToTurnHistory(move, this.selectedPiece, nearestTile);
         this.movePiece(this.selectedPiece!, nearestTile);
-        this.controlManager.calcControlledTilesAfterMoving(previouslyStandOnTile, this.board);
+        this.controlManager.calcControlledTilesAfterMoving(previouslyStandOnTile, this.selectedPiece, this.board);
         this.isPieceSelected = false;
         this.turnManager.changeActiveColor(this.selectedPiece!.color);
         this.selectedPiece = undefined;

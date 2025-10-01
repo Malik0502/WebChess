@@ -24,8 +24,9 @@ export class ControlManager{
         this.logAllControlledTilesToConsole(board.gameTiles);
     }
 
-    calcControlledTilesAfterMoving(tilePieceStandsOn: GameTile, board: Board){
-        const controllingPieces: IPiece[] = this.getPiecesControllingTile(tilePieceStandsOn);
+    calcControlledTilesAfterMoving(previouslyStandOnTile: GameTile, piece: IPiece, board: Board){
+        const controllingPieces: IPiece[] = this.getRelevantControllingPieces(previouslyStandOnTile, piece);
+        
         const isAttack: boolean = false;
 
         controllingPieces.forEach(piece => {
@@ -40,6 +41,20 @@ export class ControlManager{
         });
 
         this.logAllControlledTilesToConsole(board.gameTiles);
+    }
+
+    private getRelevantControllingPieces(previouslyStandOnTile: GameTile, piece: IPiece): IPiece[]{
+        const result: IPiece[] = [];
+        
+        result.push(...this.getPiecesControllingTile(previouslyStandOnTile));
+        result.push(...this.getPiecesControllingTile(piece.currentTile));
+        result.push(piece);
+
+        const uniqueResult = [
+            ...new Map(result.map(item => [item.currentCoordinates, item])).values()
+        ];
+
+        return uniqueResult;
     }
 
     private logAllControlledTilesToConsole(gameTiles: GameTile[][]){
