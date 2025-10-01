@@ -1,0 +1,1490 @@
+[
+  [
+    {
+      "centerPoint": [
+        50,
+        50
+      ],
+      "cornerPoint": [
+        0,
+        0
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#F0D9B5",
+      "isOccupied": false,
+      "coordinates": "a8",
+      "isMoveOption": false,
+      "row": 0,
+      "col": 0,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    },
+    {
+      "centerPoint": [
+        150,
+        50
+      ],
+      "cornerPoint": [
+        100,
+        0
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#B58863",
+      "isOccupied": false,
+      "coordinates": "b8",
+      "isMoveOption": false,
+      "row": 0,
+      "col": 1,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    },
+    {
+      "centerPoint": [
+        250,
+        50
+      ],
+      "cornerPoint": [
+        200,
+        0
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#F0D9B5",
+      "isOccupied": false,
+      "coordinates": "c8",
+      "isMoveOption": false,
+      "row": 0,
+      "col": 2,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    },
+    {
+      "centerPoint": [
+        350,
+        50
+      ],
+      "cornerPoint": [
+        300,
+        0
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#B58863",
+      "isOccupied": false,
+      "coordinates": "d8",
+      "isMoveOption": false,
+      "row": 0,
+      "col": 3,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    },
+    {
+      "centerPoint": [
+        450,
+        50
+      ],
+      "cornerPoint": [
+        400,
+        0
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#F0D9B5",
+      "isOccupied": false,
+      "coordinates": "e8",
+      "isMoveOption": false,
+      "row": 0,
+      "col": 4,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    },
+    {
+      "centerPoint": [
+        550,
+        50
+      ],
+      "cornerPoint": [
+        500,
+        0
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#B58863",
+      "isOccupied": false,
+      "coordinates": "f8",
+      "isMoveOption": false,
+      "row": 0,
+      "col": 5,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    },
+    {
+      "centerPoint": [
+        650,
+        50
+      ],
+      "cornerPoint": [
+        600,
+        0
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#F0D9B5",
+      "isOccupied": false,
+      "coordinates": "g8",
+      "isMoveOption": false,
+      "row": 0,
+      "col": 6,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    },
+    {
+      "centerPoint": [
+        750,
+        50
+      ],
+      "cornerPoint": [
+        700,
+        0
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#B58863",
+      "isOccupied": false,
+      "coordinates": "h8",
+      "isMoveOption": false,
+      "row": 0,
+      "col": 7,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    }
+  ],
+  [
+    {
+      "centerPoint": [
+        50,
+        150
+      ],
+      "cornerPoint": [
+        0,
+        100
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#B58863",
+      "isOccupied": false,
+      "coordinates": "a7",
+      "isMoveOption": false,
+      "row": 1,
+      "col": 0,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    },
+    {
+      "centerPoint": [
+        150,
+        150
+      ],
+      "cornerPoint": [
+        100,
+        100
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#F0D9B5",
+      "isOccupied": false,
+      "coordinates": "b7",
+      "isMoveOption": false,
+      "row": 1,
+      "col": 1,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    },
+    {
+      "centerPoint": [
+        250,
+        150
+      ],
+      "cornerPoint": [
+        200,
+        100
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#B58863",
+      "isOccupied": false,
+      "coordinates": "c7",
+      "isMoveOption": false,
+      "row": 1,
+      "col": 2,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    },
+    {
+      "centerPoint": [
+        350,
+        150
+      ],
+      "cornerPoint": [
+        300,
+        100
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#F0D9B5",
+      "isOccupied": false,
+      "coordinates": "d7",
+      "isMoveOption": false,
+      "row": 1,
+      "col": 3,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    },
+    {
+      "centerPoint": [
+        450,
+        150
+      ],
+      "cornerPoint": [
+        400,
+        100
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#B58863",
+      "isOccupied": false,
+      "coordinates": "e7",
+      "isMoveOption": false,
+      "row": 1,
+      "col": 4,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    },
+    {
+      "centerPoint": [
+        550,
+        150
+      ],
+      "cornerPoint": [
+        500,
+        100
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#F0D9B5",
+      "isOccupied": false,
+      "coordinates": "f7",
+      "isMoveOption": false,
+      "row": 1,
+      "col": 5,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    },
+    {
+      "centerPoint": [
+        650,
+        150
+      ],
+      "cornerPoint": [
+        600,
+        100
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#B58863",
+      "isOccupied": false,
+      "coordinates": "g7",
+      "isMoveOption": false,
+      "row": 1,
+      "col": 6,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    },
+    {
+      "centerPoint": [
+        750,
+        150
+      ],
+      "cornerPoint": [
+        700,
+        100
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#F0D9B5",
+      "isOccupied": false,
+      "coordinates": "h7",
+      "isMoveOption": false,
+      "row": 1,
+      "col": 7,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    }
+  ],
+  [
+    {
+      "centerPoint": [
+        50,
+        250
+      ],
+      "cornerPoint": [
+        0,
+        200
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#F0D9B5",
+      "isOccupied": false,
+      "coordinates": "a6",
+      "isMoveOption": false,
+      "row": 2,
+      "col": 0,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    },
+    {
+      "centerPoint": [
+        150,
+        250
+      ],
+      "cornerPoint": [
+        100,
+        200
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#B58863",
+      "isOccupied": false,
+      "coordinates": "b6",
+      "isMoveOption": false,
+      "row": 2,
+      "col": 1,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    },
+    {
+      "centerPoint": [
+        250,
+        250
+      ],
+      "cornerPoint": [
+        200,
+        200
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#F0D9B5",
+      "isOccupied": false,
+      "coordinates": "c6",
+      "isMoveOption": false,
+      "row": 2,
+      "col": 2,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    },
+    {
+      "centerPoint": [
+        350,
+        250
+      ],
+      "cornerPoint": [
+        300,
+        200
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#B58863",
+      "isOccupied": false,
+      "coordinates": "d6",
+      "isMoveOption": false,
+      "row": 2,
+      "col": 3,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    },
+    {
+      "centerPoint": [
+        450,
+        250
+      ],
+      "cornerPoint": [
+        400,
+        200
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#F0D9B5",
+      "isOccupied": false,
+      "coordinates": "e6",
+      "isMoveOption": false,
+      "row": 2,
+      "col": 4,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    },
+    {
+      "centerPoint": [
+        550,
+        250
+      ],
+      "cornerPoint": [
+        500,
+        200
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#B58863",
+      "isOccupied": false,
+      "coordinates": "f6",
+      "isMoveOption": false,
+      "row": 2,
+      "col": 5,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    },
+    {
+      "centerPoint": [
+        650,
+        250
+      ],
+      "cornerPoint": [
+        600,
+        200
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#F0D9B5",
+      "isOccupied": false,
+      "coordinates": "g6",
+      "isMoveOption": false,
+      "row": 2,
+      "col": 6,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    },
+    {
+      "centerPoint": [
+        750,
+        250
+      ],
+      "cornerPoint": [
+        700,
+        200
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#B58863",
+      "isOccupied": false,
+      "coordinates": "h6",
+      "isMoveOption": false,
+      "row": 2,
+      "col": 7,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    }
+  ],
+  [
+    {
+      "centerPoint": [
+        50,
+        350
+      ],
+      "cornerPoint": [
+        0,
+        300
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#B58863",
+      "isOccupied": false,
+      "coordinates": "a5",
+      "isMoveOption": false,
+      "row": 3,
+      "col": 0,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    },
+    {
+      "centerPoint": [
+        150,
+        350
+      ],
+      "cornerPoint": [
+        100,
+        300
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#F0D9B5",
+      "isOccupied": false,
+      "coordinates": "b5",
+      "isMoveOption": false,
+      "row": 3,
+      "col": 1,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    },
+    {
+      "centerPoint": [
+        250,
+        350
+      ],
+      "cornerPoint": [
+        200,
+        300
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#B58863",
+      "isOccupied": false,
+      "coordinates": "c5",
+      "isMoveOption": false,
+      "row": 3,
+      "col": 2,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    },
+    {
+      "centerPoint": [
+        350,
+        350
+      ],
+      "cornerPoint": [
+        300,
+        300
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#F0D9B5",
+      "isOccupied": false,
+      "coordinates": "d5",
+      "isMoveOption": false,
+      "row": 3,
+      "col": 3,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    },
+    {
+      "centerPoint": [
+        450,
+        350
+      ],
+      "cornerPoint": [
+        400,
+        300
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#B58863",
+      "isOccupied": false,
+      "coordinates": "e5",
+      "isMoveOption": false,
+      "row": 3,
+      "col": 4,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    },
+    {
+      "centerPoint": [
+        550,
+        350
+      ],
+      "cornerPoint": [
+        500,
+        300
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#F0D9B5",
+      "isOccupied": false,
+      "coordinates": "f5",
+      "isMoveOption": false,
+      "row": 3,
+      "col": 5,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    },
+    {
+      "centerPoint": [
+        650,
+        350
+      ],
+      "cornerPoint": [
+        600,
+        300
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#B58863",
+      "isOccupied": false,
+      "coordinates": "g5",
+      "isMoveOption": false,
+      "row": 3,
+      "col": 6,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    },
+    {
+      "centerPoint": [
+        750,
+        350
+      ],
+      "cornerPoint": [
+        700,
+        300
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#F0D9B5",
+      "isOccupied": false,
+      "coordinates": "h5",
+      "isMoveOption": false,
+      "row": 3,
+      "col": 7,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    }
+  ],
+  [
+    {
+      "centerPoint": [
+        50,
+        450
+      ],
+      "cornerPoint": [
+        0,
+        400
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#F0D9B5",
+      "isOccupied": false,
+      "coordinates": "a4",
+      "isMoveOption": false,
+      "row": 4,
+      "col": 0,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    },
+    {
+      "centerPoint": [
+        150,
+        450
+      ],
+      "cornerPoint": [
+        100,
+        400
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#B58863",
+      "isOccupied": false,
+      "coordinates": "b4",
+      "isMoveOption": false,
+      "row": 4,
+      "col": 1,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    },
+    {
+      "centerPoint": [
+        250,
+        450
+      ],
+      "cornerPoint": [
+        200,
+        400
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#F0D9B5",
+      "isOccupied": false,
+      "coordinates": "c4",
+      "isMoveOption": false,
+      "row": 4,
+      "col": 2,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    },
+    {
+      "centerPoint": [
+        350,
+        450
+      ],
+      "cornerPoint": [
+        300,
+        400
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#B58863",
+      "isOccupied": false,
+      "coordinates": "d4",
+      "isMoveOption": false,
+      "row": 4,
+      "col": 3,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    },
+    {
+      "centerPoint": [
+        450,
+        450
+      ],
+      "cornerPoint": [
+        400,
+        400
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#F0D9B5",
+      "isOccupied": false,
+      "coordinates": "e4",
+      "isMoveOption": false,
+      "row": 4,
+      "col": 4,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    },
+    {
+      "centerPoint": [
+        550,
+        450
+      ],
+      "cornerPoint": [
+        500,
+        400
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#B58863",
+      "isOccupied": false,
+      "coordinates": "f4",
+      "isMoveOption": false,
+      "row": 4,
+      "col": 5,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    },
+    {
+      "centerPoint": [
+        650,
+        450
+      ],
+      "cornerPoint": [
+        600,
+        400
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#F0D9B5",
+      "isOccupied": false,
+      "coordinates": "g4",
+      "isMoveOption": false,
+      "row": 4,
+      "col": 6,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    },
+    {
+      "centerPoint": [
+        750,
+        450
+      ],
+      "cornerPoint": [
+        700,
+        400
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#B58863",
+      "isOccupied": false,
+      "coordinates": "h4",
+      "isMoveOption": false,
+      "row": 4,
+      "col": 7,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    }
+  ],
+  [
+    {
+      "centerPoint": [
+        50,
+        550
+      ],
+      "cornerPoint": [
+        0,
+        500
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#B58863",
+      "isOccupied": false,
+      "coordinates": "a3",
+      "isMoveOption": false,
+      "row": 5,
+      "col": 0,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    },
+    {
+      "centerPoint": [
+        150,
+        550
+      ],
+      "cornerPoint": [
+        100,
+        500
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#F0D9B5",
+      "isOccupied": false,
+      "coordinates": "b3",
+      "isMoveOption": false,
+      "row": 5,
+      "col": 1,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    },
+    {
+      "centerPoint": [
+        250,
+        550
+      ],
+      "cornerPoint": [
+        200,
+        500
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#B58863",
+      "isOccupied": false,
+      "coordinates": "c3",
+      "isMoveOption": false,
+      "row": 5,
+      "col": 2,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    },
+    {
+      "centerPoint": [
+        350,
+        550
+      ],
+      "cornerPoint": [
+        300,
+        500
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#F0D9B5",
+      "isOccupied": false,
+      "coordinates": "d3",
+      "isMoveOption": false,
+      "row": 5,
+      "col": 3,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    },
+    {
+      "centerPoint": [
+        450,
+        550
+      ],
+      "cornerPoint": [
+        400,
+        500
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#B58863",
+      "isOccupied": false,
+      "coordinates": "e3",
+      "isMoveOption": false,
+      "row": 5,
+      "col": 4,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    },
+    {
+      "centerPoint": [
+        550,
+        550
+      ],
+      "cornerPoint": [
+        500,
+        500
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#F0D9B5",
+      "isOccupied": false,
+      "coordinates": "f3",
+      "isMoveOption": false,
+      "row": 5,
+      "col": 5,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    },
+    {
+      "centerPoint": [
+        650,
+        550
+      ],
+      "cornerPoint": [
+        600,
+        500
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#B58863",
+      "isOccupied": false,
+      "coordinates": "g3",
+      "isMoveOption": false,
+      "row": 5,
+      "col": 6,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    },
+    {
+      "centerPoint": [
+        750,
+        550
+      ],
+      "cornerPoint": [
+        700,
+        500
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#F0D9B5",
+      "isOccupied": false,
+      "coordinates": "h3",
+      "isMoveOption": false,
+      "row": 5,
+      "col": 7,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    }
+  ],
+  [
+    {
+      "centerPoint": [
+        50,
+        650
+      ],
+      "cornerPoint": [
+        0,
+        600
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#F0D9B5",
+      "isOccupied": false,
+      "coordinates": "a2",
+      "isMoveOption": false,
+      "row": 6,
+      "col": 0,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    },
+    {
+      "centerPoint": [
+        150,
+        650
+      ],
+      "cornerPoint": [
+        100,
+        600
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#B58863",
+      "isOccupied": false,
+      "coordinates": "b2",
+      "isMoveOption": false,
+      "row": 6,
+      "col": 1,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    },
+    {
+      "centerPoint": [
+        250,
+        650
+      ],
+      "cornerPoint": [
+        200,
+        600
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#F0D9B5",
+      "isOccupied": false,
+      "coordinates": "c2",
+      "isMoveOption": false,
+      "row": 6,
+      "col": 2,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    },
+    {
+      "centerPoint": [
+        350,
+        650
+      ],
+      "cornerPoint": [
+        300,
+        600
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#B58863",
+      "isOccupied": false,
+      "coordinates": "d2",
+      "isMoveOption": false,
+      "row": 6,
+      "col": 3,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    },
+    {
+      "centerPoint": [
+        450,
+        650
+      ],
+      "cornerPoint": [
+        400,
+        600
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#F0D9B5",
+      "isOccupied": false,
+      "coordinates": "e2",
+      "isMoveOption": false,
+      "row": 6,
+      "col": 4,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    },
+    {
+      "centerPoint": [
+        550,
+        650
+      ],
+      "cornerPoint": [
+        500,
+        600
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#B58863",
+      "isOccupied": false,
+      "coordinates": "f2",
+      "isMoveOption": false,
+      "row": 6,
+      "col": 5,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    },
+    {
+      "centerPoint": [
+        650,
+        650
+      ],
+      "cornerPoint": [
+        600,
+        600
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#F0D9B5",
+      "isOccupied": false,
+      "coordinates": "g2",
+      "isMoveOption": false,
+      "row": 6,
+      "col": 6,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    },
+    {
+      "centerPoint": [
+        750,
+        650
+      ],
+      "cornerPoint": [
+        700,
+        600
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#B58863",
+      "isOccupied": false,
+      "coordinates": "h2",
+      "isMoveOption": false,
+      "row": 6,
+      "col": 7,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    }
+  ],
+  [
+    {
+      "centerPoint": [
+        50,
+        750
+      ],
+      "cornerPoint": [
+        0,
+        700
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#B58863",
+      "isOccupied": false,
+      "coordinates": "a1",
+      "isMoveOption": false,
+      "row": 7,
+      "col": 0,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    },
+    {
+      "centerPoint": [
+        150,
+        750
+      ],
+      "cornerPoint": [
+        100,
+        700
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#F0D9B5",
+      "isOccupied": false,
+      "coordinates": "b1",
+      "isMoveOption": false,
+      "row": 7,
+      "col": 1,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    },
+    {
+      "centerPoint": [
+        250,
+        750
+      ],
+      "cornerPoint": [
+        200,
+        700
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#B58863",
+      "isOccupied": false,
+      "coordinates": "c1",
+      "isMoveOption": false,
+      "row": 7,
+      "col": 2,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    },
+    {
+      "centerPoint": [
+        350,
+        750
+      ],
+      "cornerPoint": [
+        300,
+        700
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#F0D9B5",
+      "isOccupied": false,
+      "coordinates": "d1",
+      "isMoveOption": false,
+      "row": 7,
+      "col": 3,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    },
+    {
+      "centerPoint": [
+        450,
+        750
+      ],
+      "cornerPoint": [
+        400,
+        700
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#B58863",
+      "isOccupied": false,
+      "coordinates": "e1",
+      "isMoveOption": false,
+      "row": 7,
+      "col": 4,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    },
+    {
+      "centerPoint": [
+        550,
+        750
+      ],
+      "cornerPoint": [
+        500,
+        700
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#F0D9B5",
+      "isOccupied": false,
+      "coordinates": "f1",
+      "isMoveOption": false,
+      "row": 7,
+      "col": 5,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    },
+    {
+      "centerPoint": [
+        650,
+        750
+      ],
+      "cornerPoint": [
+        600,
+        700
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#B58863",
+      "isOccupied": false,
+      "coordinates": "g1",
+      "isMoveOption": false,
+      "row": 7,
+      "col": 6,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    },
+    {
+      "centerPoint": [
+        750,
+        750
+      ],
+      "cornerPoint": [
+        700,
+        700
+      ],
+      "width": 100,
+      "height": 100,
+      "color": "#F0D9B5",
+      "isOccupied": false,
+      "coordinates": "h1",
+      "isMoveOption": false,
+      "row": 7,
+      "col": 7,
+      "control": {
+        "controllingPieces": [],
+        "whiteControlling": 0,
+        "blackControlling": 0
+      }
+    }
+  ]
+]

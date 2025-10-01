@@ -1,3 +1,4 @@
+import { Control } from "../../game/manager/controlManagement/entities/control";
 import type { IPiece } from "../../game/pieces/interfaces/IPiece";
 
 export class GameTile{
@@ -12,6 +13,7 @@ export class GameTile{
     row: number;
     col: number;
     currentPiece: IPiece | undefined;
+    control: Control;
 
     constructor(centerPoint: [x: number, y: number], width: number, height: number, color: string, isOccupied: boolean, coordinates: string, row: number, col: number){
         this.centerPoint = centerPoint;
@@ -23,6 +25,7 @@ export class GameTile{
         this.isMoveOption = false;
         this.row = row;
         this.col = col;
-        this.cornerPoint = [centerPoint[0] - width / 2, centerPoint[1] - height / 2]
+        this.cornerPoint = [centerPoint[0] - width / 2, centerPoint[1] - height / 2];
+        this.control = new Control([], 0, 0);
     }
 }

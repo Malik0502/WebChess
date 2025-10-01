@@ -6,6 +6,7 @@ import type { TurnManager } from "../turnManagement/turnManager";
 import type { PieceRenderer } from "../../../board/renderer/pieceRenderer";
 import type { MovePreviewRenderer } from "../../../board/renderer/movePreviewRenderer";
 import type { TileRenderer } from "../../../board/renderer/tileRenderer";
+import type { ControlManager } from "../controlManagement/controlManager";
 
 export class GameManager{
     
@@ -14,23 +15,26 @@ export class GameManager{
     private tileRenderer: TileRenderer;
 
     private turnManager: TurnManager;
+    private controlManager: ControlManager;
     private isPieceSelected: boolean;
     private selectedPiece: IPiece | undefined;
 
     private board: Board;
 
-    constructor(board: Board, pieceRenderer: PieceRenderer, movePreviewRenderer: MovePreviewRenderer, tileRenderer: TileRenderer, turnManager: TurnManager){
+    constructor(board: Board, pieceRenderer: PieceRenderer, movePreviewRenderer: MovePreviewRenderer, tileRenderer: TileRenderer, turnManager: TurnManager, controlManager: ControlManager){
         this.pieceRenderer = pieceRenderer;
         this.movePreviewRenderer = movePreviewRenderer;
         this.tileRenderer = tileRenderer;
 
         this.turnManager = turnManager;
+        this.controlManager = controlManager;
         this.isPieceSelected = false;
         
         this.board = board;
     }
 
     handleMouseClick(mousePos: [number, number]): void{
+        const isAttack: boolean = true;
         const nearestTile: GameTile = this.calcNearestTile(mousePos);
 
         if(!this.isPieceSelected && !nearestTile.isOccupied) return;
@@ -58,7 +62,7 @@ export class GameManager{
         if(!this.selectedPiece || this.selectedPiece && this.selectedPiece.color == pieceOnTile.color){
             this.deleteMoveOptions();
             this.selectPiece(pieceOnTile, nearestTile);
-            pieceOnTile.calcPossibleMoves(this.board.gameTiles);
+            pieceOnTile.calcPossibleMoves(this.board.gameTiles, isAttack);
             this.movePreviewRenderer.paintMovePreview();
         }
     }
@@ -94,9 +98,12 @@ export class GameManager{
         
         if(!this.selectedPiece) return
         let move: Move = {start: this.selectedPiece.currentCoordinates, end: nearestTile.coordinates};
-        this.turnManager.addToTurnHistory(move, this.selectedPiece, nearestTile);
         
+        const previouslyStandOnTile: GameTile = this.selectedPiece.currentTile; 
+
+        this.turnManager.addToTurnHistory(move, this.selectedPiece, nearestTile);
         this.movePiece(this.selectedPiece!, nearestTile);
+        this.controlManager.calcControlledTilesAfterMoving(previouslyStandOnTile, this.selectedPiece, this.board);
         this.isPieceSelected = false;
         this.turnManager.changeActiveColor(this.selectedPiece!.color);
         this.selectedPiece = undefined;

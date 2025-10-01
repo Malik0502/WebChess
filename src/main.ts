@@ -1,10 +1,12 @@
 import { Board } from "./scripts/board/board"
+import type { GameTile } from "./scripts/board/entities/gameTile";
 import { BoardRenderer } from "./scripts/board/renderer/boardRenderer";
 import { MovePreviewRenderer } from "./scripts/board/renderer/movePreviewRenderer";
 import { PieceRenderer } from "./scripts/board/renderer/pieceRenderer";
 import { SpriteRenderer } from "./scripts/board/renderer/spriteRenderer";
 import { TileRenderer } from "./scripts/board/renderer/tileRenderer";
 import { BlackTileColor, WhiteTileColor } from "./scripts/common/constants/canvasColors";
+import { ControlManager } from "./scripts/game/manager/controlManagement/controlManager";
 import { GameManager } from "./scripts/game/manager/gameManagement/gameManager";
 import { AlgebraicNotationParser } from "./scripts/game/manager/turnManagement/algebraicNotationParser";
 import { TurnManager } from "./scripts/game/manager/turnManagement/turnManager";
@@ -22,6 +24,7 @@ let movePreviewRenderer: MovePreviewRenderer;
 
 let gameManager: GameManager;
 let turnManager: TurnManager;
+let controlManager: ControlManager;
 let algebraicNotationParser: AlgebraicNotationParser;
 let tableRenderer: TableRenderer;
 let canvas: HTMLCanvasElement;
@@ -44,7 +47,12 @@ window.onload = () => {
     algebraicNotationParser = new AlgebraicNotationParser();
 
     turnManager = new TurnManager(algebraicNotationParser, tableRenderer);
-    gameManager = new GameManager(gameBoard, pieceRenderer, movePreviewRenderer, tileRenderer, turnManager);
+    controlManager = new ControlManager();
+    gameManager = new GameManager(gameBoard, pieceRenderer, movePreviewRenderer, tileRenderer, turnManager, controlManager);
+
+    boardRenderer.drawChessBoard().then(() => {
+        controlManager.calcControlledTilesOnStart(gameBoard);
+    });
 
     canvas.addEventListener("click", handleClick)
     
