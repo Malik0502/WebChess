@@ -20,53 +20,30 @@ export class ControlManager{
 
             this.fillTilesControl(controlledTiles, piece);
         });
-
-        //this.logAllControlledTilesToConsole(board.gameTiles);
     }
 
-
-    // something is wrong
-    // pawns are calculating wrong
-    // resetting control array in tiles seem to fail as well
-    // King cant move to squares he should be able to go because knight moved away
-    
     calcControlledTilesAfterMoving(previouslyStandOnTile: GameTile, piece: IPiece, board: Board){
+        
         const controllingPieces: IPiece[] = this.getRelevantControllingPieces(previouslyStandOnTile, piece);
-        this.resetControlTiles(previouslyStandOnTile);
-        this.resetControlTiles(piece.currentTile);
 
-        //console.log(controllingPieces);
-        //console.log(previouslyStandOnTile);
-        //console.log(piece.currentTile);
-
+        this.resetPiecesInTileControl(piece);
+        this.resetImportantControlTiles(previouslyStandOnTile, piece.currentTile);
         const isAttack: boolean = false;
 
         controllingPieces.forEach(piece => {
-            this.resetPieceControlledTiles(piece);
+            this.resetPiecesInTileControl(piece);
+
             let controlledTiles: GameTile[] = [];
+
             if(piece instanceof Pawn){
                 controlledTiles = piece.calcVerticalMoves(board.gameTiles, piece.currentTile.row, piece.currentTile.col, piece.color);
-            }else{
-                controlledTiles = piece.calcPossibleMoves(board.gameTiles, isAttack);
+            }
+            else{
+                controlledTiles = piece.calcPossibleMoves(board.gameTiles, isAttack)
             }
 
-            this.fillTilesControl(controlledTiles, piece);
-        })
-
-        // old doe
-        // controllingPieces.forEach(piece => {
-        //     this.resetPieceControlledTiles(piece);
-        //     let controlledTiles: GameTile[] = [];
-        //     if(piece instanceof Pawn){
-        //         controlledTiles = piece.calcVerticalMoves(board.gameTiles, piece.currentTile.row, piece.currentTile.col, piece.color);
-        //     }else{
-        //         controlledTiles = piece.calcPossibleMoves(board.gameTiles, isAttack);
-        //     }
-
-        //     this.fillTilesControl(controlledTiles, piece);
-        // });
-
-        // this.logAllControlledTilesToConsole(board.gameTiles);
+            this.fillTilesControl(controlledTiles, piece)
+        });
     }
 
     private getRelevantControllingPieces(previouslyStandOnTile: GameTile, piece: IPiece): IPiece[]{
@@ -83,31 +60,25 @@ export class ControlManager{
         return uniqueResult;
     }
 
-    private logAllControlledTilesToConsole(gameTiles: GameTile[][]){
-        const controlledTiles: GameTile[] = []
-
-        gameTiles.forEach(row => {
-            row.forEach(tile => {
-                if(tile.control.controllingPieces.length > 0) controlledTiles.push(tile);
-            });
-        });
-
-        console.log(controlledTiles);
-    }
-
     private fillTilesControl(controlledTiles: GameTile[], piece: IPiece){
         controlledTiles.forEach(tile => {
             tile.control.controllingPieces.push(piece);
             tile.control.whiteControlling = this.countControllingPieces(tile.control.controllingPieces, WHITE);
             tile.control.blackControlling = this.countControllingPieces(tile.control.controllingPieces, BLACK);
         })
+        piece.controlledTiles.push(...controlledTiles);
     }
 
-    private resetControlTiles(tile: GameTile){
+    private resetImportantControlTiles(previouslyStandOnTile: GameTile, newTile: GameTile){
+        this.resetTileControl(previouslyStandOnTile);
+        this.resetTileControl(newTile);
+    }
+
+    private resetTileControl(tile: GameTile){
         tile.control.controllingPieces = [];
     }
 
-    private resetPieceControlledTiles(piece: IPiece){
+    private resetPiecesInTileControl(piece: IPiece){
         piece.controlledTiles.forEach(tile => {
             const index: number = tile.control.controllingPieces.indexOf(piece);
             if(index > -1){
