@@ -56,6 +56,8 @@ export class King implements IPiece{
         return this.possibleMoves;
     }
 
+    
+
     markAsMoveOption(): void {
         this.possibleMoves.forEach(tile => {
             tile.isMoveOption = true;

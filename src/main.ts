@@ -7,6 +7,8 @@ import { TileRenderer } from "./scripts/board/renderer/tileRenderer";
 import { BlackTileColor, WhiteTileColor } from "./scripts/common/constants/canvasColors";
 import { ControlManager } from "./scripts/game/manager/controlManagement/controlManager";
 import { GameManager } from "./scripts/game/manager/gameManagement/gameManager";
+import { MoveManager } from "./scripts/game/manager/moveManagement/moveManager";
+import { PieceSelectManager } from "./scripts/game/manager/pieceSelectManagement/pieceSelectManager";
 import { AlgebraicNotationParser } from "./scripts/game/manager/turnManagement/algebraicNotationParser";
 import { TurnManager } from "./scripts/game/manager/turnManagement/turnManager";
 import { PieceFactory } from "./scripts/game/pieces/factories/pieceFactory"
@@ -24,6 +26,8 @@ let movePreviewRenderer: MovePreviewRenderer;
 let gameManager: GameManager;
 let turnManager: TurnManager;
 let controlManager: ControlManager;
+let moveManager: MoveManager;
+let pieceSelectManager: PieceSelectManager;
 let algebraicNotationParser: AlgebraicNotationParser;
 let tableRenderer: TableRenderer;
 let canvas: HTMLCanvasElement;
@@ -47,7 +51,9 @@ window.onload = () => {
 
     turnManager = new TurnManager(algebraicNotationParser, tableRenderer);
     controlManager = new ControlManager();
-    gameManager = new GameManager(gameBoard, pieceRenderer, movePreviewRenderer, tileRenderer, turnManager, controlManager);
+    moveManager = new MoveManager(turnManager, controlManager, tileRenderer, pieceRenderer, movePreviewRenderer);
+    pieceSelectManager = new PieceSelectManager(pieceRenderer);
+    gameManager = new GameManager(gameBoard, movePreviewRenderer, turnManager, moveManager, pieceSelectManager);
 
     boardRenderer.drawChessBoard().then(() => {
         controlManager.calcControlledTilesOnStart(gameBoard);
