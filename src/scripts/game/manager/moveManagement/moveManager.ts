@@ -59,7 +59,6 @@ export class MoveManager {
         piece.currentTile.currentPiece = undefined;
 
         piece.currentTile = clickedTile;
-
     }
 
     public deleteMoveOptions(board: Board) {
