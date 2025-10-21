@@ -12,6 +12,7 @@ import { PieceSelectManager } from "./scripts/game/manager/pieceSelectManagement
 import { AlgebraicNotationParser } from "./scripts/game/manager/turnManagement/algebraicNotationParser";
 import { TurnManager } from "./scripts/game/manager/turnManagement/turnManager";
 import { PieceFactory } from "./scripts/game/pieces/factories/pieceFactory"
+import { CastleHelper } from "./scripts/game/pieces/pieceMovement/castleHelper";
 import { SlidingMovement } from "./scripts/game/pieces/pieceMovement/slidingMovement";
 import { TableRenderer } from "./scripts/table/tableRenderer";
 
@@ -37,7 +38,7 @@ window.onload = () => {
     canvas = document.getElementById("game-canvas") as HTMLCanvasElement;
     const canvasContext: CanvasRenderingContext2D = canvas.getContext("2d")!;
 
-    gameBoard = new Board(new PieceFactory(), new SlidingMovement())
+    gameBoard = new Board(new PieceFactory(), new SlidingMovement(), new CastleHelper());
 
     spriteRenderer = new SpriteRenderer();
     tileRenderer = new TileRenderer(canvasContext, gameBoard);
@@ -59,7 +60,7 @@ window.onload = () => {
         controlManager.calcControlledTilesOnStart(gameBoard);
     });
 
-    canvas.addEventListener("click", handleClick)
+    canvas.addEventListener("click", handleClick);
     
 }
 

@@ -2,8 +2,6 @@ import type { GameTile } from "../../board/entities/gameTile";
 import { WHITE } from "../../common/constants/pieceColor";
 import type { IPiece } from "./interfaces/IPiece";
 import type { CastleHelper } from "./pieceMovement/castleHelper";
-import { Rook } from "./rook";
-
 
 // short castle: (king clicking on g1/8)
 // king lands on g1/8 and rook on f1/8
@@ -57,9 +55,9 @@ export class King implements IPiece{
                 
                 const quantityControllingPieces: number = this.color == WHITE ? currentTile.control.blackControlling : currentTile.control.whiteControlling;
 
-                this.calcCastleMoves(isAttack, board);
-                
                 if(quantityControllingPieces > 0) continue;
+                
+                this.calcCastleMoves(isAttack, board);
 
                 this.possibleMoves.push(board[row][col]);
             }
@@ -82,21 +80,25 @@ export class King implements IPiece{
         if(!isAttack) return;
         if(this.hasMoved) return;
         
+        const castleLong: number = -1;
+        const castleShort: number = 1;
+
         if(this.color == WHITE){
             let rookTile: GameTile = board[7][0];
-            if(this.castleHelper.canRookCastle(rookTile, this.color)) this.possibleMoves.push(board[7][2]);
+            
+            if(this.castleHelper.canRookCastle(rookTile, this.color, board, castleLong)) this.possibleMoves.push(board[7][2]);
                 
             rookTile = board[7][7]
-            if(this.castleHelper.canRookCastle(rookTile, this.color)) this.possibleMoves.push(board[7][6]);
+            if(this.castleHelper.canRookCastle(rookTile, this.color, board, castleShort)) this.possibleMoves.push(board[7][6]);
                 
             return;   
         }
 
         let rookTile: GameTile = board[0][7];
-        if(this.castleHelper.canRookCastle(rookTile, this.color)) this.possibleMoves.push(board[0][6]);
+        if(this.castleHelper.canRookCastle(rookTile, this.color, board, castleShort)) this.possibleMoves.push(board[0][6]);
             
         rookTile = board[0][0]
-        if(this.castleHelper.canRookCastle(rookTile, this.color)) this.possibleMoves.push(board[0][2]);
+        if(this.castleHelper.canRookCastle(rookTile, this.color, board, castleLong)) this.possibleMoves.push(board[0][2]);
         
     }
 }

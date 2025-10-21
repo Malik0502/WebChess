@@ -2,6 +2,7 @@ import { StartPiecePosition } from "../common/records/startPiecePosition";
 import { StartPositionPieceColor } from "../common/records/startPositionPieceColor";
 import type { IPiece } from "../game/pieces/interfaces/IPiece";
 import type { IPieceFactory } from "../game/pieces/interfaces/IPieceFactory";
+import type { CastleHelper } from "../game/pieces/pieceMovement/castleHelper";
 import type { SlidingMovement } from "../game/pieces/pieceMovement/slidingMovement";
 import { GameTile } from "./entities/gameTile";
 
@@ -10,12 +11,14 @@ export class Board {
     gamePieces: IPiece[];
     private pieceFactory: IPieceFactory;
     private movement: SlidingMovement;
+    private castleHelper: CastleHelper;
 
-    constructor(pieceFactory: IPieceFactory, movement: SlidingMovement) {
+    constructor(pieceFactory: IPieceFactory, movement: SlidingMovement, castleHelper: CastleHelper) {
         this.gameTiles = [];
         this.gamePieces = [];
         this.pieceFactory = pieceFactory;
         this.movement = movement;
+        this.castleHelper = castleHelper;
         this.fillRecordWithPawns();
     }
 
@@ -59,7 +62,7 @@ export class Board {
     }
 
     createGamePiece(pieceName: string, pieceColor: string, tile: GameTile): IPiece {
-        return this.pieceFactory.createPiece(pieceName, pieceColor, tile, this.movement)!;
+        return this.pieceFactory.createPiece(pieceName, pieceColor, tile, this.movement, this.castleHelper)!;
     }
 
     convertNumCoordToChessCoord(xCoordinate: number, yCoordinate: number): string {
