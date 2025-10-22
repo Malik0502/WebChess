@@ -34,11 +34,11 @@ let tableRenderer: TableRenderer;
 let canvas: HTMLCanvasElement;
 
 window.onload = () => {
-
+    const castleHelper = new CastleHelper();
     canvas = document.getElementById("game-canvas") as HTMLCanvasElement;
     const canvasContext: CanvasRenderingContext2D = canvas.getContext("2d")!;
 
-    gameBoard = new Board(new PieceFactory(), new SlidingMovement(), new CastleHelper());
+    gameBoard = new Board(new PieceFactory(), new SlidingMovement(), castleHelper);
 
     spriteRenderer = new SpriteRenderer();
     tileRenderer = new TileRenderer(canvasContext, gameBoard);
@@ -48,11 +48,11 @@ window.onload = () => {
     tableRenderer = new TableRenderer();
     
 
-    algebraicNotationParser = new AlgebraicNotationParser();
+    algebraicNotationParser = new AlgebraicNotationParser(castleHelper);
 
     turnManager = new TurnManager(algebraicNotationParser, tableRenderer);
     controlManager = new ControlManager();
-    moveManager = new MoveManager(turnManager, controlManager, tileRenderer, pieceRenderer, movePreviewRenderer);
+    moveManager = new MoveManager(turnManager, controlManager, tileRenderer, pieceRenderer, movePreviewRenderer, castleHelper);
     pieceSelectManager = new PieceSelectManager(pieceRenderer);
     gameManager = new GameManager(gameBoard, movePreviewRenderer, turnManager, moveManager, pieceSelectManager);
 

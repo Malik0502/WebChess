@@ -31,9 +31,7 @@ export class TurnManager{
         this.activeColor = lastPieceColor == WHITE ? BLACK : WHITE;
     }
 
-    // TODO: differentiate if piece was a castling move
-    // different algebraic notation
-    addToTurnHistory(move: Move, piece: IPiece, nearestTile: GameTile){
+    addToTurnHistory(move: Move[], piece: IPiece, nearestTile: GameTile){
         if(piece.color == WHITE){
             let turn: Turn = { 
                 turn: this.turns.length + 1, 

@@ -1,5 +1,8 @@
 import type { GameTile } from "../../../board/entities/gameTile";
 import { WHITE } from "../../../common/constants/pieceColor";
+import type { Move } from "../../manager/turnManagement/entities/move";
+import type { IPiece } from "../interfaces/IPiece";
+import { King } from "../king";
 import { Rook } from "../rook";
 
 export class CastleHelper{
@@ -26,5 +29,22 @@ export class CastleHelper{
                 continue;
             }
             return true;
+    }
+
+    public isCastlingMove(piece: IPiece, move: Move): boolean{
+        if(!(piece instanceof King)) return false;
+        if(piece.hasMoved) return false;
+
+        if(piece.color === WHITE){
+            if(move.start === "e1" && move.end === "c1" || move.end === "g1") return true;
+        }
+
+        return move.start === "e1" && move.end === "c1" || move.end === "g1";
+    }
+
+    public isShortCastling(move: Move){
+        if(move.start === "e1" && move.end === "c1" || move.start === "e8" && move.end === "c8") return false;
+
+        return move.start === "e1" && move.end === "g1" || move.start === "e8" && move.end === "g8";
     }
 }

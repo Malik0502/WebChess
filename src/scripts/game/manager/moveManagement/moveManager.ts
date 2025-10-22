@@ -3,8 +3,9 @@ import type { GameTile } from "../../../board/entities/gameTile";
 import type { MovePreviewRenderer } from "../../../board/renderer/movePreviewRenderer";
 import type { PieceRenderer } from "../../../board/renderer/pieceRenderer";
 import type { TileRenderer } from "../../../board/renderer/tileRenderer";
+import { WHITE } from "../../../common/constants/pieceColor";
 import type { IPiece } from "../../pieces/interfaces/IPiece";
-import { King } from "../../pieces/king";
+import type { CastleHelper } from "../../pieces/pieceMovement/castleHelper";
 import type { ControlManager } from "../controlManagement/controlManager";
 import type { Move } from "../turnManagement/entities/move";
 import type { TurnManager } from "../turnManagement/turnManager";
@@ -13,14 +14,16 @@ export class MoveManager {
 
     private turnManager: TurnManager;
     private controlManager: ControlManager;
+    private castleHelper: CastleHelper
 
     private tileRenderer: TileRenderer;
     private pieceRenderer: PieceRenderer;
     private movePreviewRenderer: MovePreviewRenderer;
 
-    constructor(turnManager: TurnManager, controlManager: ControlManager, tileRenderer: TileRenderer, pieceRenderer: PieceRenderer, movePreviewRenderer: MovePreviewRenderer){
+    constructor(turnManager: TurnManager, controlManager: ControlManager, tileRenderer: TileRenderer, pieceRenderer: PieceRenderer, movePreviewRenderer: MovePreviewRenderer, castleHelper: CastleHelper){
         this.turnManager = turnManager;
         this.controlManager = controlManager;
+        this.castleHelper = castleHelper;
 
         this.tileRenderer = tileRenderer;
         this.pieceRenderer = pieceRenderer;
@@ -32,14 +35,35 @@ export class MoveManager {
 
         const previouslyStandOnTile: GameTile = selectedPiece.currentTile;
         
-        // some condition to check if move is castling. 
-        // here or in addToTurnHistory
-        // maybe change turn to have short and longCastle props
+        if(!this.castleHelper.isCastlingMove(selectedPiece, move)){
+            this.turnManager.addToTurnHistory([move], selectedPiece, nearestTile);
+            this.movePiece(selectedPiece!, nearestTile, board);
+            this.controlManager.calcControlledTilesAfterMoving(previouslyStandOnTile, selectedPiece, board);
+            this.turnManager.changeActiveColor(selectedPiece!.color);
+            return;
+        }
+        
+        
+        this.handleCastling(move, nearestTile, selectedPiece);
+    }
 
-        this.turnManager.addToTurnHistory(move, selectedPiece, nearestTile);
-        this.movePiece(selectedPiece!, nearestTile, board);
-        this.controlManager.calcControlledTilesAfterMoving(previouslyStandOnTile, selectedPiece, board);
-        this.turnManager.changeActiveColor(selectedPiece!.color);
+    // black castling doesnt work. king is moving already and algebraic notation is wrong
+    // whites algebraic notation is correct but send 0-0 two times for short castling instead of 1 like on long 
+    private handleCastling(move: Move, nearestTile: GameTile, selectedPiece: IPiece){
+        let towerMove: Move;
+        if(this.castleHelper.isShortCastling(move)){
+            if(selectedPiece.color !== WHITE){
+                towerMove = {start: "h8", end: "f8"}
+            }
+            towerMove = {start: "h1", end: "f1"}
+            this.turnManager.addToTurnHistory([move, towerMove], selectedPiece, nearestTile);
+        }
+
+        if(selectedPiece.color !== WHITE){
+            towerMove = {start: "a8", end: "d8"}
+        }
+        towerMove = {start: "a1", end: "d1"}
+        this.turnManager.addToTurnHistory([move, towerMove], selectedPiece, nearestTile);
     }
 
     private movePiece(piece: IPiece, clickedTile: GameTile, board: Board): void{
@@ -77,15 +101,5 @@ export class MoveManager {
     // just handles removing piece from array right now
     private capturePiece(clickedTile: GameTile, board: Board): void {
         board.gamePieces = board.gamePieces.filter(x => x.currentCoordinates != clickedTile.coordinates);
-    }
-
-    // maybe useless?
-    private isMoveCastling(): boolean{
-        return true;
-    }
-
-    private handleCastling(){
-
-    }
-
+    }    
 }
