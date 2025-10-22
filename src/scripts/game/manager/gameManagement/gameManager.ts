@@ -44,12 +44,14 @@ export class GameManager{
             return;
 
         if(this.isPieceSelected && this.selectedPiece?.currentTile != nearestTile){
-            if(this.selectedPiece?.possibleMoves.some(x => x.coordinates === nearestTile.coordinates)){
-                this.moveManager.handleMoving(nearestTile, this.selectedPiece, this.board);
-                this.isPieceSelected = false;
-                this.selectedPiece = undefined
-                return;    
+            if(!this.selectedPiece?.possibleMoves.some(x => x.coordinates === nearestTile.coordinates)){
+                return;
             }
+            
+            this.moveManager.handleMoving(nearestTile, this.selectedPiece, this.board);
+            this.isPieceSelected = false;
+            this.selectedPiece = undefined
+            return;    
         }
 
         if(this.selectedPiece?.currentTile == nearestTile){

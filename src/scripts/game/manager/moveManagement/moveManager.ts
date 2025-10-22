@@ -4,6 +4,7 @@ import type { MovePreviewRenderer } from "../../../board/renderer/movePreviewRen
 import type { PieceRenderer } from "../../../board/renderer/pieceRenderer";
 import type { TileRenderer } from "../../../board/renderer/tileRenderer";
 import type { IPiece } from "../../pieces/interfaces/IPiece";
+import { King } from "../../pieces/king";
 import type { ControlManager } from "../controlManagement/controlManager";
 import type { Move } from "../turnManagement/entities/move";
 import type { TurnManager } from "../turnManagement/turnManager";
@@ -30,6 +31,10 @@ export class MoveManager {
         let move: Move = { start: selectedPiece.currentCoordinates, end: nearestTile.coordinates };
 
         const previouslyStandOnTile: GameTile = selectedPiece.currentTile;
+        
+        // some condition to check if move is castling. 
+        // here or in addToTurnHistory
+        // maybe change turn to have short and longCastle props
 
         this.turnManager.addToTurnHistory(move, selectedPiece, nearestTile);
         this.movePiece(selectedPiece!, nearestTile, board);
@@ -37,7 +42,7 @@ export class MoveManager {
         this.turnManager.changeActiveColor(selectedPiece!.color);
     }
 
-    public movePiece(piece: IPiece, clickedTile: GameTile, board: Board): void{
+    private movePiece(piece: IPiece, clickedTile: GameTile, board: Board): void{
 
         this.tileRenderer.drawChessRectangle(piece.currentTile.cornerPoint[0], piece.currentTile.cornerPoint[1], clickedTile.width, clickedTile.height, piece.currentTile.color);
         this.pieceRenderer.drawPieceOnBoard(piece, clickedTile, true);
@@ -45,7 +50,7 @@ export class MoveManager {
         this.changePropsAfterMove(piece, clickedTile, board);
     }
 
-    public changePropsAfterMove(piece: IPiece, clickedTile: GameTile, board: Board): void{
+    private changePropsAfterMove(piece: IPiece, clickedTile: GameTile, board: Board): void{
 
         if (clickedTile.isOccupied && clickedTile.coordinates != piece.currentCoordinates) this.capturePiece(clickedTile, board)
 
@@ -72,6 +77,15 @@ export class MoveManager {
     // just handles removing piece from array right now
     private capturePiece(clickedTile: GameTile, board: Board): void {
         board.gamePieces = board.gamePieces.filter(x => x.currentCoordinates != clickedTile.coordinates);
+    }
+
+    // maybe useless?
+    private isMoveCastling(): boolean{
+        return true;
+    }
+
+    private handleCastling(){
+
     }
 
 }
