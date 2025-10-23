@@ -21,7 +21,7 @@ export class AlgebraicNotationParser{
 
         const pieceSymbol: string = PieceNotationMap[piece.name]
         
-        if(this.isCastling(turn)){
+        if(this.isCastling(turn, piece.color)){
             return this.convertCastlingToAlgebraic(turn, isWhite);
         }
         const pieceMove: Move = isWhite ? turn.whiteMove![0] : turn.blackMove![0];
@@ -36,11 +36,11 @@ export class AlgebraicNotationParser{
         return `${pieceSymbol}${pieceMove.end}`;
     }
 
-    // that cant work => when black is castling white length is 1 which means it returns false
-    private isCastling(turn: Turn): boolean{
-        // more than one move means castling
-        if(turn.whiteMove!.length === 1) return false;
-        if(turn.whiteMove!.length > 1) return true;
+    private isCastling(turn: Turn, color: string): boolean{
+        if(color === WHITE){
+            if(turn.whiteMove!.length === 1) return false;
+            if(turn.whiteMove!.length > 1) return true;
+        }
         if(!turn.blackMove!) return false;
         return turn.blackMove!.length > 1;
     }

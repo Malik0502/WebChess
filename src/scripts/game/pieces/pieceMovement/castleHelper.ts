@@ -39,7 +39,7 @@ export class CastleHelper{
             if(move.start === "e1" && move.end === "c1" || move.end === "g1") return true;
         }
 
-        return move.start === "e1" && move.end === "c1" || move.end === "g1";
+        return move.start === "e8" && move.end === "c8" || move.end === "g8";
     }
 
     public isShortCastling(move: Move){

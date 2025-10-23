@@ -88,4 +88,15 @@ export class Board {
             StartPositionPieceColor[`${col}7`] = "black";
         }
     }
+
+    getGameTileByCoordinate(coordinates: string): GameTile{
+        let result: GameTile;
+        this.gameTiles.forEach(row => {
+            row.forEach(col => {
+                if(col.coordinates === coordinates) result = col;
+            })
+        });   
+
+        return result!;
+    }
 }

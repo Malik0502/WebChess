@@ -39,6 +39,7 @@ export class MoveManager {
         if(!this.castleHelper.isCastlingMove(selectedPiece, move)){
             this.turnManager.addToTurnHistory([move], selectedPiece, nearestTile);
             this.refreshGameInformation(selectedPiece, nearestTile, board, previouslyStandOnTile);
+            this.turnManager.changeActiveColor(selectedPiece!.color);
             return;
         }
         
@@ -46,45 +47,49 @@ export class MoveManager {
         this.handleCastling(move, nearestTile, selectedPiece, board, previouslyStandOnTile);
     }
 
-    // black castling doesnt work
+    // blacks rook randomly repaints white rook so that they repaint the wrong model
     private handleCastling(move: Move, nearestTile: GameTile, selectedPiece: IPiece, board: Board, previouslyStandOnTile: GameTile){
-        let towerMove: Move;
-        let towerPiece: IPiece;
+        let rookMove: Move;
+        let rook: IPiece;
+        let rookCastlingDest: GameTile;
         if(this.castleHelper.isShortCastling(move)){
             if(selectedPiece.color !== WHITE){
-                towerMove = {start: "h8", end: "f8"}
-                towerPiece = board.gamePieces[bRookH];
+                rookMove = {start: "h8", end: "f8"}
+                rook = board.gamePieces[bRookH];
+                rookCastlingDest = board.getGameTileByCoordinate(rookMove.end);
             }
-            towerMove = {start: "h1", end: "f1"}
-            towerPiece = board.gamePieces[wRookH];
-            this.turnManager.addToTurnHistory([move, towerMove], selectedPiece, nearestTile);
+            rookMove = {start: "h1", end: "f1"}
+            rook = board.gamePieces[wRookH];
+            rookCastlingDest = board.getGameTileByCoordinate(rookMove.end);
+            this.turnManager.addToTurnHistory([move, rookMove], selectedPiece, nearestTile);
             this.refreshGameInformation(selectedPiece, nearestTile, board, previouslyStandOnTile);
 
-            // have to find tile for rook
-            this.refreshGameInformation(towerPiece, nearestTile, board, previouslyStandOnTile);
+            this.refreshGameInformation(rook, rookCastlingDest, board, previouslyStandOnTile);
+            this.turnManager.changeActiveColor(selectedPiece!.color);
             return;
         }
 
         if(selectedPiece.color !== WHITE){
-            towerMove = {start: "a8", end: "d8"}
-            towerPiece = board.gamePieces[bRookA];
+            rookMove = {start: "a8", end: "d8"}
+            rook = board.gamePieces[bRookA];
+            rookCastlingDest = board.getGameTileByCoordinate(rookMove.end);
         }
-        towerMove = {start: "a1", end: "d1"}
-        towerPiece = board.gamePieces[wRookA];
-        this.turnManager.addToTurnHistory([move, towerMove], selectedPiece, nearestTile);
+        rookMove = {start: "a1", end: "d1"}
+        rook = board.gamePieces[wRookA];
+        rookCastlingDest = board.getGameTileByCoordinate(rookMove.end);
+        this.turnManager.addToTurnHistory([move, rookMove], selectedPiece, nearestTile);
         this.refreshGameInformation(selectedPiece, nearestTile, board, previouslyStandOnTile);
-        this.refreshGameInformation(towerPiece, nearestTile, board, previouslyStandOnTile);
+        this.refreshGameInformation(rook, rookCastlingDest, board, previouslyStandOnTile);
+        this.turnManager.changeActiveColor(selectedPiece!.color);
         return;
     }
 
     private refreshGameInformation(selectedPiece: IPiece, nearestTile: GameTile, board: Board, previouslyStandOnTile: GameTile){
         this.movePiece(selectedPiece!, nearestTile, board);
-        this.controlManager.calcControlledTilesAfterMoving(previouslyStandOnTile, selectedPiece, board);
-        this.turnManager.changeActiveColor(selectedPiece!.color);
+        this.controlManager.calcControlledTilesAfterMoving(previouslyStandOnTile, selectedPiece, board);   
     }
  
     private movePiece(piece: IPiece, clickedTile: GameTile, board: Board): void{
-
         this.tileRenderer.drawChessRectangle(piece.currentTile.cornerPoint[0], piece.currentTile.cornerPoint[1], clickedTile.width, clickedTile.height, piece.currentTile.color);
         this.pieceRenderer.drawPieceOnBoard(piece, clickedTile, true);
 
@@ -92,19 +97,19 @@ export class MoveManager {
     }
 
     private changePropsAfterMove(piece: IPiece, clickedTile: GameTile, board: Board): void{
-
         if (clickedTile.isOccupied && clickedTile.coordinates != piece.currentCoordinates) this.capturePiece(clickedTile, board)
 
+        
+        piece.currentTile.isOccupied = false;
         this.movePreviewRenderer.repaintMoveOptionTilesNormal();
         piece.possibleMoves.forEach(x => x.isMoveOption = false);
         piece.selected = false;
         piece.hasMoved = true;
         piece.possibleMoves = [];
         piece.currentCoordinates = clickedTile.coordinates;
-        piece.currentTile.isOccupied = false;
         piece.currentTile.currentPiece = undefined;
-
         piece.currentTile = clickedTile;
+        
     }
 
     public deleteMoveOptions(board: Board) {
