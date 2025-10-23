@@ -36,6 +36,7 @@ export class AlgebraicNotationParser{
         return `${pieceSymbol}${pieceMove.end}`;
     }
 
+    // that cant work => when black is castling white length is 1 which means it returns false
     private isCastling(turn: Turn): boolean{
         // more than one move means castling
         if(turn.whiteMove!.length === 1) return false;
