@@ -3,16 +3,6 @@
 This project is an easy but functional chess website build with vanilla TypeScript and Vite.  
 The goal is to create an interactive chess platform in your browser.
 
----
-
-## Features
-- Chessboard
-- movable pieces
-- preview of all possible moves on selected piece
-- turnlist with number of turns and algebraic notation of all moves 
-
----
-
 ## Requirements
 - Node.js (recommended version 22.17.0  LTS)
 
@@ -20,5 +10,7 @@ The goal is to create an interactive chess platform in your browser.
 
 ## Installation & Start
 
-- npm install
-- npm run dev
+1. navigate to folder with project in it
+2. npm install
+3. npm run dev
+4. open browser and enjoy playing
