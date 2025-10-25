@@ -1,5 +1,4 @@
 import { Board } from "./scripts/board/board"
-import type { GameTile } from "./scripts/board/entities/gameTile";
 import { BoardRenderer } from "./scripts/board/renderer/boardRenderer";
 import { MovePreviewRenderer } from "./scripts/board/renderer/movePreviewRenderer";
 import { PieceRenderer } from "./scripts/board/renderer/pieceRenderer";
@@ -8,9 +7,12 @@ import { TileRenderer } from "./scripts/board/renderer/tileRenderer";
 import { BlackTileColor, WhiteTileColor } from "./scripts/common/constants/canvasColors";
 import { ControlManager } from "./scripts/game/manager/controlManagement/controlManager";
 import { GameManager } from "./scripts/game/manager/gameManagement/gameManager";
+import { MoveManager } from "./scripts/game/manager/moveManagement/moveManager";
+import { PieceSelectManager } from "./scripts/game/manager/pieceSelectManagement/pieceSelectManager";
 import { AlgebraicNotationParser } from "./scripts/game/manager/turnManagement/algebraicNotationParser";
 import { TurnManager } from "./scripts/game/manager/turnManagement/turnManager";
 import { PieceFactory } from "./scripts/game/pieces/factories/pieceFactory"
+import { CastleHelper } from "./scripts/game/pieces/pieceMovement/castleHelper";
 import { SlidingMovement } from "./scripts/game/pieces/pieceMovement/slidingMovement";
 import { TableRenderer } from "./scripts/table/tableRenderer";
 
@@ -25,16 +27,18 @@ let movePreviewRenderer: MovePreviewRenderer;
 let gameManager: GameManager;
 let turnManager: TurnManager;
 let controlManager: ControlManager;
+let moveManager: MoveManager;
+let pieceSelectManager: PieceSelectManager;
 let algebraicNotationParser: AlgebraicNotationParser;
 let tableRenderer: TableRenderer;
 let canvas: HTMLCanvasElement;
 
 window.onload = () => {
-
+    const castleHelper = new CastleHelper();
     canvas = document.getElementById("game-canvas") as HTMLCanvasElement;
     const canvasContext: CanvasRenderingContext2D = canvas.getContext("2d")!;
 
-    gameBoard = new Board(new PieceFactory(), new SlidingMovement())
+    gameBoard = new Board(new PieceFactory(), new SlidingMovement(), castleHelper);
 
     spriteRenderer = new SpriteRenderer();
     tileRenderer = new TileRenderer(canvasContext, gameBoard);
@@ -44,17 +48,19 @@ window.onload = () => {
     tableRenderer = new TableRenderer();
     
 
-    algebraicNotationParser = new AlgebraicNotationParser();
+    algebraicNotationParser = new AlgebraicNotationParser(castleHelper);
 
     turnManager = new TurnManager(algebraicNotationParser, tableRenderer);
     controlManager = new ControlManager();
-    gameManager = new GameManager(gameBoard, pieceRenderer, movePreviewRenderer, tileRenderer, turnManager, controlManager);
+    moveManager = new MoveManager(turnManager, controlManager, tileRenderer, pieceRenderer, movePreviewRenderer, castleHelper);
+    pieceSelectManager = new PieceSelectManager(pieceRenderer);
+    gameManager = new GameManager(gameBoard, movePreviewRenderer, turnManager, moveManager, pieceSelectManager);
 
     boardRenderer.drawChessBoard().then(() => {
         controlManager.calcControlledTilesOnStart(gameBoard);
     });
 
-    canvas.addEventListener("click", handleClick)
+    canvas.addEventListener("click", handleClick);
     
 }
 
@@ -65,5 +71,6 @@ function handleClick(event: MouseEvent){
     const mousePos: [x: number, y: number] = [Math.round(event.clientX - rect.left), Math.round(event.clientY - rect.top)];
 
     gameManager.handleMouseClick(mousePos);
-    console.log(gameBoard.gamePieces)
+    console.log(gameBoard.gamePieces);
+    //console.log(gameBoard.gameTiles);
 }

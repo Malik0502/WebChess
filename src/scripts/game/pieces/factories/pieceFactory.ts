@@ -9,10 +9,11 @@ import { Rook } from "../rook";
 import { Bishop } from "../bishop";
 import { Queen } from "../queen";
 import type { SlidingMovement } from "../pieceMovement/slidingMovement";
+import type { CastleHelper } from "../pieceMovement/castleHelper";
 
 export class PieceFactory implements IPieceFactory{
     
-    createPiece(name: string, color: string, tile: GameTile, movement: SlidingMovement): IPiece | undefined {
+    createPiece(name: string, color: string, tile: GameTile, movement: SlidingMovement, castleHelper: CastleHelper): IPiece | undefined {
         if (name.includes(PAWN)) {
             return new Pawn(name, color, tile.coordinates, tile);
         }
@@ -29,7 +30,7 @@ export class PieceFactory implements IPieceFactory{
             return new Queen(name, color, tile.coordinates, tile, movement);
         }
         if (name.includes(KING)) {
-            return new King(name, color, tile.coordinates, tile);
+            return new King(name, color, tile.coordinates, tile, castleHelper);
         }
 
         return undefined;

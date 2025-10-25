@@ -20,27 +20,30 @@ export class ControlManager{
 
             this.fillTilesControl(controlledTiles, piece);
         });
-
-        this.logAllControlledTilesToConsole(board.gameTiles);
     }
 
     calcControlledTilesAfterMoving(previouslyStandOnTile: GameTile, piece: IPiece, board: Board){
-        const controllingPieces: IPiece[] = this.getRelevantControllingPieces(previouslyStandOnTile, piece);
         
+        const controllingPieces: IPiece[] = this.getRelevantControllingPieces(previouslyStandOnTile, piece);
+
+        this.resetPiecesInTileControl(piece);
+        this.resetImportantControlTiles(previouslyStandOnTile, piece.currentTile);
         const isAttack: boolean = false;
 
         controllingPieces.forEach(piece => {
+            this.resetPiecesInTileControl(piece);
+
             let controlledTiles: GameTile[] = [];
+
             if(piece instanceof Pawn){
                 controlledTiles = piece.calcVerticalMoves(board.gameTiles, piece.currentTile.row, piece.currentTile.col, piece.color);
-            }else{
-                controlledTiles = piece.calcPossibleMoves(board.gameTiles, isAttack);
+            }
+            else{
+                controlledTiles = piece.calcPossibleMoves(board.gameTiles, isAttack)
             }
 
-            this.fillTilesControl(controlledTiles, piece);
+            this.fillTilesControl(controlledTiles, piece)
         });
-
-        this.logAllControlledTilesToConsole(board.gameTiles);
     }
 
     private getRelevantControllingPieces(previouslyStandOnTile: GameTile, piece: IPiece): IPiece[]{
@@ -57,24 +60,34 @@ export class ControlManager{
         return uniqueResult;
     }
 
-    private logAllControlledTilesToConsole(gameTiles: GameTile[][]){
-        const controlledTiles: GameTile[] = []
-
-        gameTiles.forEach(row => {
-            row.forEach(tile => {
-                if(tile.control.controllingPieces.length > 0) controlledTiles.push(tile);
-            });
-        });
-
-        console.log(controlledTiles);
-    }
-
     private fillTilesControl(controlledTiles: GameTile[], piece: IPiece){
         controlledTiles.forEach(tile => {
             tile.control.controllingPieces.push(piece);
             tile.control.whiteControlling = this.countControllingPieces(tile.control.controllingPieces, WHITE);
             tile.control.blackControlling = this.countControllingPieces(tile.control.controllingPieces, BLACK);
         })
+        piece.controlledTiles.push(...controlledTiles);
+    }
+
+    private resetImportantControlTiles(previouslyStandOnTile: GameTile, newTile: GameTile){
+        this.resetTileControl(previouslyStandOnTile);
+        this.resetTileControl(newTile);
+    }
+
+    private resetTileControl(tile: GameTile){
+        tile.control.controllingPieces = [];
+    }
+
+    private resetPiecesInTileControl(piece: IPiece){
+        piece.controlledTiles.forEach(tile => {
+            const index: number = tile.control.controllingPieces.indexOf(piece);
+            if(index > -1){
+                tile.control.controllingPieces.splice(index, 1);
+                piece.color == WHITE ? tile.control.whiteControlling-- : tile.control.blackControlling--;
+            }
+        });
+
+        piece.controlledTiles = [];
     }
 
     private countControllingPieces(pieces: IPiece[], color: string): number{

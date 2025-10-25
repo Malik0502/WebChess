@@ -31,7 +31,7 @@ export class TurnManager{
         this.activeColor = lastPieceColor == WHITE ? BLACK : WHITE;
     }
 
-    addToTurnHistory(move: Move, piece: IPiece, nearestTile: GameTile){
+    addToTurnHistory(move: Move[], piece: IPiece, nearestTile: GameTile){
         if(piece.color == WHITE){
             let turn: Turn = { 
                 turn: this.turns.length + 1, 
