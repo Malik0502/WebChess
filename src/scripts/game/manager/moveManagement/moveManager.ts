@@ -47,7 +47,6 @@ export class MoveManager {
         this.handleCastling(move, nearestTile, selectedPiece, board, previouslyStandOnTile);
     }
 
-    // blacks rook randomly repaints white rook so that they repaint the wrong model
     private handleCastling(move: Move, nearestTile: GameTile, selectedPiece: IPiece, board: Board, previouslyStandOnTile: GameTile){
         let rookMove: Move;
         let rook: IPiece;
@@ -57,6 +56,12 @@ export class MoveManager {
                 rookMove = {start: "h8", end: "f8"}
                 rook = board.gamePieces[bRookH];
                 rookCastlingDest = board.getGameTileByCoordinate(rookMove.end);
+                this.turnManager.addToTurnHistory([move, rookMove], selectedPiece, nearestTile);
+                this.refreshGameInformation(selectedPiece, nearestTile, board, previouslyStandOnTile);
+
+                this.refreshGameInformation(rook, rookCastlingDest, board, previouslyStandOnTile);
+                this.turnManager.changeActiveColor(selectedPiece!.color);
+                return;
             }
             rookMove = {start: "h1", end: "f1"}
             rook = board.gamePieces[wRookH];
@@ -73,6 +78,12 @@ export class MoveManager {
             rookMove = {start: "a8", end: "d8"}
             rook = board.gamePieces[bRookA];
             rookCastlingDest = board.getGameTileByCoordinate(rookMove.end);
+            this.turnManager.addToTurnHistory([move, rookMove], selectedPiece, nearestTile);
+            this.refreshGameInformation(selectedPiece, nearestTile, board, previouslyStandOnTile);
+
+            this.refreshGameInformation(rook, rookCastlingDest, board, previouslyStandOnTile);
+            this.turnManager.changeActiveColor(selectedPiece!.color);
+            return;
         }
         rookMove = {start: "a1", end: "d1"}
         rook = board.gamePieces[wRookA];
