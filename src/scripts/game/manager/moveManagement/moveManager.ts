@@ -38,7 +38,7 @@ export class MoveManager {
         
         if(!this.castleHelper.isCastlingMove(selectedPiece, move)){
             this.turnManager.addToTurnHistory([move], selectedPiece, nearestTile);
-            this.refreshGameInformation(selectedPiece, nearestTile, board, previouslyStandOnTile);
+            this.refreshGameMoveInformation(selectedPiece, nearestTile, board, previouslyStandOnTile);
             this.turnManager.changeActiveColor(selectedPiece!.color);
             return;
         }
@@ -49,53 +49,38 @@ export class MoveManager {
 
     private handleCastling(move: Move, nearestTile: GameTile, selectedPiece: IPiece, board: Board, previouslyStandOnTile: GameTile){
         let rookMove: Move;
-        let rook: IPiece;
-        let rookCastlingDest: GameTile;
         if(this.castleHelper.isShortCastling(move)){
             if(selectedPiece.color !== WHITE){
                 rookMove = {start: "h8", end: "f8"}
-                rook = board.gamePieces[bRookH];
-                rookCastlingDest = board.getGameTileByCoordinate(rookMove.end);
-                this.turnManager.addToTurnHistory([move, rookMove], selectedPiece, nearestTile);
-                this.refreshGameInformation(selectedPiece, nearestTile, board, previouslyStandOnTile);
-
-                this.refreshGameInformation(rook, rookCastlingDest, board, previouslyStandOnTile);
-                this.turnManager.changeActiveColor(selectedPiece!.color);
+                this.castlePieces(move, rookMove, bRookH, board, selectedPiece, nearestTile, previouslyStandOnTile)
                 return;
             }
             rookMove = {start: "h1", end: "f1"}
-            rook = board.gamePieces[wRookH];
-            rookCastlingDest = board.getGameTileByCoordinate(rookMove.end);
-            this.turnManager.addToTurnHistory([move, rookMove], selectedPiece, nearestTile);
-            this.refreshGameInformation(selectedPiece, nearestTile, board, previouslyStandOnTile);
-
-            this.refreshGameInformation(rook, rookCastlingDest, board, previouslyStandOnTile);
-            this.turnManager.changeActiveColor(selectedPiece!.color);
+            this.castlePieces(move, rookMove, wRookH, board, selectedPiece, nearestTile, previouslyStandOnTile)
             return;
         }
 
         if(selectedPiece.color !== WHITE){
             rookMove = {start: "a8", end: "d8"}
-            rook = board.gamePieces[bRookA];
-            rookCastlingDest = board.getGameTileByCoordinate(rookMove.end);
-            this.turnManager.addToTurnHistory([move, rookMove], selectedPiece, nearestTile);
-            this.refreshGameInformation(selectedPiece, nearestTile, board, previouslyStandOnTile);
-
-            this.refreshGameInformation(rook, rookCastlingDest, board, previouslyStandOnTile);
-            this.turnManager.changeActiveColor(selectedPiece!.color);
+            this.castlePieces(move, rookMove, bRookA, board, selectedPiece, nearestTile, previouslyStandOnTile)
             return;
         }
         rookMove = {start: "a1", end: "d1"}
-        rook = board.gamePieces[wRookA];
-        rookCastlingDest = board.getGameTileByCoordinate(rookMove.end);
-        this.turnManager.addToTurnHistory([move, rookMove], selectedPiece, nearestTile);
-        this.refreshGameInformation(selectedPiece, nearestTile, board, previouslyStandOnTile);
-        this.refreshGameInformation(rook, rookCastlingDest, board, previouslyStandOnTile);
-        this.turnManager.changeActiveColor(selectedPiece!.color);
+        this.castlePieces(move, rookMove, wRookA, board, selectedPiece, nearestTile, previouslyStandOnTile)
         return;
     }
 
-    private refreshGameInformation(selectedPiece: IPiece, nearestTile: GameTile, board: Board, previouslyStandOnTile: GameTile){
+    private castlePieces(kingMove: Move, rookMove: Move, rookIndex: number, board: Board, selectedPiece: IPiece, nearestTile: GameTile, previouslyStandOnTile: GameTile){
+        const rook: IPiece = board.gamePieces[rookIndex];
+        const rookCastlingDest: GameTile = board.getGameTileByCoordinate(rookMove.end);
+        this.turnManager.addToTurnHistory([kingMove, rookMove], selectedPiece, nearestTile);
+        this.refreshGameMoveInformation(selectedPiece, nearestTile, board, previouslyStandOnTile);
+
+        this.refreshGameMoveInformation(rook, rookCastlingDest, board, previouslyStandOnTile);
+        this.turnManager.changeActiveColor(selectedPiece!.color);
+    }
+
+    private refreshGameMoveInformation(selectedPiece: IPiece, nearestTile: GameTile, board: Board, previouslyStandOnTile: GameTile){
         this.movePiece(selectedPiece!, nearestTile, board);
         this.controlManager.calcControlledTilesAfterMoving(previouslyStandOnTile, selectedPiece, board);   
     }
@@ -110,7 +95,6 @@ export class MoveManager {
     private changePropsAfterMove(piece: IPiece, clickedTile: GameTile, board: Board): void{
         if (clickedTile.isOccupied && clickedTile.coordinates != piece.currentCoordinates) this.capturePiece(clickedTile, board)
 
-        
         piece.currentTile.isOccupied = false;
         this.movePreviewRenderer.repaintMoveOptionTilesNormal();
         piece.possibleMoves.forEach(x => x.isMoveOption = false);

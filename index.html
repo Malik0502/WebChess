@@ -1,14 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="./src/styles/style.css">
   <title>Chess</title>
 </head>
+
 <body>
   <div class="game-container">
-    <canvas class="game-canvas" id="game-canvas" width="800" height="800"></canvas>
+
+    <div class="board-area">
+      <div class="captured-pieces-container top">
+        <div class="captured-pieces white-captures"></div>
+        <div class="score white-score"></div>
+      </div>
+
+      <canvas class="game-canvas" id="game-canvas" width="800" height="800"></canvas>
+
+      <div class="captured-pieces-container bottom">
+        <div class="captured-pieces black-captures"></div>
+        <div class="score black-score"></div>
+      </div>
+    </div>
 
     <div class="move-table-container">
       <table class="move-table" id="turn-table">
@@ -19,12 +34,13 @@
             <th>Black</th>
           </tr>
         </thead>
-        <tbody id="move-list">
-        </tbody>
+        <tbody id="move-list"></tbody>
       </table>
     </div>
+
   </div>
 
   <script type="module" src="./src/main.ts"></script>
 </body>
+
 </html>

@@ -1,8 +1,8 @@
-body{
+body {
     background-color: #333230;
 }
 
-.game-container{
+.game-container {
     min-height: 98.37vh;
     display: flex;
     justify-content: center;
@@ -10,12 +10,54 @@ body{
     gap: 20px;
 }
 
-.game-canvas{
-    width: 800px;
-    height: 800px;
-    border: 1px solid #000000;   
+.board-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
 }
 
+.game-canvas {
+    width: 800px;
+    height: 800px;
+    border: 1px solid #000000;
+}
+
+.captured-pieces-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 25px;
+    width: 800px;
+    padding: 5px 10px;
+    background-color: #403F3C;
+    border: 2px solid #444;
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+
+.captured-pieces {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.captured-pieces img {
+    height: 36px;
+    width: 36px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.5));
+}
+
+.score {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #fff;
+    min-width: 60px;
+    text-align: right;
+}
+
+/* Move Table Styling */
 .move-table-container {
     height: 800px;
     overflow-y: auto;
