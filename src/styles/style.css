@@ -5,6 +5,7 @@ body {
 .game-container {
     min-height: 98.37vh;
     display: flex;
+    flex-direction: row;
     justify-content: center;
     align-items: center;
     gap: 20px;
@@ -20,59 +21,83 @@ body {
 .game-canvas {
     width: 800px;
     height: 800px;
-    border: 1px solid #000000;
+    border: 1px solid #000;
 }
 
 .captured-pieces-container {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    min-height: 25px;
     width: 800px;
-    padding: 5px 10px;
+    padding: 6px 10px;
     background-color: #403F3C;
     border: 2px solid #444;
     border-radius: 6px;
     box-sizing: border-box;
 }
 
-.captured-pieces {
+.captured-pieces-list {
     display: flex;
-    flex-wrap: wrap;
-    gap: 4px;
+    flex-direction: row;
+    align-items: center;
+    gap: 6px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex: 1;
+    overflow-x: auto;
 }
 
-.captured-pieces img {
-    height: 36px;
+.captured-pieces-list li {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.captured-pieces-list img {
     width: 36px;
+    height: 36px;
     object-fit: contain;
     filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.5));
 }
 
-.score {
+.score-diff {
+    min-width: 60px;
+    text-align: right;
     font-size: 1.2rem;
     font-weight: bold;
     color: #fff;
-    min-width: 60px;
-    text-align: right;
+    margin-left: 10px;
+    white-space: nowrap;
 }
 
-/* Move Table Styling */
+.captured-pieces-list::-webkit-scrollbar {
+    height: 6px;
+}
+
+.captured-pieces-list::-webkit-scrollbar-thumb {
+    background-color: #555;
+    border-radius: 4px;
+}
+
+.captured-pieces-list::-webkit-scrollbar-track {
+    background: #2e2d2b;
+}
+
 .move-table-container {
-    height: 800px;
+    height: 533px;
+    width: 250px;
     overflow-y: auto;
     background-color: #403F3C;
     border: 2px solid #444;
     border-radius: 6px;
     padding: 10px;
     box-sizing: border-box;
-
     scrollbar-width: thin;
     scrollbar-color: #444 #1e1e1e;
 }
 
 .move-table {
-    width: 250px;
+    width: 100%;
     border-collapse: collapse;
     text-align: center;
     color: #fff;
@@ -93,10 +118,6 @@ body {
 
 .move-table-container::-webkit-scrollbar {
     width: 10px;
-}
-
-.move-table-container::-webkit-scrollbar-track {
-    background: #403F3C;
 }
 
 .move-table-container::-webkit-scrollbar-thumb {

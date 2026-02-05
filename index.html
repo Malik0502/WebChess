@@ -12,18 +12,21 @@
   <div class="game-container">
 
     <div class="board-area">
-      <div class="captured-pieces-container top">
-        <div class="captured-pieces white-captures"></div>
-        <div class="score white-score"></div>
-      </div>
 
-      <canvas class="game-canvas" id="game-canvas" width="800" height="800"></canvas>
+  <div class="captured-pieces-container top">
+    <ul class="captured-pieces-list white" id="whiteList"></ul>
+    <div class="score-diff white-score"></div>
+  </div>
 
-      <div class="captured-pieces-container bottom">
-        <div class="captured-pieces black-captures"></div>
-        <div class="score black-score"></div>
-      </div>
-    </div>
+  <canvas class="game-canvas" id="game-canvas" width="800" height="800"></canvas>
+
+  <div class="captured-pieces-container bottom">
+    <ul class="captured-pieces-list black" id="blackList"></ul>
+    <div class="score-diff black-score"></div>
+  </div>
+
+</div>
+
 
     <div class="move-table-container">
       <table class="move-table" id="turn-table">

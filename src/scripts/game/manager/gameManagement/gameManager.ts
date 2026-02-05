@@ -94,7 +94,6 @@ export class GameManager{
         return nearestTile[0]!;
     }
 
-    // Gets the piece that stands on method parameter tile
     private getPieceOnTile(tile: GameTile) : IPiece{
         return tile.currentPiece!;
     }
