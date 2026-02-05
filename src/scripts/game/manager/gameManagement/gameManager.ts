@@ -39,10 +39,12 @@ export class GameManager{
         
         const pieceOnTile: IPiece = this.getPieceOnTile(nearestTile);
     
-
+        // no piece is selected and selected piece on tile is not the same color as the active playing color
         if(!this.selectedPiece && pieceOnTile && !this.turnManager.isSelectedPieceEqualActiveTurnColor(pieceOnTile.color))
             return;
 
+        // piece selected and clicked tile is not tile of selected piece
+        // and clicked tile is possible move
         if(this.isPieceSelected && this.selectedPiece?.currentTile != nearestTile){
             if(this.selectedPiece?.possibleMoves.some(x => x.coordinates === nearestTile.coordinates)){
                 this.moveManager.handleMoving(nearestTile, this.selectedPiece, this.board);
@@ -52,6 +54,7 @@ export class GameManager{
             }  
         }
 
+        // clicked already selected piece a second time
         if(this.selectedPiece?.currentTile == nearestTile){
             this.pieceSelectManager.selectPiece(pieceOnTile, nearestTile, this.board);
             this.setPieceSelected(pieceOnTile)
@@ -61,6 +64,7 @@ export class GameManager{
             return;
         }
         
+        // switch selected piece to other piece of the same color
         if(!this.selectedPiece || this.selectedPiece && this.selectedPiece.color == pieceOnTile.color){
             this.moveManager.deleteMoveOptions(this.board);
 

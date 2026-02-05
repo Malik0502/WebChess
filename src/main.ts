@@ -67,10 +67,9 @@ window.onload = () => {
 function handleClick(event: MouseEvent){
     const rect = canvas.getBoundingClientRect();
 
-    // calcs mouse pos inside the canvas 
     const mousePos: [x: number, y: number] = [Math.round(event.clientX - rect.left), Math.round(event.clientY - rect.top)];
 
     gameManager.handleMouseClick(mousePos);
     console.log(gameBoard.gamePieces);
-    //console.log(gameBoard.gameTiles);
+    console.log(gameBoard.gameTiles);
 }

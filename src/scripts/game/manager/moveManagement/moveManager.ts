@@ -4,7 +4,6 @@ import type { MovePreviewRenderer } from "../../../board/renderer/movePreviewRen
 import type { PieceRenderer } from "../../../board/renderer/pieceRenderer";
 import type { TileRenderer } from "../../../board/renderer/tileRenderer";
 import { WHITE } from "../../../common/constants/pieceColor";
-import { bRookA, bRookH, wRookA, wRookH } from "../../../common/constants/towerPositionArray";
 import type { IPiece } from "../../pieces/interfaces/IPiece";
 import type { CastleHelper } from "../../pieces/pieceMovement/castleHelper";
 import type { ControlManager } from "../controlManagement/controlManager";
@@ -43,7 +42,6 @@ export class MoveManager {
             return;
         }
         
-        
         this.handleCastling(move, nearestTile, selectedPiece, board, previouslyStandOnTile);
     }
 
@@ -52,32 +50,35 @@ export class MoveManager {
         if(this.castleHelper.isShortCastling(move)){
             if(selectedPiece.color !== WHITE){
                 rookMove = {start: "h8", end: "f8"}
-                this.castlePieces(move, rookMove, bRookH, board, selectedPiece, nearestTile, previouslyStandOnTile)
+                this.castlePieces(move, rookMove, board, selectedPiece, nearestTile, previouslyStandOnTile)
                 return;
             }
             rookMove = {start: "h1", end: "f1"}
-            this.castlePieces(move, rookMove, wRookH, board, selectedPiece, nearestTile, previouslyStandOnTile)
+            this.castlePieces(move, rookMove, board, selectedPiece, nearestTile, previouslyStandOnTile)
             return;
         }
 
         if(selectedPiece.color !== WHITE){
             rookMove = {start: "a8", end: "d8"}
-            this.castlePieces(move, rookMove, bRookA, board, selectedPiece, nearestTile, previouslyStandOnTile)
+            this.castlePieces(move, rookMove, board, selectedPiece, nearestTile, previouslyStandOnTile)
             return;
         }
         rookMove = {start: "a1", end: "d1"}
-        this.castlePieces(move, rookMove, wRookA, board, selectedPiece, nearestTile, previouslyStandOnTile)
+        this.castlePieces(move, rookMove, board, selectedPiece, nearestTile, previouslyStandOnTile)
         return;
     }
 
-    private castlePieces(kingMove: Move, rookMove: Move, rookIndex: number, board: Board, selectedPiece: IPiece, nearestTile: GameTile, previouslyStandOnTile: GameTile){
-        const rook: IPiece = board.gamePieces[rookIndex];
-        const rookCastlingDest: GameTile = board.getGameTileByCoordinate(rookMove.end);
-        this.turnManager.addToTurnHistory([kingMove, rookMove], selectedPiece, nearestTile);
-        this.refreshGameMoveInformation(selectedPiece, nearestTile, board, previouslyStandOnTile);
-
-        this.refreshGameMoveInformation(rook, rookCastlingDest, board, previouslyStandOnTile);
-        this.turnManager.changeActiveColor(selectedPiece!.color);
+    private castlePieces(kingMove: Move, rookMove: Move, board: Board, selectedPiece: IPiece, nearestTile: GameTile, previouslyStandOnTile: GameTile){
+        const rook: IPiece | undefined = board.gamePieces.find(x => x.startCoordinates === rookMove.start);
+        
+        if(rook){
+            const rookCastlingDest: GameTile = board.getGameTileByCoordinate(rookMove.end);
+            this.turnManager.addToTurnHistory([kingMove, rookMove], selectedPiece, nearestTile);
+            this.refreshGameMoveInformation(selectedPiece, nearestTile, board, previouslyStandOnTile);
+    
+            this.refreshGameMoveInformation(rook, rookCastlingDest, board, previouslyStandOnTile);
+            this.turnManager.changeActiveColor(selectedPiece!.color);
+        }
     }
 
     private refreshGameMoveInformation(selectedPiece: IPiece, nearestTile: GameTile, board: Board, previouslyStandOnTile: GameTile){
@@ -115,8 +116,11 @@ export class MoveManager {
 
     }
 
-    // just handles removing piece from array right now
     private capturePiece(clickedTile: GameTile, board: Board): void {
-        board.gamePieces = board.gamePieces.filter(x => x.currentCoordinates != clickedTile.coordinates);
+        const capturedPiece: IPiece | undefined = board.gamePieces.find(x => x.currentCoordinates == clickedTile.coordinates)
+        if(capturedPiece){
+            this.controlManager.resetTileControlOfPiece(capturedPiece);
+            board.gamePieces = board.gamePieces.filter(x => x.currentCoordinates != clickedTile.coordinates)
+        }
     }    
 }

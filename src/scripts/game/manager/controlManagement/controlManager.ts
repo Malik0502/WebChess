@@ -26,12 +26,12 @@ export class ControlManager{
         
         const controllingPieces: IPiece[] = this.getRelevantControllingPieces(previouslyStandOnTile, piece);
 
-        this.resetPiecesInTileControl(piece);
+        this.resetTileControlOfPiece(piece);
         this.resetImportantControlTiles(previouslyStandOnTile, piece.currentTile);
         const isAttack: boolean = false;
 
         controllingPieces.forEach(piece => {
-            this.resetPiecesInTileControl(piece);
+            this.resetTileControlOfPiece(piece);
 
             let controlledTiles: GameTile[] = [];
 
@@ -78,7 +78,7 @@ export class ControlManager{
         tile.control.controllingPieces = [];
     }
 
-    private resetPiecesInTileControl(piece: IPiece){
+    public resetTileControlOfPiece(piece: IPiece){
         piece.controlledTiles.forEach(tile => {
             const index: number = tile.control.controllingPieces.indexOf(piece);
             if(index > -1){
